@@ -26,7 +26,12 @@ export class FarmLand {
     )
   );
 
+  public tileSize = $state(0);
+  public gridWidth = $state(0);
+  public gridHeight = $state(0);
+
   constructor() {
+    this.getGridSize();
     setInterval(() => {
       for (const tile of this.tiles) {
         tile.updateTile();
@@ -34,7 +39,14 @@ export class FarmLand {
     }, 1000);
   }
 
-  public getGridSize() {}
+  public getGridSize() {
+    const widthPercent = window.innerWidth / 16000000;
+    const heightPercent = window.innerHeight / 9000000;
+    const smallestPercent = Math.min(widthPercent, heightPercent);
+    this.gridWidth = Math.round(16000000 * smallestPercent);
+    this.gridHeight = Math.round(9000000 * smallestPercent);
+    this.tileSize = this.gridHeight / FarmLand.ROW_COUNT;
+  }
 
   static getPointFromIterator(i: number) {
     const n = i + 1;

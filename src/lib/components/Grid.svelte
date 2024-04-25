@@ -1,19 +1,20 @@
 <script>
-  import { FarmLand, farmLand } from "../GameState/FarmLand.svelte";
+  import { onDestroy, onMount } from "svelte";
+  import { farmLand } from "../GameState/FarmLand.svelte";
   import Tile from "./Tile.svelte";
-  const widthPercent = window.innerWidth / 16000000;
-  const heightPercent = window.innerHeight / 9000000;
-  const smallestPercent = Math.min(widthPercent, heightPercent);
-  const gridWidth = Math.round(16000000 * smallestPercent);
-  const gridHeight = Math.round(9000000 * smallestPercent);
-  const width = gridWidth;
-  const height = gridHeight;
-  const tileSize = height / FarmLand.ROW_COUNT;
+
+  onMount(() => {
+    window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
+  });
+
+  onDestroy(() => {
+    window.removeEventListener("resize", farmLand.getGridSize.bind(farmLand));
+  });
 </script>
 
 <div
   class="grid"
-  style="--tile-size: {tileSize}px; width: {width}px; height: {height}px"
+  style="--tile-size: {farmLand.tileSize}px; width: {farmLand.gridWidth}px; height: {farmLand.gridHeight}px"
 >
   {#each farmLand.tiles as tile}
     <Tile {tile} />
