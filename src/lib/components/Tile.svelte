@@ -5,7 +5,7 @@
     tile: Tile;
   }
   let { tile }: Props = $props();
-  let color = $derived(tile.type === "EMPTY" ? "green" : "red");
+  let color = $derived(tile.type === "EMPTY" ? "lightgreen" : "burlywood");
 </script>
 
 <div class="tile" style="background-color: {color}"></div>
