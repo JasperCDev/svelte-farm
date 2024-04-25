@@ -34,6 +34,8 @@ export class FarmLand {
     }, 1000);
   }
 
+  public getGridSize() {}
+
   static getPointFromIterator(i: number) {
     const n = i + 1;
     const row = Math.ceil(n / FarmLand.COLUMN_COUNT);
@@ -49,4 +51,4 @@ export class FarmLand {
   }
 }
 
-export let myGrid = new FarmLand();
+export let farmLand = new FarmLand();

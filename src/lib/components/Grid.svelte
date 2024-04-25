@@ -1,5 +1,5 @@
 <script>
-  import { FarmLand, myGrid } from "../GameState/Grid";
+  import { FarmLand, farmLand } from "../GameState/FarmLand.svelte";
   import Tile from "./Tile.svelte";
   const widthPercent = window.innerWidth / 16000000;
   const heightPercent = window.innerHeight / 9000000;
@@ -15,7 +15,7 @@
   class="grid"
   style="--tile-size: {tileSize}px; width: {width}px; height: {height}px"
 >
-  {#each myGrid.tiles as tile}
+  {#each farmLand.tiles as tile}
     <Tile {tile} />
   {/each}
 </div>
