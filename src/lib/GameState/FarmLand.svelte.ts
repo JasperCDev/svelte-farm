@@ -1,14 +1,62 @@
-export class Plant {
-  id = $state<string>()!;
+type Point = { row: number; column: number };
+type Points = Array<Point>;
+
+export class GridObjectSpace {
+  width = $state<number>();
+  height = $state<number>();
+  squares = $state<Points>()!;
+  constructor(squares: Points) {
+    const { width, height } = this.getWidthAndHeight(squares);
+    this.width = width;
+    this.height = height;
+    this.squares = squares;
+  }
+
+  getWidthAndHeight(squares: Points) {
+    let cols: number[] = [];
+    let rows: number[] = [];
+    for (const square of squares) {
+      if (!cols.includes(square.column)) {
+        cols.push(square.column);
+      }
+      if (!rows.includes(square.row)) {
+        rows.push(square.row);
+      }
+    }
+    return {
+      width: cols.length,
+      height: rows.length,
+    };
+  }
+}
+
+export class GridObject {
   row = $state<number>()!;
   column = $state<number>()!;
-  health = $state<number>()!;
-  static idHelper = 0;
-  constructor(row: number, column: number) {
-    Plant.idHelper++;
-    this.id = `${row}-${column}-${Plant.idHelper}`;
+  name = $state<"plant">()!;
+  space = $state<GridObjectSpace>()!;
+
+  constructor(
+    row: number,
+    column: number,
+    name: typeof this.name,
+    squares?: Points
+  ) {
     this.row = row;
     this.column = column;
+    this.space = new GridObjectSpace(squares || [{ row, column }]);
+    this.name = name;
+  }
+}
+
+export class Plant extends GridObject {
+  id = $state<string>()!;
+  health = $state<number>()!;
+  static idHelper = 0;
+  constructor(row: number, column: number, squares?: Points) {
+    super(row, column, "plant", squares);
+    Plant.idHelper++;
+    this.id = `${row}-${column}-${Plant.idHelper}`;
   }
 }
 
@@ -34,17 +82,17 @@ export class FarmLand {
   static TIME_SPEED = 500;
   static ROW_COUNT = 18;
   static COLUMN_COUNT = 32;
-  public tiles = $state(
+  public tiles = $state<Array<Tile>>(
     Array.from({ length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT }, (_, i) =>
-      i < 4 ? new Tile(i, "OCCUPIED") : new Tile(i)
+      i < 2 ? new Tile(i, "OCCUPIED") : new Tile(i)
     )
   );
-  public plants = $state(
-    Array.from({ length: 4 }, (_, i) => {
-      const { row, column } = FarmLand.getPointFromIterator(i);
-      return new Plant(row, column);
-    })
-  );
+  public gridObjects = $state<Array<GridObject>>([
+    new Plant(1, 1, [
+      { row: 1, column: 1 },
+      { row: 1, column: 2 },
+    ]),
+  ]);
 
   public tileSize = $state<number>(0);
   public gridWidth = $state<number>(0);

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Grid from "./lib/components/Grid.svelte";
+  import CGrid from "./lib/components/CGrid.svelte";
 </script>
 
 <main class="main">
-  <Grid />
+  <CGrid />
 </main>
 
 <style>

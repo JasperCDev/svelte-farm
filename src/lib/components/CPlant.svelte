@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Plant } from "../GameState/FarmLand.svelte";
+  import CGridObject from "./CGridObject.svelte";
 
   interface Props {
     plant: Plant;
@@ -7,19 +8,13 @@
   let { plant }: Props = $props();
 </script>
 
-<div
-  class="plant"
-  style="
-    top: calc({plant.row - 1} * var(--tile-size));
-    left: calc({plant.column - 1} * var(--tile-size));
-  "
->
+<CGridObject gridObject={plant}>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="100%"
     height="100%"
     viewBox="0 0 24 24"
-    fill="none"
+    fill="lightgreen"
     stroke="currentcolor"
     stroke-width="2"
     stroke-linecap="round"
@@ -30,12 +25,7 @@
     />
     <path d="M2 22 17 7" />
   </svg>
-</div>
+</CGridObject>
 
 <style>
-  .plant {
-    position: absolute;
-    width: var(--tile-size);
-    height: var(--tile-size);
-  }
 </style>
