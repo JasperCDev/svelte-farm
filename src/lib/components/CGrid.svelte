@@ -13,6 +13,7 @@
     window.removeEventListener("resize", farmLand.getGridSize.bind(farmLand));
   });
 
+
   const gridObjectsToRender = $derived(
     farmLand.gridObjects.map((g) => {
       switch (g.name) {
@@ -38,7 +39,7 @@
     --tile-size: {farmLand.tileSize}px;
     width: {farmLand.gridWidth}px;
     height: {farmLand.gridHeight}px;
-    cursor: {farmLand.isPlacingMode ? "none" : "auto"};
+    cursor: {farmLand.interactionMode === "placing" ? "none" : "auto"};
   "
 >
   {#each gridObjectsToRender as gridObject}

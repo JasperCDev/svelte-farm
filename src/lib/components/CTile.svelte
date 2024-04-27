@@ -5,14 +5,15 @@
     tile: Tile;
   }
   let { tile }: Props = $props();
-  let color = $derived(farmLand.isPlacingMode ? "#5ffa5a" : "burlywood");
+  const isPlacingMode = $derived(farmLand.interactionMode === "placing");
+  let color = $derived(isPlacingMode ? "#5ffa5a" : "lightgreen");
+  let border = $derived(isPlacingMode ? "1px dashed black" : "1px solid grey");
 </script>
 
-<div class="tile" style="background-color: {color};"></div>
+<div class="tile" style="background-color: {color}; border: {border};"></div>
 
 <style>
   .tile {
-    border: 1px solid black;
     aspect-ratio: 1;
   }
 </style>

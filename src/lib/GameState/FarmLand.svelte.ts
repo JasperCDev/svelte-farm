@@ -37,6 +37,7 @@ export class GridObject {
   name = $state<"plant" | "shop">()!;
   space = $state<GridObjectSpace>()!;
   id = $state<string>()!;
+  placing = $state<boolean>(false);
   constructor(
     row: number,
     column: number,
@@ -115,14 +116,10 @@ export class FarmLand {
   public gridWidth = $state<number>(0);
   public gridHeight = $state<number>(0);
 
-  public isPlacingMode = $state<boolean>(false);
+  public interactionMode = $state<"cursor" | "placing">("cursor");
+
   constructor() {
     this.getGridSize();
-    // setInterval(() => {
-    //   for (const tile of this.tiles) {
-    //     tile.updateTile();
-    //   }
-    // }, 1000);
   }
 
   public getGridSize() {
