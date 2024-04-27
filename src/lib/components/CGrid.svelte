@@ -4,6 +4,7 @@
   import CTile from "./CTile.svelte";
   import CPlant from "./CPlant.svelte";
   import CShop from "./CShop.svelte";
+  import { derive } from "../utils";
 
   let gridRef: HTMLDivElement;
 
@@ -88,7 +89,21 @@
         col: s.col + colDiff
       }
     })
-    const isOverlapping = (() => {
+    const isOutOfBounds = derive(() => {
+      for (const square of newSquares) {
+        if (square.row > FarmLand.ROW_COUNT) {
+          return true;
+        }
+        if (square.col > FarmLand.COLUMN_COUNT) {
+          return true;
+        }
+      }
+      return false;
+    });
+    if (isOutOfBounds) {
+      return;
+    }
+    const isOverlapping = derive(() => {
       for (const gridObj of farmLand.gridObjects) {
         if (typeof gridObj === "undefined") {
           continue;
@@ -106,7 +121,7 @@
         }
       }
       return false;
-    })();
+    });
     selectedGridObject.invalidPlacement = isOverlapping;
     selectedGridObject.row = row;
     selectedGridObject.col = col;
@@ -123,7 +138,7 @@
     --tile-size: {farmLand.tileSize}px;
     width: {farmLand.gridWidth}px;
     height: {farmLand.gridHeight}px;
-    cursor: {farmLand.interactionMode === "placing" ? "auto" : "auto"};
+    cursor: {farmLand.interactionMode === "placing" ? "none" : "auto"};
   "
   bind:this={gridRef}
   onclick={handleGridClick}
