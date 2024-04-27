@@ -37,7 +37,8 @@
   style="
     --tile-size: {farmLand.tileSize}px;
     width: {farmLand.gridWidth}px;
-    height: {farmLand.gridHeight}px
+    height: {farmLand.gridHeight}px;
+    cursor: {farmLand.isPlacingMode ? "none" : "auto"};
   "
 >
   {#each gridObjectsToRender as gridObject}

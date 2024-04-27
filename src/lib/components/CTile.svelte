@@ -1,18 +1,18 @@
 <script lang="ts">
-  import type { Tile } from "../GameState/FarmLand.svelte";
+  import { farmLand, type Tile } from "../GameState/FarmLand.svelte";
 
   interface Props {
     tile: Tile;
   }
   let { tile }: Props = $props();
-  let color = $derived(tile.type === "EMPTY" ? "burlywood" : "burlywood");
+  let color = $derived(farmLand.isPlacingMode ? "#5ffa5a" : "burlywood");
 </script>
 
-<div class="tile" style="background-color: {color}"></div>
+<div class="tile" style="background-color: {color};"></div>
 
 <style>
   .tile {
-    border: 1px solid green;
+    border: 1px solid black;
     aspect-ratio: 1;
   }
 </style>

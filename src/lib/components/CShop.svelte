@@ -20,6 +20,6 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 100, 100, 1);
   }
 </style>
