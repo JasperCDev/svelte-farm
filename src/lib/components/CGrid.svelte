@@ -19,7 +19,6 @@
   const gridObjectsToRender = $derived(
     farmLand.gridObjects.filter((g) => g).map((g) => {
       const gridObject = g!;
-      console.log(gridObject.id);
       switch (gridObject.name) {
         case "plant":
           return {
@@ -155,7 +154,6 @@
 <style>
   .grid {
     position: relative;
-    aspect-ratio: 16 / 9;
     display: grid;
     grid-template-columns: repeat(32, auto);
     overflow: hidden;

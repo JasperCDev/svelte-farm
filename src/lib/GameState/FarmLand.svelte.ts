@@ -50,7 +50,6 @@ export class GridObject {
     this.space = new GridObjectSpace(squares || [{ row, col }]);
     this.name = name;
     this.id = FarmLand.getIdFromPoint({ row, col });
-    console.log(row, col, this.id);
   }
 }
 
