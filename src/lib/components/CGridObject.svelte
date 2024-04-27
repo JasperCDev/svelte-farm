@@ -13,7 +13,6 @@
   let gridElem: HTMLElement;
 
   function handleObjectClick() {
-    console.log("click!");
     if (farmLand.isPlacingMode) {
       return;
     }
@@ -24,12 +23,14 @@
     farmLand.isPlacingMode = true;
     thisObjectPlacing = true;
     gridElem.addEventListener("mousemove", snapObject);
-    gridElem.addEventListener("click", () => {
-      farmLand.isPlacingMode = false;
-      thisObjectPlacing = false;
-      gridElem.removeEventListener("mousemove", snapObject);
-      return;
-    }, { once: true})
+    requestAnimationFrame(() => {
+      gridElem.addEventListener("click", () => {
+        farmLand.isPlacingMode = false;
+        thisObjectPlacing = false;
+        gridElem.removeEventListener("mousemove", snapObject);
+        return;
+      }, { once: true})
+    })
   }
   function snapObject(e: MouseEvent) {
     console.log("snapObject");
