@@ -31,11 +31,12 @@ export class GridObjectSpace {
 }
 
 export class GridObject {
+  static idHelper = 0;
   row = $state<number>()!;
   column = $state<number>()!;
-  name = $state<"plant">()!;
+  name = $state<"plant" | "shop">()!;
   space = $state<GridObjectSpace>()!;
-
+  id = $state<string>()!;
   constructor(
     row: number,
     column: number,
@@ -46,17 +47,21 @@ export class GridObject {
     this.column = column;
     this.space = new GridObjectSpace(squares || [{ row, column }]);
     this.name = name;
+    this.id = `${row}-${column}-${GridObject.idHelper}`;
   }
 }
 
 export class Plant extends GridObject {
   id = $state<string>()!;
   health = $state<number>()!;
-  static idHelper = 0;
   constructor(row: number, column: number, squares?: Points) {
     super(row, column, "plant", squares);
-    Plant.idHelper++;
-    this.id = `${row}-${column}-${Plant.idHelper}`;
+  }
+}
+
+export class Shop extends GridObject {
+  constructor(row: number, column: number, squares?: Points) {
+    super(row, column, "shop", squares);
   }
 }
 
@@ -65,6 +70,7 @@ export class Tile {
   column = $state<number>()!;
   id = $state<string>()!;
   type = $state<"OCCUPIED" | "EMPTY">("EMPTY");
+  movable = $state<boolean>(true);
   constructor(tileIndex: number, type?: typeof this.type) {
     const tilePoint = FarmLand.getPointFromIterator(tileIndex);
     this.id = FarmLand.getTileIdFromPoint(tilePoint);
@@ -92,12 +98,24 @@ export class FarmLand {
       { row: 1, column: 1 },
       { row: 1, column: 2 },
     ]),
+    new Shop(10, 10, [
+      { row: 10, column: 10 },
+      { row: 10, column: 11 },
+      { row: 10, column: 12 },
+      { row: 11, column: 10 },
+      { row: 11, column: 11 },
+      { row: 11, column: 12 },
+      { row: 12, column: 10 },
+      { row: 12, column: 11 },
+      { row: 12, column: 12 },
+    ]),
   ]);
 
   public tileSize = $state<number>(0);
   public gridWidth = $state<number>(0);
   public gridHeight = $state<number>(0);
 
+  public isPlacingMode = $state<boolean>(false);
   constructor() {
     this.getGridSize();
     // setInterval(() => {

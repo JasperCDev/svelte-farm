@@ -3,12 +3,12 @@
   import CGridObject from "./CGridObject.svelte";
 
   interface Props {
-    plant: Plant;
+    obj: Plant;
   }
-  let { plant }: Props = $props();
+  let { obj }: Props = $props();
 </script>
 
-<CGridObject gridObject={plant}>
+<CGridObject gridObject={obj}>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="100%"

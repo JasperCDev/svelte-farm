@@ -1,0 +1,25 @@
+<script lang="ts">
+  import type { Shop } from "../GameState/FarmLand.svelte";
+  import CGridObject from "./CGridObject.svelte";
+
+  interface Props {
+    obj: Shop;
+  }
+  let { obj }: Props = $props();
+</script>
+
+<CGridObject gridObject={obj}>
+  <div class="shop">
+    <h1>Shop</h1>
+  </div>
+</CGridObject>
+
+<style>
+  .shop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.5);
+  }
+</style>

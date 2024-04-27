@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { Plant, farmLand } from "../GameState/FarmLand.svelte";
+  import { Plant, Shop, farmLand } from "../GameState/FarmLand.svelte";
   import CTile from "./CTile.svelte";
   import CPlant from "./CPlant.svelte";
+  import CShop from "./CShop.svelte";
 
   onMount(() => {
     window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
@@ -18,9 +19,12 @@
         case "plant":
           return {
             component: CPlant,
-            props: {
-              plant: g as Plant,
-            },
+            props: g as Plant,
+          };
+        case "shop":
+          return {
+            component: CShop,
+            props: g as Shop,
           };
       }
     })
@@ -29,10 +33,15 @@
 
 <div
   class="grid"
-  style="--tile-size: {farmLand.tileSize}px; width: {farmLand.gridWidth}px; height: {farmLand.gridHeight}px"
+  id="grid"
+  style="
+    --tile-size: {farmLand.tileSize}px;
+    width: {farmLand.gridWidth}px;
+    height: {farmLand.gridHeight}px
+  "
 >
   {#each gridObjectsToRender as gridObject}
-    <svelte:component this={gridObject.component} {...gridObject.props} />
+    <svelte:component this={gridObject.component} obj={gridObject.props as any} />
   {/each}
   {#each farmLand.tiles as tile}
     <CTile {tile} />
