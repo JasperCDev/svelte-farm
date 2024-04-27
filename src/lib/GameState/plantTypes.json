@@ -2,7 +2,7 @@
   {
     "id": 0,
     "name": "basic plant",
-    "squares": [{ "row": 1, "column": 1 }],
+    "squares": [{ "row": 1, "col": 1 }],
     "width": 1,
     "height": 1
   }

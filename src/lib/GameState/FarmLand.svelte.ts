@@ -1,4 +1,4 @@
-type Point = { row: number; column: number };
+type Point = { row: number; col: number };
 type Points = Array<Point>;
 
 export class GridObjectSpace {
@@ -16,8 +16,8 @@ export class GridObjectSpace {
     let cols: number[] = [];
     let rows: number[] = [];
     for (const square of squares) {
-      if (!cols.includes(square.column)) {
-        cols.push(square.column);
+      if (!cols.includes(square.col)) {
+        cols.push(square.col);
       }
       if (!rows.includes(square.row)) {
         rows.push(square.row);
@@ -33,50 +33,50 @@ export class GridObjectSpace {
 export class GridObject {
   static idHelper = 0;
   row = $state<number>()!;
-  column = $state<number>()!;
+  col = $state<number>()!;
   name = $state<"plant" | "shop">()!;
   space = $state<GridObjectSpace>()!;
   id = $state<string>()!;
   placing = $state<boolean>(false);
+  invalidPlacement = $state<boolean>(false);
   constructor(
     row: number,
-    column: number,
+    col: number,
     name: typeof this.name,
     squares?: Points
   ) {
     this.row = row;
-    this.column = column;
-    this.space = new GridObjectSpace(squares || [{ row, column }]);
+    this.col = col;
+    this.space = new GridObjectSpace(squares || [{ row, col }]);
     this.name = name;
-    this.id = `${row}-${column}-${GridObject.idHelper}`;
+    this.id = FarmLand.getIdFromPoint({ row, col });
+    console.log(row, col, this.id);
   }
 }
 
 export class Plant extends GridObject {
-  id = $state<string>()!;
-  health = $state<number>()!;
-  constructor(row: number, column: number, squares?: Points) {
-    super(row, column, "plant", squares);
+  constructor(row: number, col: number, squares?: Points) {
+    super(row, col, "plant", squares);
   }
 }
 
 export class Shop extends GridObject {
-  constructor(row: number, column: number, squares?: Points) {
-    super(row, column, "shop", squares);
+  constructor(row: number, col: number, squares?: Points) {
+    super(row, col, "shop", squares);
   }
 }
 
 export class Tile {
   row = $state<number>()!;
-  column = $state<number>()!;
+  col = $state<number>()!;
   id = $state<string>()!;
   type = $state<"OCCUPIED" | "EMPTY">("EMPTY");
   movable = $state<boolean>(true);
   constructor(tileIndex: number, type?: typeof this.type) {
     const tilePoint = FarmLand.getPointFromIterator(tileIndex);
-    this.id = FarmLand.getTileIdFromPoint(tilePoint);
+    this.id = FarmLand.getIdFromPoint(tilePoint);
     this.row = tilePoint.row;
-    this.column = tilePoint.column;
+    this.col = tilePoint.col;
     if (type) this.type = type;
   }
 
@@ -86,40 +86,66 @@ export class Tile {
 }
 
 export class FarmLand {
+  static idHelper = 0;
   static TIME_SPEED = 500;
   static ROW_COUNT = 18;
   static COLUMN_COUNT = 32;
   public tiles = $state<Array<Tile>>(
-    Array.from({ length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT }, (_, i) =>
-      i < 2 ? new Tile(i, "OCCUPIED") : new Tile(i)
+    Array.from(
+      { length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT },
+      (_, i) => new Tile(i)
     )
   );
-  public gridObjects = $state<Array<GridObject>>([
-    new Plant(1, 1, [
-      { row: 1, column: 1 },
-      { row: 1, column: 2 },
-    ]),
-    new Shop(10, 10, [
-      { row: 10, column: 10 },
-      { row: 10, column: 11 },
-      { row: 10, column: 12 },
-      { row: 11, column: 10 },
-      { row: 11, column: 11 },
-      { row: 11, column: 12 },
-      { row: 12, column: 10 },
-      { row: 12, column: 11 },
-      { row: 12, column: 12 },
-    ]),
-  ]);
+  public gridObjects = $state<Array<GridObject | undefined>>(
+    Array.from({
+      length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT,
+    })
+  );
+  // $state<Array<GridObject>>([
+  //   new Plant(1, 1, [
+  //     { row: 1, col: 1 },
+  //     { row: 1, col: 2 },
+  //   ]),
+  //   new Shop(10, 10, [
+  //     { row: 10, col: 10 },
+  //     { row: 10, col: 11 },
+  //     { row: 10, col: 12 },
+  //     { row: 11, col: 10 },
+  //     { row: 11, col: 11 },
+  //     { row: 11, col: 12 },
+  //     { row: 12, col: 10 },
+  //     { row: 12, col: 11 },
+  //     { row: 12, col: 12 },
+  //   ]),
+  // ]);
 
   public tileSize = $state<number>(0);
   public gridWidth = $state<number>(0);
   public gridHeight = $state<number>(0);
 
   public interactionMode = $state<"cursor" | "placing">("cursor");
-
+  public selectedGridObjectId = $state<string | null>(null);
   constructor() {
     this.getGridSize();
+    this.gridObjects[
+      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 1, col: 1 }))
+    ] = new Plant(1, 1, [
+      { row: 1, col: 1 },
+      { row: 1, col: 2 },
+    ]);
+    this.gridObjects[
+      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 10, col: 10 }))
+    ] = new Shop(10, 10, [
+      { row: 10, col: 10 },
+      { row: 10, col: 11 },
+      { row: 10, col: 12 },
+      { row: 11, col: 10 },
+      { row: 11, col: 11 },
+      { row: 11, col: 12 },
+      { row: 12, col: 10 },
+      { row: 12, col: 11 },
+      { row: 12, col: 12 },
+    ]);
   }
 
   public getGridSize() {
@@ -134,14 +160,23 @@ export class FarmLand {
   static getPointFromIterator(i: number) {
     const n = i + 1;
     const row = Math.ceil(n / FarmLand.COLUMN_COUNT);
-    const column = n % FarmLand.COLUMN_COUNT || FarmLand.COLUMN_COUNT;
-    return { row, column };
+    const col = n % FarmLand.COLUMN_COUNT || FarmLand.COLUMN_COUNT;
+    return { row, col };
   }
 
-  static getTileIdFromPoint(point: { row: number; column: number }) {
+  static getIteratorFromId(id: string) {
+    const split = id.split("-");
+    const rowCount = parseInt(split[0]);
+    const colCount = parseInt(split[1]);
+    return FarmLand.COLUMN_COUNT * (rowCount - 1) + colCount - 1;
+  }
+
+  static getIdFromPoint(point: { row: number; col: number }) {
+    FarmLand.idHelper++;
     return (
       point.row.toString().padStart(2, "0") +
-      point.column.toString().padStart(2, "0")
+      "-" +
+      point.col.toString().padStart(2, "0")
     );
   }
 }
