@@ -8,7 +8,7 @@
   let { obj }: Props = $props();
 </script>
 
-<CGridObject gridObject={obj}>
+<CGridObject gridObject={obj} handleClick={() => alert("plant")}>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="100%"

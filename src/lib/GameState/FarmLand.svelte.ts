@@ -1,5 +1,6 @@
-type Point = { row: number; col: number };
-type Points = Array<Point>;
+export type Point = { row: number; col: number };
+export type Points = Array<Point>;
+export type Tool = "cursor" | "mover";
 
 export class GridObjectSpace {
   width = $state<number>();
@@ -31,37 +32,39 @@ export class GridObjectSpace {
 }
 
 export class GridObject {
-  static idHelper = 0;
   row = $state<number>()!;
   col = $state<number>()!;
-  name = $state<"plant" | "shop">()!;
+  name = $state<"plant" | "shop" | "toolbar">()!;
   space = $state<GridObjectSpace>()!;
   id = $state<string>()!;
   placing = $state<boolean>(false);
+  movable = $state<boolean>(false);
   invalidPlacement = $state<boolean>(false);
   constructor(
     row: number,
     col: number,
     name: typeof this.name,
-    squares?: Points
+    squares?: Points,
+    movable?: boolean
   ) {
     this.row = row;
     this.col = col;
     this.space = new GridObjectSpace(squares || [{ row, col }]);
     this.name = name;
     this.id = FarmLand.getIdFromPoint({ row, col });
+    this.movable = Boolean(movable);
   }
 }
 
 export class Plant extends GridObject {
   constructor(row: number, col: number, squares?: Points) {
-    super(row, col, "plant", squares);
+    super(row, col, "plant", squares, true);
   }
 }
 
 export class Shop extends GridObject {
   constructor(row: number, col: number, squares?: Points) {
-    super(row, col, "shop", squares);
+    super(row, col, "shop", squares, true);
   }
 }
 
@@ -84,6 +87,13 @@ export class Tile {
   }
 }
 
+export class Toolbar extends GridObject {
+  tools = $state<Array<Tool>>(["cursor", "mover"]);
+  constructor(row: number, col: number, squares?: Points) {
+    super(row, col, "toolbar", squares, true);
+  }
+}
+
 export class FarmLand {
   static idHelper = 0;
   static TIME_SPEED = 500;
@@ -100,23 +110,6 @@ export class FarmLand {
       length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT,
     })
   );
-  // $state<Array<GridObject>>([
-  //   new Plant(1, 1, [
-  //     { row: 1, col: 1 },
-  //     { row: 1, col: 2 },
-  //   ]),
-  //   new Shop(10, 10, [
-  //     { row: 10, col: 10 },
-  //     { row: 10, col: 11 },
-  //     { row: 10, col: 12 },
-  //     { row: 11, col: 10 },
-  //     { row: 11, col: 11 },
-  //     { row: 11, col: 12 },
-  //     { row: 12, col: 10 },
-  //     { row: 12, col: 11 },
-  //     { row: 12, col: 12 },
-  //   ]),
-  // ]);
 
   public tileSize = $state<number>(0);
   public gridWidth = $state<number>(0);
@@ -124,6 +117,7 @@ export class FarmLand {
 
   public interactionMode = $state<"cursor" | "placing">("cursor");
   public selectedGridObjectId = $state<string | null>(null);
+  public selectedTool = $state<Tool>("cursor");
   constructor() {
     this.getGridSize();
     this.gridObjects[
@@ -144,6 +138,18 @@ export class FarmLand {
       { row: 12, col: 10 },
       { row: 12, col: 11 },
       { row: 12, col: 12 },
+    ]);
+    this.gridObjects[
+      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 17, col: 15 }))
+    ] = new Toolbar(17, 15, [
+      { row: 17, col: 15 },
+      { row: 17, col: 16 },
+      { row: 17, col: 17 },
+      { row: 17, col: 18 },
+      { row: 18, col: 15 },
+      { row: 18, col: 16 },
+      { row: 18, col: 17 },
+      { row: 18, col: 18 },
     ]);
   }
 

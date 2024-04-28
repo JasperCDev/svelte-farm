@@ -1,13 +1,15 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import { farmLand, type GridObject } from "../GameState/FarmLand.svelte";
+  import type { MouseEventHandler } from "svelte/elements";
 
   interface Props {
     gridObject: GridObject;
     children: Snippet;
     className?: string;
+    handleClick?: (e: MouseEvent) => void;
   }
-  let { gridObject, children, className }: Props = $props();
+  let { gridObject, children, className, handleClick }: Props = $props();
   let objectClassName = $derived((className || "") + " object");
   let thisObjectPlacing = $derived(farmLand.selectedGridObjectId === gridObject.id)
 
@@ -16,8 +18,20 @@
       return;
     }
     e.stopPropagation();
-    farmLand.interactionMode = "placing";
-    farmLand.selectedGridObjectId = gridObject.id;
+    switch (farmLand.selectedTool) {
+      case "cursor":
+        handleClick?.(e);
+        return;
+      case "mover":
+        if (!gridObject.movable) {
+          return;
+        }
+        farmLand.interactionMode = "placing";
+        farmLand.selectedGridObjectId = gridObject.id;
+        return;
+      default:
+        const exhaustive: never = farmLand.selectedTool;
+    }
   }
   const zIndex = $derived(gridObject.invalidPlacement ? 999 : 1);
 </script>

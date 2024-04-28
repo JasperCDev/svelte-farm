@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { FarmLand, Plant, Shop, farmLand } from "../GameState/FarmLand.svelte";
+  import { FarmLand, Plant, Shop, Toolbar, farmLand } from "../GameState/FarmLand.svelte";
   import CTile from "./CTile.svelte";
   import CPlant from "./CPlant.svelte";
   import CShop from "./CShop.svelte";
   import { derive } from "../utils";
+  import CToolbar from "./CToolbar.svelte";
 
   let gridRef: HTMLDivElement;
 
@@ -30,6 +31,11 @@
             component: CShop,
             props: gridObject as Shop,
           };
+        case "toolbar":
+          return {
+            component: CToolbar,
+            props: gridObject as Toolbar
+          }
       }
     })
   );
@@ -137,7 +143,6 @@
     --tile-size: {farmLand.tileSize}px;
     width: {farmLand.gridWidth}px;
     height: {farmLand.gridHeight}px;
-    cursor: {farmLand.interactionMode === "placing" ? "none" : "auto"};
   "
   bind:this={gridRef}
   onclick={handleGridClick}

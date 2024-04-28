@@ -1,8 +1,23 @@
 <script lang="ts">
+  import { farmLand } from "./lib/GameState/FarmLand.svelte";
   import CGrid from "./lib/components/CGrid.svelte";
+
+  function getCursor() {
+    switch (farmLand.selectedTool) {
+      case "cursor":
+        return "auto";
+      case "mover":
+        return "move";
+    }
+  }
 </script>
 
-<main class="main">
+<main
+  class="main"
+  style="
+    cursor: {getCursor()};
+  "
+>
   <CGrid />
 </main>
 
