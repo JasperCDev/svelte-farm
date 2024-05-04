@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Shop } from "../GameState/FarmLand.svelte";
+  import type { Shop } from "../GameState/Shop.svelte";
   import CGridObject from "./CGridObject.svelte";
 
   interface Props {

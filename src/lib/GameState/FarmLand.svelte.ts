@@ -1,98 +1,8 @@
-export type Point = { row: number; col: number };
-export type Points = Array<Point>;
-export type Tool = "cursor" | "mover";
-
-export class GridObjectSpace {
-  width = $state<number>();
-  height = $state<number>();
-  squares = $state<Points>()!;
-  constructor(squares: Points) {
-    const { width, height } = this.getWidthAndHeight(squares);
-    this.width = width;
-    this.height = height;
-    this.squares = squares;
-  }
-
-  getWidthAndHeight(squares: Points) {
-    let cols: number[] = [];
-    let rows: number[] = [];
-    for (const square of squares) {
-      if (!cols.includes(square.col)) {
-        cols.push(square.col);
-      }
-      if (!rows.includes(square.row)) {
-        rows.push(square.row);
-      }
-    }
-    return {
-      width: cols.length,
-      height: rows.length,
-    };
-  }
-}
-
-export class GridObject {
-  row = $state<number>()!;
-  col = $state<number>()!;
-  name = $state<"plant" | "shop" | "toolbar">()!;
-  space = $state<GridObjectSpace>()!;
-  id = $state<string>()!;
-  placing = $state<boolean>(false);
-  movable = $state<boolean>(false);
-  invalidPlacement = $state<boolean>(false);
-  constructor(
-    row: number,
-    col: number,
-    name: typeof this.name,
-    squares?: Points,
-    movable?: boolean
-  ) {
-    this.row = row;
-    this.col = col;
-    this.space = new GridObjectSpace(squares || [{ row, col }]);
-    this.name = name;
-    this.id = FarmLand.getIdFromPoint({ row, col });
-    this.movable = Boolean(movable);
-  }
-}
-
-export class Plant extends GridObject {
-  constructor(row: number, col: number, squares?: Points) {
-    super(row, col, "plant", squares, true);
-  }
-}
-
-export class Shop extends GridObject {
-  constructor(row: number, col: number, squares?: Points) {
-    super(row, col, "shop", squares, true);
-  }
-}
-
-export class Tile {
-  row = $state<number>()!;
-  col = $state<number>()!;
-  id = $state<string>()!;
-  type = $state<"OCCUPIED" | "EMPTY">("EMPTY");
-  movable = $state<boolean>(true);
-  constructor(tileIndex: number, type?: typeof this.type) {
-    const tilePoint = FarmLand.getPointFromIterator(tileIndex);
-    this.id = FarmLand.getIdFromPoint(tilePoint);
-    this.row = tilePoint.row;
-    this.col = tilePoint.col;
-    if (type) this.type = type;
-  }
-
-  public updateTile() {
-    this.type = this.type === "EMPTY" ? "OCCUPIED" : "EMPTY";
-  }
-}
-
-export class Toolbar extends GridObject {
-  tools = $state<Array<Tool>>(["cursor", "mover"]);
-  constructor(row: number, col: number, squares?: Points) {
-    super(row, col, "toolbar", squares, true);
-  }
-}
+import type { GridObject } from "./GridObject.svelte";
+import { Plant } from "./Plant.svelte";
+import { Shop } from "./Shop.svelte";
+import { Tile } from "./Tile.svelte";
+import { Toolbar, type Tool } from "./Toolbar.svelte";
 
 export class FarmLand {
   static idHelper = 0;
@@ -122,10 +32,7 @@ export class FarmLand {
     this.getGridSize();
     this.gridObjects[
       FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 1, col: 1 }))
-    ] = new Plant(1, 1, [
-      { row: 1, col: 1 },
-      { row: 1, col: 2 },
-    ]);
+    ] = new Plant(1, 1, "basic");
     this.gridObjects[
       FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 10, col: 10 }))
     ] = new Shop(10, 10, [
@@ -151,6 +58,9 @@ export class FarmLand {
       { row: 18, col: 17 },
       { row: 18, col: 18 },
     ]);
+    this.gridObjects[
+      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 5, col: 10 }))
+    ] = new Plant(5, 10, "bush");
   }
 
   public getGridSize() {
