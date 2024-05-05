@@ -68,10 +68,10 @@ export class FarmLand {
 
   public handleGridClick(e: MouseEvent) {
     if (farmLand.interactionMode == "placing") {
-      const selectedGridObjectIterator = FarmLand.getIteratorFromId(
+      let selectedGridObjectIterator = FarmLand.getIteratorFromId(
         farmLand.selectedGridObjectId!
       );
-      const selectedGridObject =
+      let selectedGridObject =
         farmLand.gridObjects[selectedGridObjectIterator]!;
       if (selectedGridObject.invalidPlacement) {
         return;
@@ -82,25 +82,25 @@ export class FarmLand {
       return;
     }
 
-    const { row, col } = this.getPointFromMousePosition({
+    let { row, col } = this.getPointFromMousePosition({
       x: e.clientX,
       y: e.clientY,
     });
-    for (const gridObject of this.gridObjects) {
+    for (let gridObject of this.gridObjects) {
       if (typeof gridObject === "undefined") {
         continue;
       }
-      const squareFoundIndx = gridObject.space.squares.findIndex((point) => {
+      let squareFoundIndx = gridObject.space.squares.findIndex((point) => {
         return point.row === row && point.col === col;
       });
-      const isHit = squareFoundIndx !== -1;
+      let isHit = squareFoundIndx !== -1;
       if (isHit) {
         gridObject.handleClick();
         return;
       }
     }
-    const tileIndx = FarmLand.getIteratorFromPoint({ row, col });
-    const tile = this.tiles[tileIndx];
+    let tileIndx = FarmLand.getIteratorFromPoint({ row, col });
+    let tile = this.tiles[tileIndx];
     tile.handleClick();
   }
 
@@ -115,25 +115,24 @@ export class FarmLand {
   }
 
   public snapObject(e: MouseEvent) {
-    const selectedGridObjectIterator = FarmLand.getIteratorFromId(
+    let selectedGridObjectIterator = FarmLand.getIteratorFromId(
       farmLand.selectedGridObjectId!
     );
-    const selectedGridObject =
-      farmLand.gridObjects[selectedGridObjectIterator]!;
-    const { row, col } = this.getPointFromMousePosition({
+    let selectedGridObject = farmLand.gridObjects[selectedGridObjectIterator]!;
+    let { row, col } = this.getPointFromMousePosition({
       x: e.clientX,
       y: e.clientY,
     });
-    const rowDiff = row - selectedGridObject.space.squares[0].row;
-    const colDiff = col - selectedGridObject.space.squares[0].col;
-    const newSquares = selectedGridObject.space.squares.map((s) => {
+    let rowDiff = row - selectedGridObject.space.squares[0].row;
+    let colDiff = col - selectedGridObject.space.squares[0].col;
+    let newSquares = selectedGridObject.space.squares.map((s) => {
       return {
         row: s.row + rowDiff,
         col: s.col + colDiff,
       };
     });
-    const isOutOfBounds = derive(() => {
-      for (const square of newSquares) {
+    let isOutOfBounds = derive(() => {
+      for (let square of newSquares) {
         if (square.row > FarmLand.ROW_COUNT) {
           return true;
         }
@@ -146,17 +145,17 @@ export class FarmLand {
     if (isOutOfBounds) {
       return;
     }
-    const isOverlapping = derive(() => {
-      for (const gridObj of farmLand.gridObjects) {
+    let isOverlapping = derive(() => {
+      for (let gridObj of farmLand.gridObjects) {
         if (typeof gridObj === "undefined") {
           continue;
         }
         if (gridObj.id === selectedGridObject.id) {
           continue;
         }
-        for (const sqaure1 of gridObj.space.squares) {
-          for (const square2 of newSquares) {
-            const isSameSpace =
+        for (let sqaure1 of gridObj.space.squares) {
+          for (let square2 of newSquares) {
+            let isSameSpace =
               sqaure1.col === square2.col && sqaure1.row === square2.row;
             if (isSameSpace) {
               console.log(newSquares, gridObj.space.squares);
@@ -175,9 +174,9 @@ export class FarmLand {
       selectedGridObject.space.squares = newSquares;
       return;
     }
-    for (const square of newSquares) {
-      const tileId = FarmLand.getIteratorFromPoint(square);
-      const tile = farmLand.tiles[tileId];
+    for (let square of newSquares) {
+      let tileId = FarmLand.getIteratorFromPoint(square);
+      let tile = farmLand.tiles[tileId];
       if (tile.type !== "SOIL") {
         selectedGridObject.invalidPlacement = true;
         selectedGridObject.row = row;
@@ -193,33 +192,33 @@ export class FarmLand {
   }
 
   public getGridSize() {
-    const widthPercent = window.innerWidth / 16000000;
-    const heightPercent = window.innerHeight / 9000000;
-    const smallestPercent = Math.min(widthPercent, heightPercent);
+    let widthPercent = window.innerWidth / 16000000;
+    let heightPercent = window.innerHeight / 9000000;
+    let smallestPercent = Math.min(widthPercent, heightPercent);
     this.gridWidth = Math.round(16000000 * smallestPercent);
     this.gridHeight = Math.round(9000000 * smallestPercent);
     this.tileSize = this.gridHeight / FarmLand.ROW_COUNT;
   }
 
   static getPointFromIterator(i: number) {
-    const n = i + 1;
-    const row = Math.ceil(n / FarmLand.COLUMN_COUNT);
-    const col = n % FarmLand.COLUMN_COUNT || FarmLand.COLUMN_COUNT;
+    let n = i + 1;
+    let row = Math.ceil(n / FarmLand.COLUMN_COUNT);
+    let col = n % FarmLand.COLUMN_COUNT || FarmLand.COLUMN_COUNT;
     return { row, col };
   }
 
   public getPointFromMousePosition(mousePos: { x: number; y: number }) {
     // x & y mouse position relative to the window
-    const relX = mousePos.x - (window.innerWidth - this.gridWidth) / 2;
-    const relY = mousePos.y - (window.innerHeight - this.gridHeight) / 2;
+    let relX = mousePos.x - (window.innerWidth - this.gridWidth) / 2;
+    let relY = mousePos.y - (window.innerHeight - this.gridHeight) / 2;
 
     // x & y remander from tilesize
-    const modX = relX % this.tileSize;
-    const modY = relY % this.tileSize;
+    let modX = relX % this.tileSize;
+    let modY = relY % this.tileSize;
 
     // x & y snapped to grid
-    const snappedX = relX - modX;
-    const snappedY = relY - modY;
+    let snappedX = relX - modX;
+    let snappedY = relY - modY;
 
     // row & col rounded from the tile count of x & y + 1
     return {
@@ -229,9 +228,9 @@ export class FarmLand {
   }
 
   static getIteratorFromId(id: string) {
-    const split = id.split("-");
-    const rowCount = parseInt(split[0]);
-    const colCount = parseInt(split[1]);
+    let split = id.split("-");
+    let rowCount = parseInt(split[0]);
+    let colCount = parseInt(split[1]);
     return FarmLand.COLUMN_COUNT * (rowCount - 1) + colCount - 1;
   }
 

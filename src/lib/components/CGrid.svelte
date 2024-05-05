@@ -20,9 +20,9 @@
     window.removeEventListener("resize", farmLand.getGridSize.bind(farmLand));
   });
 
-  const gridObjectsToRender = $derived(
+  let gridObjectsToRender = $derived(
     farmLand.gridObjects.filter((g) => g).map((g) => {
-      const gridObject = g!;
+      let gridObject = g!;
       switch (gridObject.name) {
         case "plant":
           return {

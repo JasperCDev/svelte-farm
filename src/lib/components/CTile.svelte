@@ -6,7 +6,7 @@
     tile: Tile;
   }
   let { tile }: Props = $props();
-  const isPlacingMode = $derived(farmLand.interactionMode === "placing");
+  let isPlacingMode = $derived(farmLand.interactionMode === "placing");
   function getColor() {
     switch (tile.type) {
       case "SOIL":

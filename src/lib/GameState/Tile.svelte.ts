@@ -9,7 +9,7 @@ export class Tile {
   type = $state<TileType>("SOIL");
   movable = $state<boolean>(true);
   constructor(tileIndex: number, type?: TileType) {
-    const tilePoint = FarmLand.getPointFromIterator(tileIndex);
+    let tilePoint = FarmLand.getPointFromIterator(tileIndex);
     this.id = FarmLand.getIdFromPoint(tilePoint);
     this.row = tilePoint.row;
     this.col = tilePoint.col;

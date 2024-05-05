@@ -11,7 +11,7 @@
   let { gridObject, children, className }: Props = $props();
   let objectClassName = $derived((className || "") + " object");
   let thisObjectPlacing = $derived(farmLand.selectedGridObjectId === gridObject.id)
-  const zIndex = $derived(gridObject.invalidPlacement ? 999 : 1);
+  let zIndex = $derived(gridObject.invalidPlacement ? 999 : 1);
 </script>
 
 <div

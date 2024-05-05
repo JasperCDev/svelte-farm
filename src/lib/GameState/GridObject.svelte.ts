@@ -60,7 +60,7 @@ export class GridObject {
         farmLand.selectedGridObjectId = this.id;
         return;
       default:
-        const exhaustive: never = farmLand.selectedTool;
+        let exhaustive: never = farmLand.selectedTool;
     }
   }
 }
