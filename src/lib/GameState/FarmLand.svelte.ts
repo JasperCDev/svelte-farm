@@ -10,16 +10,16 @@ export class FarmLand {
   static idHelper = 0;
   static TIME_SPEED = 500;
   static ROW_COUNT = 18;
-  static COLUMN_COUNT = 32;
+  static COL_COUNT = 32;
   public tiles = $state<Array<Tile>>(
     Array.from(
-      { length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT },
+      { length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT },
       (_, i) => new Tile(i)
     )
   );
   public gridObjects = $state<Array<GridObject | undefined>>(
     Array.from({
-      length: FarmLand.COLUMN_COUNT * FarmLand.ROW_COUNT,
+      length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT,
     })
   );
 
@@ -131,19 +131,32 @@ export class FarmLand {
         col: s.col + colDiff,
       };
     });
-    let isOutOfBounds = derive(() => {
-      for (let square of newSquares) {
-        if (square.row > FarmLand.ROW_COUNT) {
-          return true;
-        }
-        if (square.col > FarmLand.COLUMN_COUNT) {
-          return true;
-        }
+    let isOutOfBounds = false;
+    let rowBoundsDiff = 0;
+    let colBoundsDiff = 0;
+    for (let square of newSquares) {
+      if (square.row > FarmLand.ROW_COUNT) {
+        rowBoundsDiff = Math.max(
+          colBoundsDiff,
+          square.row - FarmLand.ROW_COUNT
+        );
+        isOutOfBounds = true;
       }
-      return false;
-    });
+      if (square.col > FarmLand.COL_COUNT) {
+        colBoundsDiff = Math.max(
+          rowBoundsDiff,
+          square.col - FarmLand.COL_COUNT
+        );
+        isOutOfBounds = true;
+      }
+    }
     if (isOutOfBounds) {
-      return;
+      row -= rowBoundsDiff;
+      col -= colBoundsDiff;
+      for (let square of newSquares) {
+        square.row -= rowBoundsDiff;
+        square.col -= colBoundsDiff;
+      }
     }
     let isOverlapping = derive(() => {
       for (let gridObj of farmLand.gridObjects) {
@@ -158,7 +171,6 @@ export class FarmLand {
             let isSameSpace =
               sqaure1.col === square2.col && sqaure1.row === square2.row;
             if (isSameSpace) {
-              console.log(newSquares, gridObj.space.squares);
               return true;
             }
           }
@@ -202,8 +214,8 @@ export class FarmLand {
 
   static getPointFromIterator(i: number) {
     let n = i + 1;
-    let row = Math.ceil(n / FarmLand.COLUMN_COUNT);
-    let col = n % FarmLand.COLUMN_COUNT || FarmLand.COLUMN_COUNT;
+    let row = Math.ceil(n / FarmLand.COL_COUNT);
+    let col = n % FarmLand.COL_COUNT || FarmLand.COL_COUNT;
     return { row, col };
   }
 
@@ -231,7 +243,7 @@ export class FarmLand {
     let split = id.split("-");
     let rowCount = parseInt(split[0]);
     let colCount = parseInt(split[1]);
-    return FarmLand.COLUMN_COUNT * (rowCount - 1) + colCount - 1;
+    return FarmLand.COL_COUNT * (rowCount - 1) + colCount - 1;
   }
 
   static getIteratorFromPoint(point: Point) {
