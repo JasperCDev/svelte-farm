@@ -5,14 +5,5 @@
   viewBox="0 0 48 48"
   fill="none"
 >
-  <g clip-path="url(#clip0_1_2)">
-    <rect width="48" height="48" fill="white" />
-    <rect width="16" height="48" fill="#DA2020" />
-    <rect x="16" y="32" width="32" height="16" fill="#DA2020" />
-  </g>
-  <defs>
-    <clipPath id="clip0_1_2">
-      <rect width="48" height="48" fill="white" />
-    </clipPath>
-  </defs>
+  <path d="M0 0H16V48H0V0Z M16 32H48V48H16V32Z" fill="green" />
 </svg>

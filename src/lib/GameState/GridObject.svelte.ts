@@ -1,4 +1,4 @@
-import { FarmLand } from "./FarmLand.svelte";
+import { FarmLand, farmLand } from "./FarmLand.svelte";
 import type { Points } from "./types";
 
 export type GridObjectName = "plant" | "shop" | "toolbar";
@@ -23,6 +23,8 @@ export class GridObject {
   placing = $state<boolean>(false);
   movable = $state<boolean>(false);
   invalidPlacement = $state<boolean>(false);
+  handleSpecificClick: () => void;
+
   constructor(
     row: number,
     col: number,
@@ -30,7 +32,8 @@ export class GridObject {
     width: number,
     height: number,
     squares?: Points,
-    movable?: boolean
+    movable?: boolean,
+    handleClick?: () => void
   ) {
     this.row = row;
     this.col = col;
@@ -38,5 +41,26 @@ export class GridObject {
     this.name = name;
     this.id = FarmLand.getIdFromPoint({ row, col });
     this.movable = Boolean(movable);
+    this.handleSpecificClick = handleClick || (() => {});
+  }
+
+  handleClick() {
+    if (farmLand.interactionMode === "placing") {
+      return;
+    }
+    switch (farmLand.selectedTool) {
+      case "cursor":
+        this.handleSpecificClick();
+        return;
+      case "mover":
+        if (!this.movable) {
+          return;
+        }
+        farmLand.interactionMode = "placing";
+        farmLand.selectedGridObjectId = this.id;
+        return;
+      default:
+        const exhaustive: never = farmLand.selectedTool;
+    }
   }
 }

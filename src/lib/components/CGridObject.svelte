@@ -7,37 +7,13 @@
     gridObject: GridObject;
     children: Snippet;
     className?: string;
-    handleClick?: (e: MouseEvent) => void;
   }
-  let { gridObject, children, className, handleClick }: Props = $props();
+  let { gridObject, children, className }: Props = $props();
   let objectClassName = $derived((className || "") + " object");
   let thisObjectPlacing = $derived(farmLand.selectedGridObjectId === gridObject.id)
-
-  function handleObjectClick(e: MouseEvent) {
-    if (farmLand.interactionMode === "placing") {
-      return;
-    }
-    e.stopPropagation();
-    switch (farmLand.selectedTool) {
-      case "cursor":
-        handleClick?.(e);
-        return;
-      case "mover":
-        if (!gridObject.movable) {
-          return;
-        }
-        farmLand.interactionMode = "placing";
-        farmLand.selectedGridObjectId = gridObject.id;
-        return;
-      default:
-        const exhaustive: never = farmLand.selectedTool;
-    }
-  }
   const zIndex = $derived(gridObject.invalidPlacement ? 999 : 1);
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class={objectClassName}
   style="
@@ -48,7 +24,6 @@
     border: {thisObjectPlacing ? "2px solid red" : "none"};
     z-index: {zIndex};
   "
-  onclick={handleObjectClick}
 >
   {#if gridObject.invalidPlacement}
     <div class="overlay" style="z-index: {zIndex + 1}"></div>
@@ -59,7 +34,6 @@
 <style>
   .object {
     position: absolute;
-    z-index: 1;
   }
   .overlay {
     position: absolute;

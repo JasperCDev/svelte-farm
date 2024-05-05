@@ -18,13 +18,9 @@
       }
     }
   }
-
-  $effect(() => {
-    console.log(obj.plantName);
-  });
 </script>
 
-<CGridObject gridObject={obj} handleClick={() => alert("plant")}>
+<CGridObject gridObject={obj}>
   <svelte:component this={getPlant()}></svelte:component>
 </CGridObject>
 

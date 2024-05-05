@@ -43,98 +43,6 @@
     })
   );
 
-  function handleGridClick() {
-    if (farmLand.interactionMode !== "placing") {
-      return;
-    }
-    const selectedGridObjectIterator = FarmLand.getIteratorFromId(farmLand.selectedGridObjectId!)
-    const selectedGridObject = farmLand.gridObjects[selectedGridObjectIterator]!;
-    if (selectedGridObject.invalidPlacement) {
-      return;
-    }
-    farmLand.interactionMode = "cursor";
-    selectedGridObject.invalidPlacement = false;
-    farmLand.selectedGridObjectId = null;
-  }
-
-  function handleGridMouseMove(e: MouseEvent) {
-    if (farmLand.interactionMode !== "placing") {
-      return;
-    }
-    if (farmLand.selectedGridObjectId === null) {
-      return;
-    }
-    snapObject(e);
-  }
-
-  function snapObject(e: MouseEvent) {
-    const selectedGridObjectIterator = FarmLand.getIteratorFromId(farmLand.selectedGridObjectId!)
-    const selectedGridObject = farmLand.gridObjects[selectedGridObjectIterator]!;
-    // x & y of mouse position relative to the grid
-    const x = e.clientX;
-    const y = e.clientY;
-
-    // x & y mouse position relative to the window
-    const relX = x - (window.innerWidth - gridRef.clientWidth) / 2;
-    const relY = y - (window.innerHeight - gridRef.clientHeight) / 2;
-
-    // x & y remander from tilesize
-    const modX = relX % farmLand.tileSize;
-    const modY = relY % farmLand.tileSize;
-
-    // x & y snapped to grid
-    const snappedX = relX - modX;
-    const snappedY = relY - modY;
-
-    // row & col rounded from the tile count of x & y + 1
-    const row = Math.round(snappedY / farmLand.tileSize + 1);
-    const col = Math.round(snappedX / farmLand.tileSize + 1);
-    const rowDiff = row - selectedGridObject.space.squares[0].row;
-    const colDiff = col - selectedGridObject.space.squares[0].col;
-    const newSquares = selectedGridObject.space.squares.map((s) => {
-      return {
-        row: s.row + rowDiff,
-        col: s.col + colDiff
-      }
-    })
-    const isOutOfBounds = derive(() => {
-      for (const square of newSquares) {
-        if (square.row > FarmLand.ROW_COUNT) {
-          return true;
-        }
-        if (square.col > FarmLand.COLUMN_COUNT) {
-          return true;
-        }
-      }
-      return false;
-    });
-    if (isOutOfBounds) {
-      return;
-    }
-    const isOverlapping = derive(() => {
-      for (const gridObj of farmLand.gridObjects) {
-        if (typeof gridObj === "undefined") {
-          continue;
-        }
-        if (gridObj.id === selectedGridObject.id) {
-          continue;
-        }
-        for (const sqaure1 of gridObj.space.squares) {
-          for (const square2 of newSquares) {
-            const isSameSpace = sqaure1.col === square2.col && sqaure1.row === square2.row;
-            if (isSameSpace) {
-              return true;
-            }
-          }
-        }
-      }
-      return false;
-    });
-    selectedGridObject.invalidPlacement = isOverlapping;
-    selectedGridObject.row = row;
-    selectedGridObject.col = col;
-    selectedGridObject.space.squares = newSquares;
-  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -148,8 +56,8 @@
     height: {farmLand.gridHeight}px;
   "
   bind:this={gridRef}
-  onclick={handleGridClick}
-  onmousemove={handleGridMouseMove}
+  onclick={farmLand.handleGridClick}
+  onmousemove={farmLand.handleGridMouseMove}
 >
   {#each gridObjectsToRender as gridObject}
     <svelte:component this={gridObject.component} obj={gridObject.props as any} />

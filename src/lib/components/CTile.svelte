@@ -7,11 +7,21 @@
   }
   let { tile }: Props = $props();
   const isPlacingMode = $derived(farmLand.interactionMode === "placing");
-  let color = $derived(isPlacingMode ? "#5ffa5a" : "lightgreen");
+  function getColor() {
+    switch (tile.type) {
+      case "SOIL":
+        return "burlywood";
+      case "WATER":
+        return "lightblue";
+    }
+  }
   let border = $derived(isPlacingMode ? "1px dashed black" : "1px solid grey");
 </script>
 
-<div class="tile" style="background-color: {color}; border: {border};"></div>
+<div
+  class="tile"
+  style="background-color: {getColor()}; border: {border};"
+></div>
 
 <style>
   .tile {

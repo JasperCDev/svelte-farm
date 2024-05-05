@@ -8,7 +8,7 @@
   let { obj }: Props = $props();
 </script>
 
-<CGridObject gridObject={obj} handleClick={() => alert("shop")}>
+<CGridObject gridObject={obj}>
   <div class="shop">
     <h1>Shop</h1>
   </div>

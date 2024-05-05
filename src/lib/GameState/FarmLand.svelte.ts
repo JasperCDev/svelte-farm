@@ -1,8 +1,10 @@
+import { derive } from "../utils";
 import type { GridObject } from "./GridObject.svelte";
 import { Plant } from "./Plant.svelte";
 import { Shop } from "./Shop.svelte";
 import { Tile } from "./Tile.svelte";
 import { Toolbar, type Tool } from "./Toolbar.svelte";
+import type { Point } from "./types";
 
 export class FarmLand {
   static idHelper = 0;
@@ -30,22 +32,20 @@ export class FarmLand {
   public selectedTool = $state<Tool>("cursor");
   constructor() {
     this.getGridSize();
-    this.gridObjects[
-      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 1, col: 1 }))
-    ] = new Plant(1, 1, "basic");
-    this.gridObjects[
-      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 10, col: 10 }))
-    ] = new Shop(10, 10, [
-      { row: 10, col: 10 },
-      { row: 10, col: 11 },
-      { row: 10, col: 12 },
-      { row: 11, col: 10 },
-      { row: 11, col: 11 },
-      { row: 11, col: 12 },
-      { row: 12, col: 10 },
-      { row: 12, col: 11 },
-      { row: 12, col: 12 },
-    ]);
+    this.gridObjects[FarmLand.getIteratorFromPoint({ row: 1, col: 1 })] =
+      new Plant(1, 1, "basic");
+    this.gridObjects[FarmLand.getIteratorFromPoint({ row: 10, col: 10 })] =
+      new Shop(10, 10, [
+        { row: 10, col: 10 },
+        { row: 10, col: 11 },
+        { row: 10, col: 12 },
+        { row: 11, col: 10 },
+        { row: 11, col: 11 },
+        { row: 11, col: 12 },
+        { row: 12, col: 10 },
+        { row: 12, col: 11 },
+        { row: 12, col: 12 },
+      ]);
     this.gridObjects[
       FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 17, col: 15 }))
     ] = new Toolbar(17, 15, [
@@ -61,6 +61,135 @@ export class FarmLand {
     this.gridObjects[
       FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 5, col: 10 }))
     ] = new Plant(5, 10, "bush");
+
+    this.handleGridClick = this.handleGridClick.bind(this);
+    this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
+  }
+
+  public handleGridClick(e: MouseEvent) {
+    if (farmLand.interactionMode == "placing") {
+      const selectedGridObjectIterator = FarmLand.getIteratorFromId(
+        farmLand.selectedGridObjectId!
+      );
+      const selectedGridObject =
+        farmLand.gridObjects[selectedGridObjectIterator]!;
+      if (selectedGridObject.invalidPlacement) {
+        return;
+      }
+      farmLand.interactionMode = "cursor";
+      selectedGridObject.invalidPlacement = false;
+      farmLand.selectedGridObjectId = null;
+      return;
+    }
+
+    const { row, col } = this.getPointFromMousePosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
+    for (const gridObject of this.gridObjects) {
+      if (typeof gridObject === "undefined") {
+        continue;
+      }
+      const squareFoundIndx = gridObject.space.squares.findIndex((point) => {
+        return point.row === row && point.col === col;
+      });
+      const isHit = squareFoundIndx !== -1;
+      if (isHit) {
+        gridObject.handleClick();
+        return;
+      }
+    }
+    const tileIndx = FarmLand.getIteratorFromPoint({ row, col });
+    const tile = this.tiles[tileIndx];
+    tile.handleClick();
+  }
+
+  public handleGridMouseMove(e: MouseEvent) {
+    if (farmLand.interactionMode !== "placing") {
+      return;
+    }
+    if (farmLand.selectedGridObjectId === null) {
+      return;
+    }
+    this.snapObject(e);
+  }
+
+  public snapObject(e: MouseEvent) {
+    const selectedGridObjectIterator = FarmLand.getIteratorFromId(
+      farmLand.selectedGridObjectId!
+    );
+    const selectedGridObject =
+      farmLand.gridObjects[selectedGridObjectIterator]!;
+    const { row, col } = this.getPointFromMousePosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
+    const rowDiff = row - selectedGridObject.space.squares[0].row;
+    const colDiff = col - selectedGridObject.space.squares[0].col;
+    const newSquares = selectedGridObject.space.squares.map((s) => {
+      return {
+        row: s.row + rowDiff,
+        col: s.col + colDiff,
+      };
+    });
+    const isOutOfBounds = derive(() => {
+      for (const square of newSquares) {
+        if (square.row > FarmLand.ROW_COUNT) {
+          return true;
+        }
+        if (square.col > FarmLand.COLUMN_COUNT) {
+          return true;
+        }
+      }
+      return false;
+    });
+    if (isOutOfBounds) {
+      return;
+    }
+    const isOverlapping = derive(() => {
+      for (const gridObj of farmLand.gridObjects) {
+        if (typeof gridObj === "undefined") {
+          continue;
+        }
+        if (gridObj.id === selectedGridObject.id) {
+          continue;
+        }
+        for (const sqaure1 of gridObj.space.squares) {
+          for (const square2 of newSquares) {
+            const isSameSpace =
+              sqaure1.col === square2.col && sqaure1.row === square2.row;
+            if (isSameSpace) {
+              console.log(newSquares, gridObj.space.squares);
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    });
+    if (isOverlapping) {
+      selectedGridObject.invalidPlacement = true;
+      selectedGridObject.invalidPlacement = isOverlapping;
+      selectedGridObject.row = row;
+      selectedGridObject.col = col;
+      selectedGridObject.space.squares = newSquares;
+      return;
+    }
+    for (const square of newSquares) {
+      const tileId = FarmLand.getIteratorFromPoint(square);
+      const tile = farmLand.tiles[tileId];
+      if (tile.type !== "SOIL") {
+        selectedGridObject.invalidPlacement = true;
+        selectedGridObject.row = row;
+        selectedGridObject.col = col;
+        selectedGridObject.space.squares = newSquares;
+        return;
+      }
+    }
+    selectedGridObject.invalidPlacement = isOverlapping;
+    selectedGridObject.row = row;
+    selectedGridObject.col = col;
+    selectedGridObject.space.squares = newSquares;
   }
 
   public getGridSize() {
@@ -79,6 +208,26 @@ export class FarmLand {
     return { row, col };
   }
 
+  public getPointFromMousePosition(mousePos: { x: number; y: number }) {
+    // x & y mouse position relative to the window
+    const relX = mousePos.x - (window.innerWidth - this.gridWidth) / 2;
+    const relY = mousePos.y - (window.innerHeight - this.gridHeight) / 2;
+
+    // x & y remander from tilesize
+    const modX = relX % this.tileSize;
+    const modY = relY % this.tileSize;
+
+    // x & y snapped to grid
+    const snappedX = relX - modX;
+    const snappedY = relY - modY;
+
+    // row & col rounded from the tile count of x & y + 1
+    return {
+      row: Math.round(snappedY / this.tileSize + 1),
+      col: Math.round(snappedX / this.tileSize + 1),
+    };
+  }
+
   static getIteratorFromId(id: string) {
     const split = id.split("-");
     const rowCount = parseInt(split[0]);
@@ -86,7 +235,11 @@ export class FarmLand {
     return FarmLand.COLUMN_COUNT * (rowCount - 1) + colCount - 1;
   }
 
-  static getIdFromPoint(point: { row: number; col: number }) {
+  static getIteratorFromPoint(point: Point) {
+    return FarmLand.getIteratorFromId(FarmLand.getIdFromPoint(point));
+  }
+
+  static getIdFromPoint(point: Point) {
     FarmLand.idHelper++;
     return (
       point.row.toString().padStart(2, "0") +

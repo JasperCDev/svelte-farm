@@ -15,4 +15,8 @@ export class Tile {
     this.col = tilePoint.col;
     if (type) this.type = type;
   }
+
+  handleClick() {
+    this.type = "WATER";
+  }
 }
