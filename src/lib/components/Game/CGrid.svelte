@@ -1,14 +1,14 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { FarmLand, farmLand } from "../GameState/FarmLand.svelte";
-  import CTile from "./CTile.svelte";
-  import CPlant from "./CPlant.svelte";
-  import CShop from "./CShop.svelte";
-  import { derive } from "../utils";
-  import CToolbar from "./CToolbar.svelte";
-  import { Plant } from "../GameState/Plant.svelte";
-  import { Shop } from "../GameState/Shop.svelte";
-  import { Toolbar } from "../GameState/Toolbar.svelte";
+  import { FarmLand, farmLand } from "../../GameState/FarmLand.svelte";
+  import CTile from "../CTile.svelte";
+  import CPlant from "../CPlant.svelte";
+  import CShop from "../CShop.svelte";
+  import { derive } from "../../utils";
+  import CToolbar from "../CToolbar.svelte";
+  import { Plant } from "../../GameState/Plant.svelte";
+  import { Shop } from "../../GameState/Shop.svelte";
+  import { Toolbar } from "../../GameState/Toolbar.svelte";
 
   let gridRef: HTMLDivElement;
 

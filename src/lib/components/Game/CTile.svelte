@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { farmLand } from "../GameState/FarmLand.svelte";
-  import type { Tile } from "../GameState/Tile.svelte";
+  import { farmLand } from "../../GameState/FarmLand.svelte";
+  import type { Tile } from "../../GameState/Tile.svelte";
 
   interface Props {
     tile: Tile;

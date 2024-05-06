@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Plant } from "../GameState/Plant.svelte";
+  import type { Plant } from "../../GameState/Plant.svelte";
   import CGridObject from "./CGridObject.svelte";
   import SvgPlantBasic from "./SVGPlantBasic.svelte";
   import SvgPlantLBush from "./SVGPlantLBush.svelte";

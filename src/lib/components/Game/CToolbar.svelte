@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { farmLand } from "../GameState/FarmLand.svelte";
-  import type { Toolbar, Tool } from "../GameState/Toolbar.svelte";
+  import { farmLand } from "../../GameState/FarmLand.svelte";
+  import type { Toolbar, Tool } from "../../GameState/Toolbar.svelte";
   import CGridObject from "./CGridObject.svelte";
 
   interface Props {

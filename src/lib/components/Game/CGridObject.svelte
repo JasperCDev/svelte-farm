@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { farmLand } from "../GameState/FarmLand.svelte";
-  import type { GridObject } from "../GameState/GridObject.svelte";
+  import { farmLand } from "../../GameState/FarmLand.svelte";
+  import type { GridObject } from "../../GameState/GridObject.svelte";
 
   interface Props {
     gridObject: GridObject;

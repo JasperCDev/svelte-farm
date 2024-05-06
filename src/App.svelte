@@ -1,6 +1,6 @@
 <script lang="ts">
   import { farmLand } from "./lib/GameState/FarmLand.svelte";
-  import CGrid from "./lib/components/CGrid.svelte";
+  import CGrid from "./lib/components/Game/CGrid.svelte";
 
   function getCursor() {
     switch (farmLand.selectedTool) {
