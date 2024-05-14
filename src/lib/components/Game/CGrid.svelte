@@ -1,16 +1,14 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import { FarmLand, farmLand } from "../../GameState/FarmLand.svelte";
-  import CTile from "../CTile.svelte";
-  import CPlant from "../CPlant.svelte";
-  import CShop from "../CShop.svelte";
-  import { derive } from "../../utils";
-  import CToolbar from "../CToolbar.svelte";
+  import CTile from "./CTile.svelte";
+  import CPlant from "./CPlant.svelte";
+  import CShop from "./CShop.svelte";
+  import CToolbar from "./CToolbar.svelte";
   import { Plant } from "../../GameState/Plant.svelte";
   import { Shop } from "../../GameState/Shop.svelte";
   import { Toolbar } from "../../GameState/Toolbar.svelte";
-
-  let gridRef: HTMLDivElement;
+  import CTiles from "./CTiles.svelte";
 
   onMount(() => {
     window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
@@ -55,16 +53,16 @@
     width: {farmLand.gridWidth}px;
     height: {farmLand.gridHeight}px;
   "
-  bind:this={gridRef}
   onclick={farmLand.handleGridClick}
   onmousemove={farmLand.handleGridMouseMove}
 >
   {#each gridObjectsToRender as gridObject}
     <svelte:component this={gridObject.component} obj={gridObject.props as any} />
   {/each}
-  {#each farmLand.tiles as tile}
+  <!-- {#each farmLand.tiles as tile}
     <CTile {tile} />
-  {/each}
+  {/each} -->
+  <CTiles />
 </div>
 
 <style>

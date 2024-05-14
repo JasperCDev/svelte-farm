@@ -17,6 +17,6 @@ export class Tile {
   }
 
   handleClick() {
-    this.type = "WATER";
+    this.type = this.type === "WATER" ? "SOIL" : "WATER";
   }
 }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Shop } from "../../GameState/Shop.svelte";
   import CGridObject from "./CGridObject.svelte";
+  import SvgShop from "./SVGShop.svelte";
 
   interface Props {
     obj: Shop;
@@ -10,7 +11,7 @@
 
 <CGridObject gridObject={obj}>
   <div class="shop">
-    <h1>Shop</h1>
+    <SvgShop />
   </div>
 </CGridObject>
 

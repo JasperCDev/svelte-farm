@@ -259,5 +259,4 @@ export class FarmLand {
     );
   }
 }
-
 export let farmLand = new FarmLand();

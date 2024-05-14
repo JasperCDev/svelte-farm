@@ -1,33 +1,25 @@
 <script lang="ts">
   import { farmLand } from "./lib/GameState/FarmLand.svelte";
+  import { gameState } from "./lib/GameState/GameState.svelte";
+  import CGame from "./lib/components/Game/CGame.svelte";
   import CGrid from "./lib/components/Game/CGrid.svelte";
+  import MainMenu from "./lib/components/MainMenu/MainMenu.svelte";
 
-  function getCursor() {
-    switch (farmLand.selectedTool) {
-      case "cursor":
-        return "auto";
-      case "mover":
-        return "move";
+  function getScene() {
+    switch (gameState.scene) {
+      case "game":
+        return CGame;
+      case "main menu":
+        return MainMenu;
+      default:
+        let exhaustiveCheck: never = gameState.scene;
     }
   }
 </script>
 
-<main
-  class="main"
-  style="
-    cursor: {getCursor()};
-  "
->
-  <CGrid />
+<main class="main">
+  <svelte:component this={getScene()} />
 </main>
 
 <style>
-  .main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-  }
 </style>
