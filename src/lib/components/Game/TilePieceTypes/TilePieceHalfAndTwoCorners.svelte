@@ -4,6 +4,7 @@
     tilePiece: TilePiece;
   };
   let { tilePiece }: Props = $props();
+  console.log("half and two corners");
 </script>
 
 <svg

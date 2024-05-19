@@ -27,7 +27,6 @@
   let otherColor = $derived(
     grassCount === 3 ? getTileColor(primaryTileType) : getTileColor("GRASS")
   );
-  console.log(baseColor, otherColor, tilePiece.topLeft);
   let rotation = $derived(
     getTileColor(tilePiece.topLeft) === otherColor
       ? "0"
@@ -37,6 +36,7 @@
           ? "180"
           : "270"
   );
+  console.log("one corner");
 </script>
 
 <svg

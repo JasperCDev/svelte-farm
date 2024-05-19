@@ -9,6 +9,7 @@
   let rotation = $derived(
     tilePiece.topLeft === tilePiece.topRight ? "90" : "0"
   );
+  console.log("half and half");
 </script>
 
 <svg

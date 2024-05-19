@@ -106,6 +106,7 @@
           t.topRight === t.bottomRight &&
           t.bottomRight === t.bottomLeft
         ) {
+          console.log("solid");
           return {
             tilePiece: t,
             component: TilePieceSolid,

@@ -5,6 +5,7 @@
   };
   let { tilePiece }: Props = $props();
   const color = getTileColor(tilePiece.topLeft);
+  console.log("solid");
 </script>
 
 <svg

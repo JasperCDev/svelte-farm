@@ -9,6 +9,7 @@
   let topRightColor = $derived(getTileColor(tilePiece.topRight));
   let bottomRightColor = $derived(getTileColor(tilePiece.bottomRight));
   let bottomLeftColor = $derived(getTileColor(tilePiece.bottomLeft));
+  console.log("four corners");
 </script>
 
 <svg
