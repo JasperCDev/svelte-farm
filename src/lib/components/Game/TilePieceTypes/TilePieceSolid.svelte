@@ -5,7 +5,6 @@
   };
   let { tilePiece }: Props = $props();
   const color = getTileColor(tilePiece.topLeft);
-  const baseColor = getTileColor("GRASS");
 </script>
 
 <svg
@@ -16,8 +15,5 @@
   xmlns="http://www.w3.org/2000/svg"
   class="solid"
 >
-  <g clip-path="url(#clip0_16_2)">
-    <rect width="100%" height="100%" fill={baseColor} />
-    <rect width="100%" height="100%" fill={color} />
-  </g>
+  <rect width="100%" height="100%" fill={color} />
 </svg>
