@@ -1,5 +1,6 @@
 <script context="module">
   export type ZeroThruFour = 0 | 1 | 2 | 3 | 4;
+  export type OneThruFour = 0 | 1 | 2 | 3 | 4;
   export type TilePiece = {
     point: Point;
     topLeft: TileType | null;
@@ -29,15 +30,6 @@
   import { FarmLand, farmLand } from "../../GameState/FarmLand.svelte";
   import type { TileType } from "../../GameState/Tile.svelte";
   import type { Point } from "../../GameState/types";
-  import { derive } from "../../utils";
-  import TilePieceSolid from "./TilePieceTypes/TilePieceSolid.svelte";
-  import TilePieceOneCorner from "./TilePieceTypes/TilePieceOneCorner.svelte";
-  import TilePieceOpposingCorners from "./TilePieceTypes/TilePieceOpposingCorners.svelte";
-  import TilePieceTwoCorners from "./TilePieceTypes/TilePieceTwoCorners.svelte";
-  import TilePieceHalfAndTwoCorners from "./TilePieceTypes/TilePieceHalfAndTwoCorners.svelte";
-  import TilePieceHalfAndHalf from "./TilePieceTypes/TilePieceHalfAndHalf.svelte";
-  import TilePieceThreeCorners from "./TilePieceTypes/TilePieceThreeCorners.svelte";
-  import TilePieceFourCorners from "./TilePieceTypes/TilePieceFourCorners.svelte";
 
   let tilesPiecesColCount = FarmLand.COL_COUNT + 1;
   let tilesPiecesRowCount = FarmLand.ROW_COUNT + 1;
@@ -79,86 +71,81 @@
     bottomRight.typeCounts[tile.type]++;
     bottomLeft.typeCounts[tile.type]++;
   }
+  let tilesPiecesToRender = tilesPieces.map((tp) => {
+    return {
+      tp,
+      objs: Object.keys(tp.typeCounts)
+        .filter((t) => t !== "GRASS" && tp.typeCounts[t as TileType] !== 0)
+        .map((type) => {
+          let obj = {
+            horizontal: false,
+            vertical: false,
+            isTop: false,
+            isLeft: false,
+            isOpposing: false,
+            count: tp.typeCounts[type as TileType] as ZeroThruFour,
+            color: getTileColor(type as TileType),
+          };
+          let isTopLeft = tp.topLeft === type;
+          let isTopRight = tp.topRight === type;
+          let isBottomRight = tp.bottomRight === type;
+          let isBottomLeft = tp.bottomLeft === type;
 
-  const tilesPiecesToRender = tilesPieces.map((t) => {
-    let uniqCorners = (Object.keys(t.typeCounts) as TileType[]).filter(
-      (type) => type !== "GRASS" && t.typeCounts[type] > 0
-    ).length as ZeroThruFour;
-    let doubleTileCount = derive(() => {
-      let count = 0;
-      if (t.typeCounts.SOIL >= 2) {
-        count++;
-      }
-      if (t.typeCounts.WATER >= 2) {
-        count++;
-      }
-      return count;
-    });
-    switch (uniqCorners) {
-      case 0:
-        return {
-          tilePiece: t,
-          component: TilePieceSolid,
-        };
-      case 1:
-        if (
-          t.topLeft === t.topRight &&
-          t.topRight === t.bottomRight &&
-          t.bottomRight === t.bottomLeft
-        ) {
-          console.log("solid");
-          return {
-            tilePiece: t,
-            component: TilePieceSolid,
-          };
-        }
-        if (doubleTileCount === 1) {
-          return {
-            tilePiece: t,
-            component: TilePieceHalfAndHalf,
-          };
-        }
-        return {
-          tilePiece: t,
-          component: TilePieceOneCorner,
-        };
-      case 2:
-        if (doubleTileCount === 2) {
-          return {
-            tilePiece: t,
-            component: TilePieceHalfAndHalf,
-          };
-        }
-        let isOpossing =
-          (t.topRight !== "GRASS" && t.bottomLeft !== "GRASS") ||
-          (t.topLeft !== "GRASS" && t.bottomRight !== "GRASS");
-        if (isOpossing) {
-          return {
-            tilePiece: t,
-            component: TilePieceOpposingCorners,
-          };
-        }
-        return {
-          tilePiece: t,
-          component: TilePieceTwoCorners,
-        };
-      case 3:
-        if (doubleTileCount === 1) {
-          return {
-            tilePiece: t,
-            component: TilePieceHalfAndTwoCorners,
-          };
-        }
-        return {
-          tilePiece: t,
-          component: TilePieceThreeCorners,
-        };
-      case 4:
-        return {
-          tilePiece: t,
-          component: TilePieceFourCorners,
-        };
-    }
+          switch (obj.count) {
+            case 4:
+              break;
+            case 3:
+              break;
+            case 2:
+              let isOpposing =
+                (isTopLeft && isBottomRight) || (isTopRight && isBottomLeft);
+              if (isOpposing) {
+                obj.isLeft = isTopLeft;
+                obj.isOpposing = true;
+                break;
+              }
+              if (isTopLeft) {
+                if (isTopRight) {
+                  obj.horizontal = true;
+                  obj.isTop = true;
+                  break;
+                } else {
+                  obj.vertical = true;
+                  obj.isLeft = true;
+                  break;
+                }
+              }
+              if (isTopRight) {
+                obj.vertical = true;
+                obj.isLeft = false;
+                break;
+              }
+              obj.horizontal = true;
+              obj.isTop = false;
+              break;
+            case 1:
+              if (isTopLeft) {
+                obj.isTop = true;
+                obj.isLeft = true;
+                break;
+              }
+              if (isTopRight) {
+                obj.isTop = true;
+                obj.isLeft = false;
+                break;
+              }
+              if (isBottomRight) {
+                obj.isTop = false;
+                obj.isLeft = false;
+                break;
+              }
+              obj.isTop = false;
+              obj.isLeft = true;
+              break;
+          }
+          return obj;
+        }),
+    };
   });
 </script>
 
@@ -166,15 +153,68 @@
   <div
     class="tile-piece"
     style="
-      top: {tilePiece.tilePiece.point.row * farmLand.tileSize -
+      top: {tilePiece.tp.point.row * farmLand.tileSize -
       farmLand.tileSize * 1.5}px;
-      left: {tilePiece.tilePiece.point.col * farmLand.tileSize -
-      farmLand.tileSize * 1.5}px;"
+      left: {tilePiece.tp.point.col * farmLand.tileSize -
+      farmLand.tileSize * 1.5}px;
+    "
   >
-    <svelte:component
-      this={tilePiece.component}
-      tilePiece={tilePiece.tilePiece}
-    />
+    {#each tilePiece.objs as obj}
+      {#if obj.count === 4}
+        <div
+          class="tile-piece-corner"
+          style="
+          top: 0;
+          left: 0;
+          background-color: {obj.color};
+        "
+        ></div>
+      {:else if obj.count === 3}
+        <div
+          class="tile-piece-corner"
+          style="
+          top: 0;
+          left: 0;
+          background-color: {obj.color};
+        "
+        ></div>
+      {:else if obj.count === 2}
+        {#if obj.isOpposing}
+          <div
+            class="tile-piece-corner is-round"
+            style="
+              top: -50%;
+            "
+          ></div>
+          <div
+            class="tile-piece-corner is-round"
+            style="
+              top: {obj.vertical ? 0 : obj.isTop ? '-50%' : '50%'};
+              left: {obj.horizontal ? 0 : obj.isLeft ? '-50%' : '50%'};
+              background-color: {obj.color};
+            "
+          ></div>
+        {:else}
+          <div
+            class="tile-piece-corner"
+            style="
+              top: {obj.vertical ? 0 : obj.isTop ? '-50%' : '50%'};
+              left: {obj.horizontal ? 0 : obj.isLeft ? '-50%' : '50%'};
+              background-color: {obj.color};
+            "
+          ></div>
+        {/if}
+      {:else}
+        <div
+          class="tile-piece-corner is-round"
+          style="
+          top={obj.isTop ? '-50%' : '50%'};
+          left={obj.isLeft ? '-50%' : '50%'};
+          background-color={obj.color}
+        "
+        ></div>
+      {/if}
+    {/each}
   </div>
 {/each}
 
@@ -184,5 +224,16 @@
     width: var(--tile-size);
     height: var(--tile-size);
     outline: 1px solid red;
+    background-color: lightgreen;
+    overflow: hidden;
+  }
+  .is-round {
+    border-radius: 20%;
+  }
+
+  .tile-piece-corner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
 </style>
