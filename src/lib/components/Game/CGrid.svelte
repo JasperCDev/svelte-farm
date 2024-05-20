@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
-  import { FarmLand, farmLand } from "../../GameState/FarmLand.svelte";
-  import CTile from "./CTile.svelte";
+  import { farmLand } from "../../GameState/FarmLand.svelte";
   import CPlant from "./CPlant.svelte";
   import CShop from "./CShop.svelte";
   import CToolbar from "./CToolbar.svelte";

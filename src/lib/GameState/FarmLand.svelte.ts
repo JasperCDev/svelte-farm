@@ -1,3 +1,4 @@
+import type { TilePiece, ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { derive } from "../utils";
 import type { GridObject } from "./GridObject.svelte";
 import { Plant } from "./Plant.svelte";
@@ -22,6 +23,24 @@ export class FarmLand {
       length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT,
     })
   );
+  public tilePieces = Array.from<object, TilePiece>(
+    { length: (FarmLand.COL_COUNT + 1) * (FarmLand.ROW_COUNT + 1) },
+    (_, i) => ({
+      point: {
+        row: Math.ceil((i + 1) / (FarmLand.COL_COUNT + 1)),
+        col: (i + 1) % (FarmLand.COL_COUNT + 1) || FarmLand.COL_COUNT + 1,
+      },
+      topLeft: null,
+      topRight: null,
+      bottomLeft: null,
+      bottomRight: null,
+      typeCounts: {
+        GRASS: 0 as ZeroThruFour,
+        SOIL: 0 as ZeroThruFour,
+        WATER: 0 as ZeroThruFour,
+      },
+    })
+  );
 
   public tileSize = $state<number>(0);
   public gridWidth = $state<number>(0);
@@ -32,6 +51,7 @@ export class FarmLand {
   public selectedTool = $state<Tool>("cursor");
   constructor() {
     this.getGridSize();
+    this.initTilePieces();
     // this.gridObjects[FarmLand.getIteratorFromPoint({ row: 1, col: 1 })] =
     //   new Plant(1, 1, "basic");
     // this.gridObjects[FarmLand.getIteratorFromPoint({ row: 10, col: 10 })] =
@@ -64,6 +84,39 @@ export class FarmLand {
 
     this.handleGridClick = this.handleGridClick.bind(this);
     this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
+  }
+
+  public initTilePieces() {
+    for (let i = 0; i < this.tiles.length; i++) {
+      let tile = this.tiles[i];
+      let topLeftIndx = i + (tile.row - 1);
+      let topRightIndx = topLeftIndx + 1;
+      let bottomLeftIndx = tile.row * (FarmLand.COL_COUNT + 1) - 1 + tile.col;
+      let bottomRightIndx = bottomLeftIndx + 1;
+      let topLeft = this.tilePieces[topLeftIndx];
+      let topRight = this.tilePieces[topRightIndx];
+      let bottomLeft = this.tilePieces[bottomLeftIndx];
+      let bottomRight = this.tilePieces[bottomRightIndx];
+      topLeft.bottomRight = tile.type;
+      topRight.bottomLeft = tile.type;
+      bottomLeft.topRight = tile.type;
+      bottomRight.topLeft = tile.type;
+      topLeft.typeCounts[tile.type]++;
+      topRight.typeCounts[tile.type]++;
+      bottomRight.typeCounts[tile.type]++;
+      bottomLeft.typeCounts[tile.type]++;
+    }
+  }
+
+  public placeObject(gridObject: GridObject) {
+    for (let i = 0; i < gridObject.space.squares.length; i++) {
+      let square = gridObject.space.squares[0];
+    }
+    this.gridObjects[
+      FarmLand.getIteratorFromId(
+        FarmLand.getIdFromPoint({ row: gridObject.row, col: gridObject.col })
+      )
+    ] = gridObject;
   }
 
   public handleGridClick(e: MouseEvent) {

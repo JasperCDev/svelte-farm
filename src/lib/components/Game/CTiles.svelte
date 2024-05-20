@@ -29,51 +29,10 @@
 </script>
 
 <script lang="ts">
-  import { FarmLand, farmLand } from "../../GameState/FarmLand.svelte";
+  import { farmLand } from "../../GameState/FarmLand.svelte";
   import type { TileType } from "../../GameState/Tile.svelte";
   import type { Point } from "../../GameState/types";
-
-  let tilesPiecesColCount = FarmLand.COL_COUNT + 1;
-  let tilesPiecesRowCount = FarmLand.ROW_COUNT + 1;
-  let tilesPieces = Array.from<object, TilePiece>(
-    { length: tilesPiecesColCount * tilesPiecesRowCount },
-    (_, i) => ({
-      point: {
-        row: Math.ceil((i + 1) / tilesPiecesColCount),
-        col: (i + 1) % tilesPiecesColCount || tilesPiecesColCount,
-      },
-      topLeft: null,
-      topRight: null,
-      bottomLeft: null,
-      bottomRight: null,
-      typeCounts: {
-        GRASS: 0 as ZeroThruFour,
-        SOIL: 0 as ZeroThruFour,
-        WATER: 0 as ZeroThruFour,
-      },
-    })
-  );
-
-  for (let i = 0; i < farmLand.tiles.length; i++) {
-    let tile = farmLand.tiles[i];
-    let topLeftIndx = i + (tile.row - 1);
-    let topRightIndx = topLeftIndx + 1;
-    let bottomLeftIndx = tile.row * tilesPiecesColCount - 1 + tile.col;
-    let bottomRightIndx = bottomLeftIndx + 1;
-    let topLeft = tilesPieces[topLeftIndx];
-    let topRight = tilesPieces[topRightIndx];
-    let bottomLeft = tilesPieces[bottomLeftIndx];
-    let bottomRight = tilesPieces[bottomRightIndx];
-    topLeft.bottomRight = tile.type;
-    topRight.bottomLeft = tile.type;
-    bottomLeft.topRight = tile.type;
-    bottomRight.topLeft = tile.type;
-    topLeft.typeCounts[tile.type]++;
-    topRight.typeCounts[tile.type]++;
-    bottomRight.typeCounts[tile.type]++;
-    bottomLeft.typeCounts[tile.type]++;
-  }
-  let tilesPiecesToRender = tilesPieces.map((tp) => {
+  let tilesPiecesToRender = farmLand.tilePieces.map((tp) => {
     return {
       tp,
       objs: Object.keys(tp.typeCounts)
