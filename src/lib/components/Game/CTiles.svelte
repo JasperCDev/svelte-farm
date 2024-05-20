@@ -1,4 +1,5 @@
 <script context="module">
+  const TILE_PIECE_Z_INDEX = 10;
   export type ZeroThruFour = 0 | 1 | 2 | 3 | 4;
   export type OneThruFour = 0 | 1 | 2 | 3 | 4;
   export type TilePiece = {
@@ -11,6 +12,7 @@
       [key in TileType]: ZeroThruFour;
     };
   };
+  type TilePiecePos = "topLeft" | "topRight" | "bottomRight" | "bottomLeft";
   export function getTileColor(tileType: TileType | null) {
     if (tileType === null) {
       return "lightgreen";
@@ -19,9 +21,9 @@
       case "GRASS":
         return "lightgreen";
       case "SOIL":
-        return "burlywood";
+        return "#eab64f";
       case "WATER":
-        return "lightblue";
+        return "#74ccf4";
     }
   }
 </script>
@@ -85,6 +87,7 @@
             isOpposing: false,
             count: tp.typeCounts[type as TileType] as ZeroThruFour,
             color: getTileColor(type as TileType),
+            excludingTile: null as TilePiecePos | null,
           };
           let isTopLeft = tp.topLeft === type;
           let isTopRight = tp.topRight === type;
@@ -93,55 +96,68 @@
 
           switch (obj.count) {
             case 4:
-              break;
+              return obj;
             case 3:
-              break;
+              if (!isTopLeft) {
+                obj.excludingTile = "topLeft";
+                return obj;
+              }
+              if (!isTopRight) {
+                obj.excludingTile = "topRight";
+                return obj;
+              }
+              if (!isBottomRight) {
+                obj.excludingTile = "bottomRight";
+                return obj;
+              }
+              obj.excludingTile = "bottomLeft";
+              return obj;
             case 2:
               let isOpposing =
                 (isTopLeft && isBottomRight) || (isTopRight && isBottomLeft);
               if (isOpposing) {
                 obj.isLeft = isTopLeft;
                 obj.isOpposing = true;
-                break;
+                return obj;
               }
               if (isTopLeft) {
                 if (isTopRight) {
                   obj.horizontal = true;
                   obj.isTop = true;
-                  break;
+                  return obj;
                 } else {
                   obj.vertical = true;
                   obj.isLeft = true;
-                  break;
+                  return obj;
                 }
               }
               if (isTopRight) {
                 obj.vertical = true;
                 obj.isLeft = false;
-                break;
+                return obj;
               }
               obj.horizontal = true;
               obj.isTop = false;
-              break;
+              return obj;
             case 1:
               if (isTopLeft) {
                 obj.isTop = true;
                 obj.isLeft = true;
-                break;
+                return obj;
               }
               if (isTopRight) {
                 obj.isTop = true;
                 obj.isLeft = false;
-                break;
+                return obj;
               }
               if (isBottomRight) {
                 obj.isTop = false;
                 obj.isLeft = false;
-                break;
+                return obj;
               }
               obj.isTop = false;
               obj.isLeft = true;
-              break;
+              return obj;
           }
           return obj;
         }),
@@ -157,6 +173,7 @@
       farmLand.tileSize * 1.5}px;
       left: {tilePiece.tp.point.col * farmLand.tileSize -
       farmLand.tileSize * 1.5}px;
+      --z-index: {TILE_PIECE_Z_INDEX};
     "
   >
     {#each tilePiece.objs as obj}
@@ -168,31 +185,47 @@
           left: 0;
           background-color: {obj.color};
         "
+          id="fourCorners"
         ></div>
       {:else if obj.count === 3}
         <div
           class="tile-piece-corner"
           style="
-          top: 0;
-          left: 0;
-          background-color: {obj.color};
-        "
+            top: 0;
+            left: 0;
+            background-color: {obj.color};
+          "
+          id="threeCorners"
+        ></div>
+        <div
+          class="tile-piece-corner is-rounded"
+          style="
+            top: {obj.excludingTile!.startsWith('bottom') ? '50%' : '-50%'};
+            left: {obj.excludingTile!.endsWith('Left') ? '-50%' : '50%'};
+            background-color: {getTileColor("GRASS")};
+
+          "
+          id="threeCorners_hole"
         ></div>
       {:else if obj.count === 2}
         {#if obj.isOpposing}
           <div
-            class="tile-piece-corner is-round"
+            class="tile-piece-corner is-rounded"
             style="
               top: -50%;
-            "
-          ></div>
-          <div
-            class="tile-piece-corner is-round"
-            style="
-              top: {obj.vertical ? 0 : obj.isTop ? '-50%' : '50%'};
-              left: {obj.horizontal ? 0 : obj.isLeft ? '-50%' : '50%'};
+              left: {obj.isLeft ? '-50%' : '50%'};
               background-color: {obj.color};
             "
+            id="opposingCorner"
+          ></div>
+          <div
+            class="tile-piece-corner is-rounded"
+            style="
+              top: 50%;
+              left: {obj.isLeft ? '50%' : '-50%'};
+              background-color: {obj.color};
+            "
+            id="opposingCorner"
           ></div>
         {:else}
           <div
@@ -202,16 +235,19 @@
               left: {obj.horizontal ? 0 : obj.isLeft ? '-50%' : '50%'};
               background-color: {obj.color};
             "
+            id="adjacentCorners"
           ></div>
         {/if}
       {:else}
         <div
-          class="tile-piece-corner is-round"
+          class="tile-piece-corner is-rounded"
           style="
-          top={obj.isTop ? '-50%' : '50%'};
-          left={obj.isLeft ? '-50%' : '50%'};
-          background-color={obj.color}
-        "
+            top: {obj.isTop ? '-50%' : '50%'};
+            left: {obj.isLeft ? '-50%' : '50%'};
+            background-color: {obj.color};
+            z-index: {TILE_PIECE_Z_INDEX + 1}
+          "
+          id="oneCorner"
         ></div>
       {/if}
     {/each}
@@ -223,11 +259,12 @@
     position: absolute;
     width: var(--tile-size);
     height: var(--tile-size);
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     background-color: lightgreen;
     overflow: hidden;
+    z-index: var(--z-index);
   }
-  .is-round {
+  .is-rounded {
     border-radius: 20%;
   }
 

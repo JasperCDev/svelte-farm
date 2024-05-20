@@ -32,35 +32,35 @@ export class FarmLand {
   public selectedTool = $state<Tool>("cursor");
   constructor() {
     this.getGridSize();
-    this.gridObjects[FarmLand.getIteratorFromPoint({ row: 1, col: 1 })] =
-      new Plant(1, 1, "basic");
-    this.gridObjects[FarmLand.getIteratorFromPoint({ row: 10, col: 10 })] =
-      new Shop(10, 10, [
-        { row: 10, col: 10 },
-        { row: 10, col: 11 },
-        { row: 10, col: 12 },
-        { row: 11, col: 10 },
-        { row: 11, col: 11 },
-        { row: 11, col: 12 },
-        { row: 12, col: 10 },
-        { row: 12, col: 11 },
-        { row: 12, col: 12 },
-      ]);
-    this.gridObjects[
-      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 17, col: 15 }))
-    ] = new Toolbar(17, 15, [
-      { row: 17, col: 15 },
-      { row: 17, col: 16 },
-      { row: 17, col: 17 },
-      { row: 17, col: 18 },
-      { row: 18, col: 15 },
-      { row: 18, col: 16 },
-      { row: 18, col: 17 },
-      { row: 18, col: 18 },
-    ]);
-    this.gridObjects[
-      FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 5, col: 10 }))
-    ] = new Plant(5, 10, "bush");
+    // this.gridObjects[FarmLand.getIteratorFromPoint({ row: 1, col: 1 })] =
+    //   new Plant(1, 1, "basic");
+    // this.gridObjects[FarmLand.getIteratorFromPoint({ row: 10, col: 10 })] =
+    //   new Shop(10, 10, [
+    //     { row: 10, col: 10 },
+    //     { row: 10, col: 11 },
+    //     { row: 10, col: 12 },
+    //     { row: 11, col: 10 },
+    //     { row: 11, col: 11 },
+    //     { row: 11, col: 12 },
+    //     { row: 12, col: 10 },
+    //     { row: 12, col: 11 },
+    //     { row: 12, col: 12 },
+    //   ]);
+    // this.gridObjects[
+    //   FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 17, col: 15 }))
+    // ] = new Toolbar(17, 15, [
+    //   { row: 17, col: 15 },
+    //   { row: 17, col: 16 },
+    //   { row: 17, col: 17 },
+    //   { row: 17, col: 18 },
+    //   { row: 18, col: 15 },
+    //   { row: 18, col: 16 },
+    //   { row: 18, col: 17 },
+    //   { row: 18, col: 18 },
+    // ]);
+    // this.gridObjects[
+    //   FarmLand.getIteratorFromId(FarmLand.getIdFromPoint({ row: 5, col: 10 }))
+    // ] = new Plant(5, 10, "bush");
 
     this.handleGridClick = this.handleGridClick.bind(this);
     this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
