@@ -11,7 +11,7 @@
   let { gridObject, children, className }: Props = $props();
   let objectClassName = $derived((className || "") + " object");
   let thisObjectPlacing = $derived(farmLand.selectedGridObjectId === gridObject.id)
-  let zIndex = $derived(gridObject.invalidPlacement ? 999 : 1);
+  let zIndex = $derived(gridObject.invalidPlacement ? 999 : 20);
 </script>
 
 <div
@@ -34,12 +34,12 @@
 <style>
   .object {
     position: absolute;
+    z-index: 20;
   }
   .overlay {
     position: absolute;
     background-color: red;
     opacity: 0.7;
-    z-index: 2;
     width: 100%;
     height: 100%;
     top: 0;

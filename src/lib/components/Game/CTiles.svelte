@@ -12,7 +12,7 @@
       [key in TileType]: ZeroThruFour;
     };
   };
-  type TilePiecePos = "topLeft" | "topRight" | "bottomRight" | "bottomLeft";
+  export type TilePiecePos = "topLeft" | "topRight" | "bottomRight" | "bottomLeft";
   export function getTileColor(tileType: TileType | null) {
     if (tileType === null) {
       return "lightgreen";
@@ -32,7 +32,7 @@
   import { farmLand } from "../../GameState/FarmLand.svelte";
   import type { TileType } from "../../GameState/Tile.svelte";
   import type { Point } from "../../GameState/types";
-  let tilesPiecesToRender = farmLand.tilePieces.map((tp) => {
+  let tilesPiecesToRender = $derived(farmLand.tilePieces.map((tp) => {
     return {
       tp,
       objs: Object.keys(tp.typeCounts)
@@ -52,7 +52,6 @@
           let isTopRight = tp.topRight === type;
           let isBottomRight = tp.bottomRight === type;
           let isBottomLeft = tp.bottomLeft === type;
-
           switch (obj.count) {
             case 4:
               return obj;
@@ -121,7 +120,7 @@
           return obj;
         }),
     };
-  });
+  }));
 </script>
 
 {#each tilesPiecesToRender as tilePiece}
@@ -218,7 +217,7 @@
     position: absolute;
     width: var(--tile-size);
     height: var(--tile-size);
-    /* outline: 1px solid red; */
+    outline: 1px solid red;
     background-color: lightgreen;
     overflow: hidden;
     z-index: var(--z-index);
