@@ -3,7 +3,7 @@ import { derive } from "../utils";
 import type { GridObject } from "./GridObject.svelte";
 import { Plant } from "./Plant.svelte";
 import { Shop } from "./Shop.svelte";
-import { Tile } from "./Tile.svelte";
+import { Tile, type TileType } from "./Tile.svelte";
 import { Toolbar, type Tool } from "./Toolbar.svelte";
 import type { Point } from "./types";
 
@@ -99,25 +99,28 @@ export class FarmLand {
         }
     }
 
+    public updateTileType(tile: Tile, type: TileType) {
+        let { topLeft, topRight, bottomRight, bottomLeft } = this.getCorrespondingTilePieces(tile);
+        topLeft.bottomRight = "GRASS";
+        topRight.bottomLeft = "GRASS";
+        bottomLeft.topRight = "GRASS";
+        bottomRight.topLeft = "GRASS";
+        topLeft.typeCounts[tile.type]--;
+        topRight.typeCounts[tile.type]--;
+        bottomRight.typeCounts[tile.type]--;
+        bottomLeft.typeCounts[tile.type]--;
+        topLeft.typeCounts["GRASS"]++;
+        topRight.typeCounts["GRASS"]++;
+        bottomRight.typeCounts["GRASS"]++;
+        bottomLeft.typeCounts["GRASS"]++;
+        tile.type = "GRASS";
+    }
+
     public placeObject(gridObject: GridObject) {
         for (let i = 0; i < gridObject.space.squares.length; i++) {
             let square = gridObject.space.squares[i];
             let tile = this.tiles[FarmLand.getIteratorFromId(FarmLand.getIdFromPoint(square))];
-            let { topLeft, topRight, bottomRight, bottomLeft } =
-                this.getCorrespondingTilePieces(tile);
-            topLeft.bottomRight = "GRASS";
-            topRight.bottomLeft = "GRASS";
-            bottomLeft.topRight = "GRASS";
-            bottomRight.topLeft = "GRASS";
-            topLeft.typeCounts[tile.type]--;
-            topRight.typeCounts[tile.type]--;
-            bottomRight.typeCounts[tile.type]--;
-            bottomLeft.typeCounts[tile.type]--;
-            topLeft.typeCounts["GRASS"]++;
-            topRight.typeCounts["GRASS"]++;
-            bottomRight.typeCounts["GRASS"]++;
-            bottomLeft.typeCounts["GRASS"]++;
-            tile.type = "GRASS";
+            this.updateTileType(tile, "GRASS");
         }
         this.gridObjects[
             FarmLand.getIteratorFromId(
