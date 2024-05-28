@@ -51,33 +51,33 @@ export class FarmLand {
     constructor() {
         this.getGridSize();
         this.initTilePieces();
-        this.placeObject(new Plant(1, 1, "basic"));
-        this.placeObject(
-            new Shop(10, 10, [
-                { row: 10, col: 10 },
-                { row: 10, col: 11 },
-                { row: 10, col: 12 },
-                { row: 11, col: 10 },
-                { row: 11, col: 11 },
-                { row: 11, col: 12 },
-                { row: 12, col: 10 },
-                { row: 12, col: 11 },
-                { row: 12, col: 12 },
-            ]),
-        );
-        this.placeObject(
-            new Toolbar(17, 15, [
-                { row: 17, col: 15 },
-                { row: 17, col: 16 },
-                { row: 17, col: 17 },
-                { row: 17, col: 18 },
-                { row: 18, col: 15 },
-                { row: 18, col: 16 },
-                { row: 18, col: 17 },
-                { row: 18, col: 18 },
-            ]),
-        );
-        this.placeObject(new Plant(5, 10, "bush"));
+        // this.placeObject(new Plant(1, 1, "basic"));
+        // this.placeObject(
+        //     new Shop(10, 10, [
+        //         { row: 10, col: 10 },
+        //         { row: 10, col: 11 },
+        //         { row: 10, col: 12 },
+        //         { row: 11, col: 10 },
+        //         { row: 11, col: 11 },
+        //         { row: 11, col: 12 },
+        //         { row: 12, col: 10 },
+        //         { row: 12, col: 11 },
+        //         { row: 12, col: 12 },
+        //     ]),
+        // );
+        // this.placeObject(
+        //     new Toolbar(17, 15, [
+        //         { row: 17, col: 15 },
+        //         { row: 17, col: 16 },
+        //         { row: 17, col: 17 },
+        //         { row: 17, col: 18 },
+        //         { row: 18, col: 15 },
+        //         { row: 18, col: 16 },
+        //         { row: 18, col: 17 },
+        //         { row: 18, col: 18 },
+        //     ]),
+        // );
+        // this.placeObject(new Plant(5, 10, "bush"));
 
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
@@ -101,19 +101,19 @@ export class FarmLand {
 
     public updateTileType(tile: Tile, type: TileType) {
         let { topLeft, topRight, bottomRight, bottomLeft } = this.getCorrespondingTilePieces(tile);
-        topLeft.bottomRight = "GRASS";
-        topRight.bottomLeft = "GRASS";
-        bottomLeft.topRight = "GRASS";
-        bottomRight.topLeft = "GRASS";
+        topLeft.bottomRight = type;
+        topRight.bottomLeft = type;
+        bottomLeft.topRight = type;
+        bottomRight.topLeft = type;
         topLeft.typeCounts[tile.type]--;
         topRight.typeCounts[tile.type]--;
         bottomRight.typeCounts[tile.type]--;
         bottomLeft.typeCounts[tile.type]--;
-        topLeft.typeCounts["GRASS"]++;
-        topRight.typeCounts["GRASS"]++;
-        bottomRight.typeCounts["GRASS"]++;
-        bottomLeft.typeCounts["GRASS"]++;
-        tile.type = "GRASS";
+        topLeft.typeCounts[type]++;
+        topRight.typeCounts[type]++;
+        bottomRight.typeCounts[type]++;
+        bottomLeft.typeCounts[type]++;
+        tile.type = type;
     }
 
     public placeObject(gridObject: GridObject) {
@@ -146,6 +146,9 @@ export class FarmLand {
     }
 
     public handleGridClick(e: MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("click");
         if (farmLand.interactionMode == "placing") {
             let selectedGridObjectIterator = FarmLand.getIteratorFromId(
                 farmLand.selectedGridObjectId!,

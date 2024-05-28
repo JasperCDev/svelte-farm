@@ -32,12 +32,14 @@
   import { farmLand } from "../../GameState/FarmLand.svelte";
   import type { TileType } from "../../GameState/Tile.svelte";
   import type { Point } from "../../GameState/types";
-  let tilesPiecesToRender = $derived(farmLand.tilePieces.map((tp) => {
+  import { derive } from "../../utils";
+  let tilesPiecesToRender = $derived(derive(() => {
+    const t = farmLand.tilePieces.map((tp) => {
     return {
       tp,
       objs: Object.keys(tp.typeCounts)
         .filter((t) => t !== "GRASS" && tp.typeCounts[t as TileType] !== 0)
-        .map((type) => {
+        .map((type, i) => {
           let obj = {
             horizontal: false,
             vertical: false,
@@ -120,6 +122,8 @@
           return obj;
         }),
     };
+  })
+    return t;
   }));
 </script>
 
@@ -217,13 +221,14 @@
     position: absolute;
     width: var(--tile-size);
     height: var(--tile-size);
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
     background-color: lightgreen;
     overflow: hidden;
     z-index: var(--z-index);
+
   }
   .is-rounded {
-    border-radius: 20%;
+    border-radius: 30%;
   }
 
   .tile-piece-corner {

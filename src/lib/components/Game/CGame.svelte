@@ -11,7 +11,7 @@
     }
 </script>
 
-<div class="game" style="cursor: {getCursor()};">
+<div class="game" style="cursor: pointer;">
     <CGrid />
 </div>
 
