@@ -162,8 +162,8 @@
         <div
           class="tile-piece-corner is-rounded"
           style="
-            top: {obj.excludingTile!.startsWith('bottom') ? '50%' : '-50%'};
-            left: {obj.excludingTile!.endsWith('Left') ? '-50%' : '50%'};
+            top: {obj.excludingTile!.startsWith("bottom") ? "50%" : "-50%"};
+            left: {obj.excludingTile!.endsWith("Left") ? "-50%" : "50%"};
             background-color: {getTileColor("GRASS")};
 
           "
@@ -175,7 +175,7 @@
             class="tile-piece-corner is-rounded"
             style="
               top: -50%;
-              left: {obj.isLeft ? '-50%' : '50%'};
+              left: {obj.isLeft ? "-50%" : "50%"};
               background-color: {obj.color};
             "
             id="opposingCorner"
@@ -184,7 +184,7 @@
             class="tile-piece-corner is-rounded"
             style="
               top: 50%;
-              left: {obj.isLeft ? '50%' : '-50%'};
+              left: {obj.isLeft ? "50%" : "-50%"};
               background-color: {obj.color};
             "
             id="opposingCorner"
@@ -193,8 +193,8 @@
           <div
             class="tile-piece-corner"
             style="
-              top: {obj.vertical ? 0 : obj.isTop ? '-50%' : '50%'};
-              left: {obj.horizontal ? 0 : obj.isLeft ? '-50%' : '50%'};
+              top: {obj.vertical ? 0 : obj.isTop ? "-50%" : "50%"};
+              left: {obj.horizontal ? 0 : obj.isLeft ? "-50%" : "50%"};
               background-color: {obj.color};
             "
             id="adjacentCorners"
@@ -204,8 +204,8 @@
         <div
           class="tile-piece-corner is-rounded"
           style="
-            top: {obj.isTop ? '-50%' : '50%'};
-            left: {obj.isLeft ? '-50%' : '50%'};
+            top: {obj.isTop ? "-50%" : "50%"};
+            left: {obj.isLeft ? "-50%" : "50%"};
             background-color: {obj.color};
             z-index: {TILE_PIECE_Z_INDEX + 1}
           "

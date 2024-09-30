@@ -1,7 +1,7 @@
 import type { TilePiece, TilePiecePos, ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { derive } from "../utils";
 import type { GridObject } from "./GridObject.svelte";
-import { Plant } from "./Plant.svelte";
+import { PlantBasic } from "./PlantBasic.svelte";
 import { Shop } from "./Shop.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { ToolMover } from "./ToolMover.svelte";
@@ -53,22 +53,9 @@ export class FarmLand {
     constructor() {
         this.getGridSize();
         this.initTilePieces();
-        this.placeObject(new Plant(1, 1, "basic"));
-        this.placeObject(
-            new Shop(10, 10, [
-                { row: 10, col: 10 },
-                { row: 10, col: 11 },
-                { row: 10, col: 12 },
-                { row: 11, col: 10 },
-                { row: 11, col: 11 },
-                { row: 11, col: 12 },
-                { row: 12, col: 10 },
-                { row: 12, col: 11 },
-                { row: 12, col: 12 },
-            ]),
-        );
-        this.placeObject(new Plant(5, 10, "bush"));
+        this.placeObject(new Shop(10, 10));
         this.placeObject(new ToolMover(14, 12));
+        this.placeObject(new PlantBasic(1, 1));
 
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);

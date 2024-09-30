@@ -1,6 +1,6 @@
 <script context="module">
     export const GRID_OBJECT_MAP = {
-        plant: CPlant,
+        plant_basic: CPlantBasic,
         shop: CShop,
         toolMover: CToolMover,
     };
@@ -9,7 +9,7 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { farmLand } from "../../GameState/FarmLand.svelte";
-    import CPlant from "./CPlant.svelte";
+    import CPlantBasic from "./CPlantBasic.svelte";
     import CShop from "./CShop.svelte";
     import CTiles from "./CTiles.svelte";
     import CTileTextures from "./CTileTextures.svelte";
@@ -46,9 +46,6 @@
     {#each gridObjectsToRender as gridObject}
         <svelte:component this={GRID_OBJECT_MAP[gridObject.name]} obj={gridObject} />
     {/each}
-    <!-- {#each farmLand.tiles as tile}
-    <CTile {tile} />
-  {/each} -->
     <CTiles />
     <CTileTextures />
 </div>

@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import type { Plant } from "../../GameState/Plant.svelte";
     import CGridObject from "./CGridObject.svelte";
     import SvgPlantBasic from "./SVGPlantBasic.svelte";
@@ -25,4 +25,4 @@
 </CGridObject>
 
 <style>
-</style>
+</style> -->

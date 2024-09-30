@@ -54,7 +54,9 @@ export class GridObject {
         });
     }
 
-    onClick() {}
+    onClick() {
+        /** */
+    }
 
     handleClick() {
         if (farmLand.interactionMode === "placing") {
