@@ -1,7 +1,8 @@
 import { FarmLand, farmLand } from "./FarmLand.svelte";
 import type { Points } from "./types";
+import { GRID_OBJECT_MAP } from "../components/Game/CGrid.svelte";
 
-export type GridObjectName = "plant" | "shop" | "toolbar";
+export type GridObjectName = keyof typeof GRID_OBJECT_MAP;
 
 export class GridObjectSpace {
     width = $state<number>();
@@ -23,7 +24,6 @@ export class GridObject {
     placing = $state<boolean>(false);
     movable = $state<boolean>(false);
     invalidPlacement = $state<boolean>(false);
-    handleSpecificClick: () => void;
 
     constructor(
         row: number,
@@ -33,16 +33,28 @@ export class GridObject {
         height: number,
         squares?: Points,
         movable?: boolean,
-        handleClick?: () => void,
     ) {
         this.row = row;
         this.col = col;
-        this.space = new GridObjectSpace(width, height, squares || [{ row, col }]);
+        let translatedSquares = this._getTranslatedSqaures(squares || [{ row, col }]);
+        this.space = new GridObjectSpace(width, height, translatedSquares);
         this.name = name;
         this.id = FarmLand.getIdFromPoint({ row, col });
         this.movable = Boolean(movable);
-        this.handleSpecificClick = handleClick || (() => {});
     }
+
+    private _getTranslatedSqaures(squares: Points) {
+        let rowDiff = this.row - squares[0].row;
+        let colDiff = this.col - squares[0].col;
+        return squares.map((s) => {
+            return {
+                row: s.row + rowDiff,
+                col: s.col + colDiff,
+            };
+        });
+    }
+
+    onClick() {}
 
     handleClick() {
         if (farmLand.interactionMode === "placing") {
@@ -50,7 +62,7 @@ export class GridObject {
         }
         switch (farmLand.selectedTool) {
             case "cursor":
-                this.handleSpecificClick();
+                this.onClick();
                 return;
             case "mover":
                 if (!this.movable) {

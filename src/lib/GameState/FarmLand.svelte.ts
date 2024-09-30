@@ -4,17 +4,19 @@ import type { GridObject } from "./GridObject.svelte";
 import { Plant } from "./Plant.svelte";
 import { Shop } from "./Shop.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
-import { Toolbar, type Tool } from "./Toolbar.svelte";
-import type { Point } from "./types";
+import { ToolMover } from "./ToolMover.svelte";
+import type { Point, Tool } from "./types";
 
 export class FarmLand {
     static idHelper = 0;
     static TIME_SPEED = 500;
     static ROW_COUNT = 18;
     static COL_COUNT = 32;
-    public tiles = $state<Array<Tile>>(
-        Array.from({ length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT }, (_, i) => new Tile(i)),
+    public tiles = Array.from(
+        { length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT },
+        (_, i) => new Tile(i),
     );
+
     public gridObjects = $state<Array<GridObject | undefined>>(
         Array.from({
             length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT,
@@ -51,33 +53,22 @@ export class FarmLand {
     constructor() {
         this.getGridSize();
         this.initTilePieces();
-        // this.placeObject(new Plant(1, 1, "basic"));
-        // this.placeObject(
-        //     new Shop(10, 10, [
-        //         { row: 10, col: 10 },
-        //         { row: 10, col: 11 },
-        //         { row: 10, col: 12 },
-        //         { row: 11, col: 10 },
-        //         { row: 11, col: 11 },
-        //         { row: 11, col: 12 },
-        //         { row: 12, col: 10 },
-        //         { row: 12, col: 11 },
-        //         { row: 12, col: 12 },
-        //     ]),
-        // );
-        // this.placeObject(
-        //     new Toolbar(17, 15, [
-        //         { row: 17, col: 15 },
-        //         { row: 17, col: 16 },
-        //         { row: 17, col: 17 },
-        //         { row: 17, col: 18 },
-        //         { row: 18, col: 15 },
-        //         { row: 18, col: 16 },
-        //         { row: 18, col: 17 },
-        //         { row: 18, col: 18 },
-        //     ]),
-        // );
-        // this.placeObject(new Plant(5, 10, "bush"));
+        this.placeObject(new Plant(1, 1, "basic"));
+        this.placeObject(
+            new Shop(10, 10, [
+                { row: 10, col: 10 },
+                { row: 10, col: 11 },
+                { row: 10, col: 12 },
+                { row: 11, col: 10 },
+                { row: 11, col: 11 },
+                { row: 11, col: 12 },
+                { row: 12, col: 10 },
+                { row: 12, col: 11 },
+                { row: 12, col: 12 },
+            ]),
+        );
+        this.placeObject(new Plant(5, 10, "bush"));
+        this.placeObject(new ToolMover(14, 12));
 
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);

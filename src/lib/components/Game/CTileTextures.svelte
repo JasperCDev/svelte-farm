@@ -18,7 +18,7 @@
     }
 
     .tile-texture:hover {
-        border: 2px solid red;
+        /* border: 2px solid red; */
         /* border-radius: 30%; */
     }
 </style>

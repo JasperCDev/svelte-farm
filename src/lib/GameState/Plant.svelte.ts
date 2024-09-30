@@ -17,9 +17,11 @@ export class Plant extends GridObject {
             };
         });
 
-        super(row, col, "plant", plantData.width, plantData.height, newSquares, true, () =>
-            alert(this.plantName),
-        );
+        super(row, col, "plant", plantData.width, plantData.height, newSquares, true);
         this.plantName = plantData.name;
+    }
+
+    onClick() {
+        alert(this.plantName);
     }
 }

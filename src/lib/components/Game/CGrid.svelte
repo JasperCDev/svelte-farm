@@ -1,14 +1,19 @@
+<script context="module">
+    export const GRID_OBJECT_MAP = {
+        plant: CPlant,
+        shop: CShop,
+        toolMover: CToolMover,
+    };
+</script>
+
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { farmLand } from "../../GameState/FarmLand.svelte";
     import CPlant from "./CPlant.svelte";
     import CShop from "./CShop.svelte";
-    import CToolbar from "./CToolbar.svelte";
-    import { Plant } from "../../GameState/Plant.svelte";
-    import { Shop } from "../../GameState/Shop.svelte";
-    import { Toolbar } from "../../GameState/Toolbar.svelte";
     import CTiles from "./CTiles.svelte";
     import CTileTextures from "./CTileTextures.svelte";
+    import CToolMover from "./CToolMover.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
@@ -19,28 +24,7 @@
     });
 
     let gridObjectsToRender = $derived(
-        farmLand.gridObjects
-            .filter((g) => g)
-            .map((g) => {
-                let gridObject = g!;
-                switch (gridObject.name) {
-                    case "plant":
-                        return {
-                            component: CPlant,
-                            props: gridObject as Plant,
-                        };
-                    case "shop":
-                        return {
-                            component: CShop,
-                            props: gridObject as Shop,
-                        };
-                    case "toolbar":
-                        return {
-                            component: CToolbar,
-                            props: gridObject as Toolbar,
-                        };
-                }
-            }),
+        farmLand.gridObjects.filter((g) => typeof g !== "undefined"),
     );
 </script>
 
@@ -50,18 +34,18 @@
     class="grid"
     id="grid"
     style="
-    --tile-size: {farmLand.tileSize}px;
-    width: {farmLand.gridWidth}px;
-    height: {farmLand.gridHeight}px;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  "
+        --tile-size: {farmLand.tileSize}px;
+        width: {farmLand.gridWidth}px;
+        height: {farmLand.gridHeight}px;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    "
     onclick={farmLand.handleGridClick}
     onmousemove={farmLand.handleGridMouseMove}
 >
     {#each gridObjectsToRender as gridObject}
-    <svelte:component this={gridObject.component} obj={gridObject.props as any} />
-  {/each}
+        <svelte:component this={GRID_OBJECT_MAP[gridObject.name]} obj={gridObject} />
+    {/each}
     <!-- {#each farmLand.tiles as tile}
     <CTile {tile} />
   {/each} -->
