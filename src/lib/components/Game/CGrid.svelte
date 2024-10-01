@@ -26,6 +26,7 @@
     let gridObjectsToRender = $derived(
         farmLand.gridObjects.filter((g) => typeof g !== "undefined"),
     );
+    $effect(() => console.log(gridObjectsToRender));
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

@@ -137,15 +137,22 @@ export class FarmLand {
             let tile = this.tiles[FarmLand.getIteratorFromId(FarmLand.getIdFromPoint(square))];
             this.updateTileType(tile, "GRASS");
         }
-        this.gridObjects[
-            FarmLand.getIteratorFromId(
-                FarmLand.getIdFromPoint({ row: gridObject.draggedRow, col: gridObject.draggedCol }),
-            )
-        ] = gridObject;
         if (this.isDragging && !gridObject.invalidPlacement) {
             gridObject.row = gridObject.draggedRow;
             gridObject.col = gridObject.draggedCol;
             gridObject.space.squares = gridObject.space.draggedSquares;
+        }
+        this.gridObjects[
+            FarmLand.getIteratorFromId(
+                FarmLand.getIdFromPoint({ row: gridObject.row, col: gridObject.col }),
+            )
+        ] = gridObject;
+        if (this.isDragging && !gridObject.invalidPlacement) {
+            this.gridObjects[
+                FarmLand.getIteratorFromId(
+                    FarmLand.getIdFromPoint({ row: gridObject.row, col: gridObject.col }),
+                )
+            ] = undefined; // clear old space
         }
     }
 

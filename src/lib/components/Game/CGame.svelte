@@ -2,14 +2,14 @@
     import { farmLand } from "../../GameState/FarmLand.svelte";
     import CGrid from "./CGrid.svelte";
     function getCursor() {
-        switch (farmLand.selectedTool) {
-            case "cursor":
-                return "auto";
+        if (farmLand.isDragging) {
+            return "grab";
         }
+        return "auto";
     }
 </script>
 
-<div class="game" style="cursor: pointer;">
+<div class="game" style="cursor: {getCursor()};">
     <CGrid />
 </div>
 

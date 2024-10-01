@@ -10,10 +10,8 @@
   }
   let { gridObject, children, className }: Props = $props();
   let objectClassName = $derived((className || "") + " object");
-  let thisObjectPlacing = $derived(farmLand.selectedGridObjectId === gridObject.id)
   let zIndex = $derived(gridObject.invalidPlacement ? 999 : 20);
   let isDragging = $derived(farmLand.isDragging && farmLand.selectedGridObjectId === gridObject.id);
-  $effect(() => console.log(gridObject));
 </script>
 
 <div
@@ -23,7 +21,6 @@
     left: calc({(isDragging ? gridObject.draggedCol : gridObject.col) - 1} * var(--tile-size));
     width: calc({gridObject.space.width} * var(--tile-size));
     height: calc({gridObject.space.height} * var(--tile-size));
-    border: {thisObjectPlacing ? "2px solid red" : "none"};
     z-index: {zIndex};
   "
 >
