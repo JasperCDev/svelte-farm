@@ -8,18 +8,22 @@ export class GridObjectSpace {
     width = $state<number>();
     height = $state<number>();
     squares = $state<Points>()!;
+    draggedSquares = $state<Points>()!;
     constructor(width: number, height: number, squares: Points) {
         this.width = width;
         this.height = height;
         this.squares = squares;
+        this.draggedSquares = squares;
     }
 }
 
 export class GridObject {
     row = $state<number>()!;
     col = $state<number>()!;
-    name = $state<GridObjectName>()!;
     space = $state<GridObjectSpace>()!;
+    draggedRow = $state<number>()!;
+    draggedCol = $state<number>()!;
+    name = $state<GridObjectName>()!;
     id = $state<string>()!;
     placing = $state<boolean>(false);
     movable = $state<boolean>(false);
@@ -34,8 +38,11 @@ export class GridObject {
         squares?: Points,
         movable?: boolean,
     ) {
+        console.log(row, col);
         this.row = row;
         this.col = col;
+        this.draggedRow = row;
+        this.draggedCol = col;
         let translatedSquares = this._getTranslatedSqaures(squares || [{ row, col }]);
         this.space = new GridObjectSpace(width, height, translatedSquares);
         this.name = name;
@@ -59,19 +66,9 @@ export class GridObject {
     }
 
     handleClick() {
-        if (farmLand.interactionMode === "placing") {
-            return;
-        }
         switch (farmLand.selectedTool) {
             case "cursor":
                 this.onClick();
-                return;
-            case "mover":
-                if (!this.movable) {
-                    return;
-                }
-                farmLand.interactionMode = "placing";
-                farmLand.selectedGridObjectId = this.id;
                 return;
             default:
                 let exhaustive: never = farmLand.selectedTool;

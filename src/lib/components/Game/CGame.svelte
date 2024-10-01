@@ -5,8 +5,6 @@
         switch (farmLand.selectedTool) {
             case "cursor":
                 return "auto";
-            case "mover":
-                return "move";
         }
     }
 </script>

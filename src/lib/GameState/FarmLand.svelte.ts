@@ -22,6 +22,7 @@ export class FarmLand {
             length: FarmLand.COL_COUNT * FarmLand.ROW_COUNT,
         }),
     );
+
     public tilePieces = $state(
         Array.from<object, TilePiece>(
             { length: (FarmLand.COL_COUNT + 1) * (FarmLand.ROW_COUNT + 1) },
@@ -47,9 +48,11 @@ export class FarmLand {
     public gridWidth = $state<number>(0);
     public gridHeight = $state<number>(0);
 
-    public interactionMode = $state<"cursor" | "placing">("cursor");
     public selectedGridObjectId = $state<string | null>(null);
     public selectedTool = $state<Tool>("cursor");
+    public isDragging = $state<boolean>(false);
+    public isMouseDown = $state<boolean>(false);
+
     constructor() {
         this.getGridSize();
         this.initTilePieces();
@@ -59,6 +62,40 @@ export class FarmLand {
 
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
+        this.handleGridMouseDown = this.handleGridMouseDown.bind(this);
+        this.handleGridMouseUp = this.handleGridMouseUp.bind(this);
+    }
+
+    public handleGridMouseDown(e: MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.isMouseDown = true;
+        let point = this.getPointFromMousePosition({
+            x: e.clientX,
+            y: e.clientY,
+        });
+        const clickedGridObject = this.getGridObjectFromPoint(point);
+        this.selectedGridObjectId = clickedGridObject?.id || null;
+    }
+
+    public handleGridMouseUp(e: MouseEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.isMouseDown = false;
+        if (!this.isDragging || this.selectedGridObjectId === null) {
+            return;
+        }
+        let selectedGridObjectIterator = FarmLand.getIteratorFromId(farmLand.selectedGridObjectId!);
+        let selectedGridObject = farmLand.gridObjects[selectedGridObjectIterator]!;
+        this.placeObject(selectedGridObject);
+        selectedGridObject.invalidPlacement = false;
+        farmLand.selectedGridObjectId = null;
+        this.stopDrag();
+    }
+
+    private stopDrag() {
+        // hacky trick to prevent a drag triggering a click
+        requestAnimationFrame(() => (this.isDragging = false));
     }
 
     public initTilePieces() {
@@ -102,9 +139,14 @@ export class FarmLand {
         }
         this.gridObjects[
             FarmLand.getIteratorFromId(
-                FarmLand.getIdFromPoint({ row: gridObject.row, col: gridObject.col }),
+                FarmLand.getIdFromPoint({ row: gridObject.draggedRow, col: gridObject.draggedCol }),
             )
         ] = gridObject;
+        if (this.isDragging && !gridObject.invalidPlacement) {
+            gridObject.row = gridObject.draggedRow;
+            gridObject.col = gridObject.draggedCol;
+            gridObject.space.squares = gridObject.space.draggedSquares;
+        }
     }
 
     public getCorrespondingTilePieces(tile: Tile) {
@@ -126,55 +168,68 @@ export class FarmLand {
     public handleGridClick(e: MouseEvent) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("click");
-        if (farmLand.interactionMode == "placing") {
-            let selectedGridObjectIterator = FarmLand.getIteratorFromId(
-                farmLand.selectedGridObjectId!,
-            );
-            let selectedGridObject = farmLand.gridObjects[selectedGridObjectIterator]!;
-            if (selectedGridObject.invalidPlacement) {
-                return;
-            }
-            farmLand.interactionMode = "cursor";
-            selectedGridObject.invalidPlacement = false;
-            farmLand.selectedGridObjectId = null;
-            this.placeObject(selectedGridObject);
+        if (this.isDragging) {
             return;
         }
-
-        let { row, col } = this.getPointFromMousePosition({
+        console.log("click");
+        let point = this.getPointFromMousePosition({
             x: e.clientX,
             y: e.clientY,
         });
-        for (let gridObject of this.gridObjects) {
-            if (typeof gridObject === "undefined") {
-                continue;
-            }
-            let squareFoundIndx = gridObject.space.squares.findIndex((point) => {
-                return point.row === row && point.col === col;
-            });
-            let isHit = squareFoundIndx !== -1;
-            if (isHit) {
-                gridObject.handleClick();
-                return;
-            }
+        const clickedGridObject = this.getGridObjectFromPoint(point);
+        if (typeof clickedGridObject !== "undefined") {
+            clickedGridObject.handleClick();
+            return;
         }
-        let tileIndx = FarmLand.getIteratorFromPoint({ row, col });
+        let tileIndx = FarmLand.getIteratorFromPoint(point);
         let tile = this.tiles[tileIndx];
         tile.handleClick();
     }
 
+    private getGridObjectFromPoint(point: Point): GridObject | undefined {
+        for (let gridObject of this.gridObjects) {
+            if (typeof gridObject === "undefined") {
+                continue;
+            }
+            let squareFoundIndx = gridObject.space.squares.findIndex((square) => {
+                return square.row === point.row && square.col === point.col;
+            });
+            if (squareFoundIndx !== -1) {
+                return gridObject;
+            }
+        }
+    }
+
     public handleGridMouseMove(e: MouseEvent) {
-        if (farmLand.interactionMode !== "placing") {
+        if (!this.isMouseDown) {
             return;
         }
-        if (farmLand.selectedGridObjectId === null) {
+        if (this.isDragging) {
+            this.snapObject(e);
             return;
         }
-        this.snapObject(e);
+        if (this.selectedGridObjectId === null) {
+            return;
+        }
+        let selectedGridObject =
+            this.gridObjects[FarmLand.getIteratorFromId(this.selectedGridObjectId)]!;
+        let point = this.getPointFromMousePosition({
+            x: e.clientX,
+            y: e.clientY,
+        });
+        const isDifferentPoint =
+            point.row != selectedGridObject.row || point.col !== selectedGridObject.col;
+        if (isDifferentPoint) {
+            this.isDragging = true;
+            this.snapObject(e);
+            return;
+        }
     }
 
     public snapObject(e: MouseEvent) {
+        if (this.selectedGridObjectId === null) {
+            return;
+        }
         let selectedGridObjectIterator = FarmLand.getIteratorFromId(farmLand.selectedGridObjectId!);
         let selectedGridObject = farmLand.gridObjects[selectedGridObjectIterator]!;
         let { row, col } = this.getPointFromMousePosition({
@@ -230,29 +285,10 @@ export class FarmLand {
             }
             return false;
         });
-        if (isOverlapping) {
-            selectedGridObject.invalidPlacement = true;
-            selectedGridObject.invalidPlacement = isOverlapping;
-            selectedGridObject.row = row;
-            selectedGridObject.col = col;
-            selectedGridObject.space.squares = newSquares;
-            return;
-        }
-        for (let square of newSquares) {
-            let tileId = FarmLand.getIteratorFromPoint(square);
-            let tile = farmLand.tiles[tileId];
-            // if (tile.type !== "GRASS") {
-            //     selectedGridObject.invalidPlacement = true;
-            //     selectedGridObject.row = row;
-            //     selectedGridObject.col = col;
-            //     selectedGridObject.space.squares = newSquares;
-            //     return;
-            // }
-        }
         selectedGridObject.invalidPlacement = isOverlapping;
-        selectedGridObject.row = row;
-        selectedGridObject.col = col;
-        selectedGridObject.space.squares = newSquares;
+        selectedGridObject.draggedRow = row;
+        selectedGridObject.draggedCol = col;
+        selectedGridObject.space.draggedSquares = newSquares;
     }
 
     public getGridSize() {

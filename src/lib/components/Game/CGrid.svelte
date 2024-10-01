@@ -42,6 +42,8 @@
     "
     onclick={farmLand.handleGridClick}
     onmousemove={farmLand.handleGridMouseMove}
+    onmousedown={farmLand.handleGridMouseDown}
+    onmouseup={farmLand.handleGridMouseUp}
 >
     {#each gridObjectsToRender as gridObject}
         <svelte:component this={GRID_OBJECT_MAP[gridObject.name]} obj={gridObject} />
