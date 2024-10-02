@@ -11,10 +11,8 @@ export class ToolMover extends GridObject {
     ];
 
     constructor(row: number, col: number) {
-        super(row, col, "toolMover", 2, 2, ToolMover.squares, true);
+        super(row, col, "tool_mover", 2, 2, ToolMover.squares, true);
     }
 
-    onClick(): void {
-        farmLand.selectedTool = "mover";
-    }
+    onClick(): void {}
 }

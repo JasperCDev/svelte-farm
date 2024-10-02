@@ -1,6 +1,8 @@
 import { FarmLand, farmLand } from "./FarmLand.svelte";
-import type { Points } from "./types";
+import type { Point, Points } from "./types";
 import { GRID_OBJECT_MAP } from "../components/Game/CGrid.svelte";
+import { Component } from "./Component.svelte";
+import { derive } from "../utils";
 
 export type GridObjectName = keyof typeof GRID_OBJECT_MAP;
 
@@ -17,7 +19,8 @@ export class GridObjectSpace {
     }
 }
 
-export class GridObject {
+export class GridObject extends Component {
+    static idHelper = 0;
     row = $state<number>()!;
     col = $state<number>()!;
     space = $state<GridObjectSpace>()!;
@@ -38,7 +41,7 @@ export class GridObject {
         squares?: Points,
         movable?: boolean,
     ) {
-        console.log(row, col);
+        super();
         this.row = row;
         this.col = col;
         this.draggedRow = row;
@@ -46,7 +49,7 @@ export class GridObject {
         let translatedSquares = this._getTranslatedSqaures(squares || [{ row, col }]);
         this.space = new GridObjectSpace(width, height, translatedSquares);
         this.name = name;
-        this.id = FarmLand.getIdFromPoint({ row, col });
+        this.id = (++FarmLand.idHelper).toString();
         this.movable = Boolean(movable);
     }
 
@@ -73,5 +76,103 @@ export class GridObject {
             default:
                 let exhaustive: never = farmLand.selectedTool;
         }
+    }
+
+    private _snapToGrid() {
+        let { row, col } = farmLand.mousePosition;
+        let rowDiff = row - this.space.squares[0].row;
+        let colDiff = col - this.space.squares[0].col;
+        let newSquares = this.space.squares.map((s) => {
+            return {
+                row: s.row + rowDiff,
+                col: s.col + colDiff,
+            };
+        });
+        let isOutOfBounds = false;
+        let rowBoundsDiff = 0;
+        let colBoundsDiff = 0;
+        for (let square of newSquares) {
+            if (square.row > FarmLand.ROW_COUNT) {
+                rowBoundsDiff = Math.max(colBoundsDiff, square.row - FarmLand.ROW_COUNT);
+                isOutOfBounds = true;
+            }
+            if (square.col > FarmLand.COL_COUNT) {
+                colBoundsDiff = Math.max(rowBoundsDiff, square.col - FarmLand.COL_COUNT);
+                isOutOfBounds = true;
+            }
+        }
+        if (isOutOfBounds) {
+            row -= rowBoundsDiff;
+            col -= colBoundsDiff;
+            for (let square of newSquares) {
+                square.row -= rowBoundsDiff;
+                square.col -= colBoundsDiff;
+            }
+        }
+        let isOverlapping = derive(() => {
+            for (let gridObj of farmLand.gridObjects) {
+                if (typeof gridObj === "undefined") {
+                    continue;
+                }
+                if (gridObj.id === this.id) {
+                    continue;
+                }
+                for (let sqaure1 of gridObj.space.squares) {
+                    for (let square2 of newSquares) {
+                        let isSameSpace =
+                            sqaure1.col === square2.col && sqaure1.row === square2.row;
+                        if (isSameSpace) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        });
+        this.invalidPlacement = isOverlapping;
+        this.draggedRow = row;
+        this.draggedCol = col;
+        this.space.draggedSquares = newSquares;
+    }
+
+    private _moveObject() {
+        console.log("MOVE OBJECT");
+        if (this.invalidPlacement) {
+            return;
+        }
+        const posOld = GridObject.getIteratorFromPoint({
+            row: this.row,
+            col: this.col,
+        });
+        const posNew = GridObject.getIteratorFromPoint({
+            row: this.draggedRow,
+            col: this.draggedCol,
+        });
+        console.log("THIS THIS THIS: ", posOld, posNew);
+
+        this.row = this.draggedRow;
+        this.col = this.draggedCol;
+        this.space.squares = this.space.draggedSquares;
+        let isNewPosition = posOld !== posNew;
+        if (isNewPosition) {
+            farmLand.gridObjects[posNew] = this;
+            farmLand.gridObjects[posOld] = undefined; // Delete from old position
+        }
+        return;
+    }
+
+    update(timestamp: number): void {
+        if (farmLand.isDragging && farmLand.selectedGridObjectId === this.id) {
+            this._snapToGrid();
+        }
+        if (farmLand.isDragEnd && farmLand.selectedGridObjectId === this.id) {
+            this._moveObject();
+            this.invalidPlacement = false;
+            farmLand.isDragEnd = false;
+        }
+    }
+
+    static getIteratorFromPoint(point: Point) {
+        return (point.row - 1) * FarmLand.COL_COUNT + point.col - 1;
     }
 }

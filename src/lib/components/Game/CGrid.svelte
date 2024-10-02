@@ -2,7 +2,8 @@
     export const GRID_OBJECT_MAP = {
         plant_basic: CPlantBasic,
         shop: CShop,
-        toolMover: CToolMover,
+        tool_mover: CToolMover,
+        time_block: CTimeBlock,
     };
 </script>
 
@@ -14,6 +15,7 @@
     import CTiles from "./CTiles.svelte";
     import CTileTextures from "./CTileTextures.svelte";
     import CToolMover from "./CToolMover.svelte";
+    import CTimeBlock from "./CTimeBlock.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
@@ -26,7 +28,6 @@
     let gridObjectsToRender = $derived(
         farmLand.gridObjects.filter((g) => typeof g !== "undefined"),
     );
-    $effect(() => console.log(gridObjectsToRender));
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -46,11 +47,11 @@
     onmousedown={farmLand.handleGridMouseDown}
     onmouseup={farmLand.handleGridMouseUp}
 >
+    <CTiles />
+    <CTileTextures />
     {#each gridObjectsToRender as gridObject}
         <svelte:component this={GRID_OBJECT_MAP[gridObject.name]} obj={gridObject} />
     {/each}
-    <CTiles />
-    <CTileTextures />
 </div>
 
 <style>

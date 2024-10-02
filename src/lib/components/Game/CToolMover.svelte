@@ -11,7 +11,7 @@
 <CGridObject gridObject={obj}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div class="tool" class:is-selected={farmLand.selectedTool === "mover"}>
+    <div class="tool">
         <h3>Mover</h3>
     </div>
 </CGridObject>
