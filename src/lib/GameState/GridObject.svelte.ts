@@ -69,13 +69,7 @@ export class GridObject extends Component {
     }
 
     handleClick() {
-        switch (farmLand.selectedTool) {
-            case "cursor":
-                this.onClick();
-                return;
-            default:
-                let exhaustive: never = farmLand.selectedTool;
-        }
+        this.onClick();
     }
 
     private _snapToGrid() {

@@ -9,13 +9,13 @@
     }
     function getTint() {
         if (farmLand.time.hour > 18 || farmLand.time.hour < 6) {
-            return "purple";
+            return "background-color: purple; opacity: 0.4;";
         }
-        return "orange";
+        return "background-color: orange; opacity: 0.2;";
     }
 </script>
 
-<div class="tint" style="background-color: {getTint()}"></div>
+<div class="tint" style={getTint()}></div>
 <div class="game" style="cursor: {getCursor()};">
     <CGrid />
 </div>
@@ -41,6 +41,6 @@
         pointer-events: none;
         transition:
             background-color 1s ease,
-            tint 1s ease;
+            opacity 1s ease;
     }
 </style>

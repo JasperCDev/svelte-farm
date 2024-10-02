@@ -2,8 +2,8 @@
     export const GRID_OBJECT_MAP = {
         plant_basic: CPlantBasic,
         shop: CShop,
-        tool_mover: CToolMover,
         time_block: CTimeBlock,
+        tool_hoe: CToolHoe,
     };
 </script>
 
@@ -14,8 +14,8 @@
     import CShop from "./CShop.svelte";
     import CTiles from "./CTiles.svelte";
     import CTileTextures from "./CTileTextures.svelte";
-    import CToolMover from "./CToolMover.svelte";
     import CTimeBlock from "./CTimeBlock.svelte";
+    import CToolHoe from "./CToolHoe.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));

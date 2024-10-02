@@ -7,7 +7,7 @@ import { Shop } from "./Shop.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
-import { ToolMover } from "./ToolMover.svelte";
+import { ToolHoe } from "./ToolHoe.svelte";
 import type { Point, Tool } from "./types";
 
 export class FarmLand extends Component {
@@ -67,9 +67,9 @@ export class FarmLand extends Component {
         this.getGridSize();
         this.initTilePieces();
         this.placeObject(new Shop(10, 10));
-        this.placeObject(new ToolMover(14, 12));
         this.placeObject(new PlantBasic(1, 1));
         this.placeObject(new TimeBlock(1, 29));
+        this.placeObject(new ToolHoe(15, 20));
 
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);

@@ -1,9 +1,10 @@
+import { Component } from "./Component.svelte";
 import { FarmLand, farmLand } from "./FarmLand.svelte";
 import type { Point } from "./types";
 
 export type TileType = "SOIL" | "WATER" | "GRASS";
 
-export class Tile {
+export class Tile extends Component {
     static idHelper = 0;
     row = $state<number>()!;
     col = $state<number>()!;
@@ -11,6 +12,7 @@ export class Tile {
     type = $state<TileType>("GRASS");
     movable = $state<boolean>(true);
     constructor(tileIndex: number, type?: TileType) {
+        super();
         let tilePoint = Tile.getPointFromIterator(tileIndex);
         this.id = Tile.getIdFromPoint(tilePoint);
         this.row = tilePoint.row;
@@ -19,8 +21,17 @@ export class Tile {
     }
 
     handleClick() {
-        farmLand.updateTileType(this, this.type === "SOIL" ? "GRASS" : "SOIL");
+        switch (farmLand.selectedTool) {
+            case "cursor":
+                break;
+            case "hoe":
+                farmLand.updateTileType(this, "SOIL");
+                this.type = "SOIL";
+                break;
+        }
     }
+
+    update(timestamp: number): void {}
 
     static getIteratorFromId(id: string) {
         let split = id.split("-");
