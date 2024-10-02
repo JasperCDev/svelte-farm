@@ -5,6 +5,7 @@ import { GridObject } from "./GridObject.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { Shop } from "./Shop.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
+import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
 import { ToolMover } from "./ToolMover.svelte";
 import type { Point, Tool } from "./types";
@@ -59,6 +60,8 @@ export class FarmLand extends Component {
     public recentMouseDownPosition = $state<Point>({ row: 1, col: 1 });
     public isDragEnd = $state<boolean>(false);
 
+    public time = new Time();
+
     constructor() {
         super();
         this.getGridSize();
@@ -76,6 +79,7 @@ export class FarmLand extends Component {
 
     update(timestamp: number): void {
         this.mousePosition = this._mousePositionFromEvent;
+        this.time.update(timestamp);
         for (let gridObject of this.gridObjects) {
             if (typeof gridObject === "undefined") {
                 continue;
@@ -108,7 +112,6 @@ export class FarmLand extends Component {
 
     public stopDrag() {
         this.isDragEnd = true;
-        console.log("STOP DRAG");
         // hacky trick to prevent a drag triggering a click
         requestAnimationFrame(() => {
             this.isDragging = false;
@@ -182,7 +185,6 @@ export class FarmLand extends Component {
         if (this.isDragging) {
             return;
         }
-        console.log("click");
         let point = this.getPointFromMousePosition({
             x: e.clientX,
             y: e.clientY,

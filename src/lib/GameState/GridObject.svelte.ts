@@ -135,8 +135,7 @@ export class GridObject extends Component {
         this.space.draggedSquares = newSquares;
     }
 
-    private _moveObject() {
-        console.log("MOVE OBJECT");
+    private _move() {
         if (this.invalidPlacement) {
             return;
         }
@@ -148,8 +147,6 @@ export class GridObject extends Component {
             row: this.draggedRow,
             col: this.draggedCol,
         });
-        console.log("THIS THIS THIS: ", posOld, posNew);
-
         this.row = this.draggedRow;
         this.col = this.draggedCol;
         this.space.squares = this.space.draggedSquares;
@@ -166,7 +163,7 @@ export class GridObject extends Component {
             this._snapToGrid();
         }
         if (farmLand.isDragEnd && farmLand.selectedGridObjectId === this.id) {
-            this._moveObject();
+            this._move();
             this.invalidPlacement = false;
             farmLand.isDragEnd = false;
         }

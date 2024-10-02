@@ -9,7 +9,7 @@
 </script>
 
 <CGridObject gridObject={obj} class="time-block">
-    <div class="time-block"><p>${obj.displayTime}</p></div>
+    <div class="time-block"><p>{obj.displayTime}</p></div>
 </CGridObject>
 
 <style>
@@ -17,8 +17,11 @@
         container-type: inline-size;
         border: 1px solid red;
         height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     p {
-        font-size: 4.5cqh;
+        font-size: 3cqh;
     }
 </style>

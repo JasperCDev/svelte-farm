@@ -1,17 +1,9 @@
 import { derive } from "../utils";
+import { farmLand } from "./FarmLand.svelte";
 import { GridObject } from "./GridObject.svelte";
 
-type Minute = 0 | 15 | 30 | 45;
-
 export class TimeBlock extends GridObject {
-    currentTime = $state<number>(0);
-    prevTimestamp = $state<number>(Date.now());
-    prevTick = $state<number>(this.prevTimestamp);
     displayTime = $state<string>("Day 1: 9am");
-
-    day = $state<number>(1);
-    hour = $state<number>(9);
-    minute = $state<number>(0);
 
     static squares = [
         { row: 1, col: 1 },
@@ -25,29 +17,14 @@ export class TimeBlock extends GridObject {
     }
 
     update(timestamp: number): void {
-        let timePassed = timestamp - this.prevTimestamp;
-        let previousTime = this.currentTime;
-        this.currentTime = this.currentTime + timePassed;
-        this.prevTimestamp = previousTime;
-        this.displayTime = this.formatTime(this.currentTime);
+        super.update(timestamp);
+        this.displayTime = this.formatTime();
     }
 
-    formatTime(timestamp: number) {
-        const msIn15Minutes = 1000;
-        const timeSinceLastTick = timestamp - this.prevTick;
-        if (timeSinceLastTick >= msIn15Minutes) {
-            this.minute = this.minute === 45 ? 0 : this.minute + 15;
-            if (this.minute === 0) {
-                this.hour = this.hour === 23 ? 0 : this.hour + 1;
-            }
-            if (this.hour === 0) {
-                this.day += 1;
-            }
-            this.prevTick = timestamp;
-        }
-        let formattedDay = this.day.toString().padStart(2, "00");
+    private formatTime() {
+        let formattedDay = farmLand.time.day.toString().padStart(2, "00");
         let formattedHour = derive(() => {
-            let h = this.hour;
+            let h = farmLand.time.hour;
             if (h === 0) {
                 h = 12;
             }
@@ -56,7 +33,9 @@ export class TimeBlock extends GridObject {
             }
             return h.toString().padStart(2, "00");
         });
-        let formattedMinute = this.minute.toString().padStart(2, "00");
-        return `Day ${formattedDay} ${formattedHour}:${formattedMinute}pm`;
+        let formattedMinute = farmLand.time.minute.toString().padStart(2, "00");
+        return `Day ${formattedDay} ${formattedHour}:${formattedMinute}${
+            farmLand.time.hour >= 12 ? "pm" : "am"
+        }`;
     }
 }
