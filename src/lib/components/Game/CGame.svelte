@@ -40,7 +40,7 @@
         z-index: 999999999;
         pointer-events: none;
         transition:
-            background-color 1s ease,
-            opacity 1s ease;
+            background-color 5s ease,
+            opacity 5s ease;
     }
 </style>

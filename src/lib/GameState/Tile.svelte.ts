@@ -11,6 +11,8 @@ export class Tile extends Component {
     id = $state<string>()!;
     type = $state<TileType>("GRASS");
     movable = $state<boolean>(true);
+
+    emptySoilCountdown = 1000;
     constructor(tileIndex: number, type?: TileType) {
         super();
         let tilePoint = Tile.getPointFromIterator(tileIndex);
@@ -31,7 +33,17 @@ export class Tile extends Component {
         }
     }
 
-    update(timestamp: number): void {}
+    update(timestamp: number): void {
+        let gridObject =
+            farmLand.gridObjects[Tile.getIteratorFromPoint({ row: this.row, col: this.col })];
+        if (this.type === "SOIL" && typeof gridObject === "undefined") {
+            this.emptySoilCountdown -= 1;
+        }
+        if (this.emptySoilCountdown === 0) {
+            farmLand.updateTileType(this, "GRASS");
+            this.emptySoilCountdown = 1000;
+        }
+    }
 
     static getIteratorFromId(id: string) {
         let split = id.split("-");
@@ -54,5 +66,8 @@ export class Tile extends Component {
         let row = Math.ceil(n / FarmLand.COL_COUNT);
         let col = n % FarmLand.COL_COUNT || FarmLand.COL_COUNT;
         return { row, col };
+    }
+    static getTileByPoint(point: Point): Tile {
+        return farmLand.tiles[Tile.getIteratorFromPoint(point)];
     }
 }

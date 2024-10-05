@@ -1,7 +1,9 @@
 import { GridObject, type GridObjectName } from "./GridObject.svelte";
+import type { TileType } from "./Tile.svelte";
 import type { Points } from "./types";
 
 export class Plant extends GridObject {
+    validTiles: TileType[] = ["SOIL"];
     constructor(
         row: number,
         col: number,

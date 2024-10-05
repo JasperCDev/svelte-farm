@@ -71,6 +71,8 @@ export class FarmLand extends Component {
         this.placeObject(new TimeBlock(1, 29));
         this.placeObject(new ToolHoe(15, 20));
 
+        this.updateTileType(this.tiles[0], "SOIL");
+
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
         this.handleGridMouseDown = this.handleGridMouseDown.bind(this);
@@ -85,6 +87,9 @@ export class FarmLand extends Component {
                 continue;
             }
             gridObject.update(timestamp);
+        }
+        for (let tile of this.tiles) {
+            tile.update(timestamp);
         }
     }
 

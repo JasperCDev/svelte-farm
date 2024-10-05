@@ -3,6 +3,7 @@ import type { Point, Points } from "./types";
 import { GRID_OBJECT_MAP } from "../components/Game/CGrid.svelte";
 import { Component } from "./Component.svelte";
 import { derive } from "../utils";
+import { Tile, type TileType } from "./Tile.svelte";
 
 export type GridObjectName = keyof typeof GRID_OBJECT_MAP;
 
@@ -31,6 +32,8 @@ export class GridObject extends Component {
     placing = $state<boolean>(false);
     movable = $state<boolean>(false);
     invalidPlacement = $state<boolean>(false);
+
+    validTiles: Array<TileType> = ["GRASS", "SOIL", "WATER"];
 
     constructor(
         row: number,
@@ -123,7 +126,18 @@ export class GridObject extends Component {
             }
             return false;
         });
-        this.invalidPlacement = isOverlapping;
+
+        let isTileValid = derive(() => {
+            for (let square of newSquares) {
+                let tile = Tile.getTileByPoint({ row, col });
+                if (!this.validTiles.includes(tile.type)) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        this.invalidPlacement = isOverlapping || !isTileValid;
         this.draggedRow = row;
         this.draggedCol = col;
         this.space.draggedSquares = newSquares;

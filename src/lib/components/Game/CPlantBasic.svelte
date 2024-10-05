@@ -10,5 +10,17 @@
 </script>
 
 <CGridObject gridObject={obj}>
-    <SvgPlantBasic />
+    <div>
+        <SvgPlantBasic />
+    </div>
 </CGridObject>
+
+<style>
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+</style>
