@@ -25,9 +25,7 @@ export class Time extends Component {
         const msIn15Minutes = 250;
         const timeSinceLastTick = timestamp - this.prevTick;
         const tick = timeSinceLastTick >= msIn15Minutes;
-
         if (tick) {
-            console.log("this should only run once");
             this.minute = this.minute === 45 ? 0 : this.minute + 15;
             if (this.minute === 0) {
                 this.hour = this.hour === 23 ? 0 : this.hour + 1;

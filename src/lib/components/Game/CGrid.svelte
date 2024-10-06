@@ -4,6 +4,7 @@
         shop: CShop,
         time_block: CTimeBlock,
         tool_hoe: CToolHoe,
+        currency_block: CCurrencyBlock,
     };
 </script>
 
@@ -16,6 +17,7 @@
     import CTileTextures from "./CTileTextures.svelte";
     import CTimeBlock from "./CTimeBlock.svelte";
     import CToolHoe from "./CToolHoe.svelte";
+    import CCurrencyBlock from "./CCurrencyBlock.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));

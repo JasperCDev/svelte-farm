@@ -1,6 +1,8 @@
 import type { TilePiece, TilePiecePos, ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { derive } from "../utils";
 import { Component } from "./Component.svelte";
+import { Currency } from "./Currency.svelte";
+import { CurrencyBlock } from "./CurrencyBlock.svelte";
 import { GridObject } from "./GridObject.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { Shop } from "./Shop.svelte";
@@ -61,17 +63,32 @@ export class FarmLand extends Component {
     public isDragEnd = $state<boolean>(false);
 
     public time = new Time();
+    public currency = new Currency();
 
     constructor() {
         super();
         this.getGridSize();
         this.initTilePieces();
         this.placeObject(new Shop(10, 10));
-        this.placeObject(new PlantBasic(1, 1));
         this.placeObject(new TimeBlock(1, 29));
         this.placeObject(new ToolHoe(15, 20));
+        this.placeObject(new CurrencyBlock(18, 29));
+
+        this.placeObject(new PlantBasic(1, 1));
+        this.placeObject(new PlantBasic(1, 2));
+        this.placeObject(new PlantBasic(1, 3));
+        this.placeObject(new PlantBasic(1, 4));
+        this.placeObject(new PlantBasic(1, 5));
+        this.placeObject(new PlantBasic(1, 6));
+        this.placeObject(new PlantBasic(1, 7));
 
         this.updateTileType(this.tiles[0], "SOIL");
+        this.updateTileType(this.tiles[1], "SOIL");
+        this.updateTileType(this.tiles[2], "SOIL");
+        this.updateTileType(this.tiles[3], "SOIL");
+        this.updateTileType(this.tiles[4], "SOIL");
+        this.updateTileType(this.tiles[5], "SOIL");
+        this.updateTileType(this.tiles[6], "SOIL");
 
         this.handleGridClick = this.handleGridClick.bind(this);
         this.handleGridMouseMove = this.handleGridMouseMove.bind(this);
@@ -82,6 +99,7 @@ export class FarmLand extends Component {
     update(timestamp: number): void {
         this.mousePosition = this._mousePositionFromEvent;
         this.time.update(timestamp);
+        this.currency.update(timestamp);
         for (let gridObject of this.gridObjects) {
             if (typeof gridObject === "undefined") {
                 continue;
