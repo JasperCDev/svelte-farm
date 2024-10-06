@@ -22,14 +22,17 @@ export class Time extends Component {
         let previousTime = this.currentTime;
         this.currentTime = this.currentTime + timePassed;
         this.prevTimestamp = previousTime;
-        const msIn15Minutes = 1000;
+        const msIn15Minutes = 250;
         const timeSinceLastTick = timestamp - this.prevTick;
-        if (timeSinceLastTick >= msIn15Minutes) {
+        const tick = timeSinceLastTick >= msIn15Minutes;
+
+        if (tick) {
+            console.log("this should only run once");
             this.minute = this.minute === 45 ? 0 : this.minute + 15;
             if (this.minute === 0) {
                 this.hour = this.hour === 23 ? 0 : this.hour + 1;
             }
-            if (this.hour === 0) {
+            if (this.hour === 0 && this.minute === 0) {
                 this.day += 1;
             }
             this.prevTick = timestamp;
