@@ -22,7 +22,7 @@ export class Time extends Component {
         let previousTime = this.currentTime;
         this.currentTime = this.currentTime + timePassed;
         this.prevTimestamp = previousTime;
-        const msIn15Minutes = 250;
+        const msIn15Minutes = 1000;
         const timeSinceLastTick = timestamp - this.prevTick;
         const tick = timeSinceLastTick >= msIn15Minutes;
         if (tick) {

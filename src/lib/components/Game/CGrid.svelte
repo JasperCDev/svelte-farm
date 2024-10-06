@@ -3,6 +3,7 @@
         plant_basic: CPlantBasic,
         shop: CShop,
         time_block: CTimeBlock,
+        tool_watering_can: CToolWateringCan,
         tool_hoe: CToolHoe,
         currency_block: CCurrencyBlock,
     };
@@ -18,6 +19,7 @@
     import CTimeBlock from "./CTimeBlock.svelte";
     import CToolHoe from "./CToolHoe.svelte";
     import CCurrencyBlock from "./CCurrencyBlock.svelte";
+    import CToolWateringCan from "./CToolWateringCan.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));

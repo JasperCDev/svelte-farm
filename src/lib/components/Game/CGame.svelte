@@ -1,6 +1,7 @@
 <script>
     import { farmLand } from "../../GameState/FarmLand.svelte";
     import CGrid from "./CGrid.svelte";
+    import CRain from "./CRain.svelte";
     function getCursor() {
         if (farmLand.isDragging) {
             return "grab";
@@ -16,6 +17,9 @@
 </script>
 
 <div class="tint" style={getTint()}></div>
+{#if farmLand.weather.weather === "raining"}
+    <CRain />
+{/if}
 <div class="game" style="cursor: {getCursor()};">
     <CGrid />
 </div>

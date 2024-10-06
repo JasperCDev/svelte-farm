@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Plant } from "../../GameState/Plant.svelte";
-    import CGridObject from "./CGridObject.svelte";
+    import CPlant from "./CPlant.svelte";
     import SvgPlantBasic from "./SVGPlantBasic.svelte";
 
     interface Props {
@@ -9,11 +9,11 @@
     let { obj }: Props = $props();
 </script>
 
-<CGridObject gridObject={obj}>
+<CPlant {obj}>
     <div>
         <SvgPlantBasic />
     </div>
-</CGridObject>
+</CPlant>
 
 <style>
     div {

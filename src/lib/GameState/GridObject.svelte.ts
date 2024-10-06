@@ -167,7 +167,9 @@ export class GridObject extends Component {
     }
 
     update(timestamp: number): void {
+        console.log(farmLand.isDragging, farmLand.selectedGridObjectId);
         if (farmLand.isDragging && farmLand.selectedGridObjectId === this.id) {
+            console.log("IT DO BE DRAGGIN DOE");
             this._snapToGrid();
         }
         if (farmLand.isDragEnd && farmLand.selectedGridObjectId === this.id) {

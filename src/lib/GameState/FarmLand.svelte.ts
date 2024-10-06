@@ -10,7 +10,9 @@ import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
 import { ToolHoe } from "./ToolHoe.svelte";
+import { ToolWateringCan } from "./ToolWateringCan.svelte";
 import type { Point, Tool } from "./types";
+import { Weather } from "./Weather.svelte";
 
 export class FarmLand extends Component {
     static idHelper = 0;
@@ -64,6 +66,7 @@ export class FarmLand extends Component {
 
     public time = new Time();
     public currency = new Currency();
+    public weather = new Weather();
 
     constructor() {
         super();
@@ -72,6 +75,7 @@ export class FarmLand extends Component {
         this.placeObject(new Shop(10, 10));
         this.placeObject(new TimeBlock(1, 29));
         this.placeObject(new ToolHoe(15, 20));
+        this.placeObject(new ToolWateringCan(13, 14));
         this.placeObject(new CurrencyBlock(18, 29));
 
         this.placeObject(new PlantBasic(1, 1));
@@ -100,6 +104,7 @@ export class FarmLand extends Component {
         this.mousePosition = this._mousePositionFromEvent;
         this.time.update(timestamp);
         this.currency.update(timestamp);
+        this.weather.update(timestamp);
         for (let gridObject of this.gridObjects) {
             if (typeof gridObject === "undefined") {
                 continue;
