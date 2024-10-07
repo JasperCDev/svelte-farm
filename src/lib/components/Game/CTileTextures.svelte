@@ -3,7 +3,7 @@
 </script>
 
 {#each farmLand.tiles as tile}
-    <div class="tile-texture"></div>
+    <div class="tile-texture soil-moisture" style="opacity: {tile.soilMoisture}"></div>
 {/each}
 
 <style>
@@ -17,8 +17,7 @@
         user-select: none;
     }
 
-    .tile-texture:hover {
-        /* border: 2px solid red; */
-        /* border-radius: 30%; */
+    .tile-texture.soil-moisture {
+        background-color: #75450d;
     }
 </style>

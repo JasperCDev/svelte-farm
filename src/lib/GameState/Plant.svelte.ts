@@ -1,6 +1,6 @@
 import { farmLand } from "./FarmLand.svelte";
 import { GridObject, type GridObjectName } from "./GridObject.svelte";
-import type { TileType } from "./Tile.svelte";
+import { Tile, type TileType } from "./Tile.svelte";
 import type { Points } from "./types";
 
 export class Plant extends GridObject {
@@ -16,23 +16,40 @@ export class Plant extends GridObject {
         movable?: boolean,
     ) {
         super(row, col, name, width, height, squares, movable);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    onClick() {
-        alert("PlantBasic");
+    handleClick(): void {
+        switch (farmLand.selectedTool) {
+            case "cursor":
+                this.onClick();
+                break;
+            case "hoe":
+                break;
+            case "watering_can":
+                let tileIndx = Tile.getIteratorFromPoint({ row: this.row, col: this.col });
+                let tile = farmLand.tiles[tileIndx];
+                if (farmLand.water >= 25) {
+                    tile.water();
+                    farmLand.water -= 25;
+                }
+                break;
+        }
     }
 
     update(timestamp: number): void {
         super.update(timestamp);
-        this.health -= 0.1;
-        if (farmLand.weather.weather === "raining") {
-            this.health = Math.min(this.health + 1, 300);
+        let tileIndx = Tile.getIteratorFromPoint({ row: this.row, col: this.col });
+        let tile = farmLand.tiles[tileIndx];
+        if (tile.soilMoisture > 0) {
+            this.health = Math.min(this.health + 0.1, 300);
+            tile.soilMoisture -= 0.001;
+        } else {
+            this.health -= 0.1;
         }
         if (this.health <= 0) {
             // kill
-            farmLand.gridObjects[
-                GridObject.getIteratorFromPoint({ row: this.row, col: this.col })
-            ] = undefined;
+            GridObject.kill({ row: this.row, col: this.col });
         }
     }
 }

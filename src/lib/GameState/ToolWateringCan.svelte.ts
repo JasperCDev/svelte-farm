@@ -4,7 +4,7 @@ import { GridObject } from "./GridObject.svelte";
 
 export class ToolWateringCan extends GridObject {
     static squares = [{ row: 1, col: 1 }];
-    water = $state<number>(0);
+
     constructor(row: number, col: number) {
         super(row, col, "tool_watering_can", 1, 1);
     }
@@ -16,7 +16,7 @@ export class ToolWateringCan extends GridObject {
     update(timestamp: number): void {
         super.update(timestamp);
         if (farmLand.weather.weather === "raining") {
-            this.water = Math.min(this.water + 0.1, 100);
+            farmLand.water = Math.min(farmLand.water + 0.1, 100);
         }
     }
 }

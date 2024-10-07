@@ -16,7 +16,7 @@
         class="watering-can"
         style="outline: {farmLand.selectedTool === 'watering_can' ? '2px solid red' : ''};"
     >
-        <div class="water" style="height: {obj.water}%"></div>
+        <div class="water" style="height: {farmLand.water}%"></div>
     </div>
 </CGridObject>
 
@@ -32,6 +32,6 @@
         width: 100%;
         position: absolute;
         bottom: 0;
-        background-color: #48f0e7;
+        background-color: #3256b8;
     }
 </style>

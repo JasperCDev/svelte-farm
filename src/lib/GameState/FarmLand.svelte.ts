@@ -67,7 +67,7 @@ export class FarmLand extends Component {
     public time = new Time();
     public currency = new Currency();
     public weather = new Weather();
-
+    public water = $state<number>(100);
     constructor() {
         super();
         this.getGridSize();

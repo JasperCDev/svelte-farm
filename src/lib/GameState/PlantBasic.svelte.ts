@@ -1,3 +1,4 @@
+import { farmLand } from "./FarmLand.svelte";
 import { Plant } from "./Plant.svelte";
 
 export class PlantBasic extends Plant {
@@ -7,6 +8,14 @@ export class PlantBasic extends Plant {
     }
 
     onClick() {
-        alert("PlantBasic");
+        switch (farmLand.selectedTool) {
+            case "cursor":
+                alert("PlantBasic");
+                break;
+            case "hoe":
+                break;
+            case "watering_can":
+                
+        }
     }
 }
