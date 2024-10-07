@@ -54,10 +54,6 @@ export class Tile extends Component {
         }
     }
 
-    water() {
-        this.soilMoisture = 1;
-    }
-
     static getIteratorFromId(id: string) {
         let split = id.split("-");
         let rowCount = parseInt(split[0]);

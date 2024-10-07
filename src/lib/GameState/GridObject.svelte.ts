@@ -22,6 +22,7 @@ export class GridObjectSpace {
 
 export class GridObject extends Component {
     static idHelper = 0;
+    static duplicating = false;
     row = $state<number>()!;
     col = $state<number>()!;
     space = $state<GridObjectSpace>()!;
@@ -166,14 +167,25 @@ export class GridObject extends Component {
         return;
     }
 
+    duplicate() {}
+
+    duplicateEnd() {}
+
     update(timestamp: number): void {
         if (farmLand.isDragging && farmLand.selectedGridObjectId === this.id) {
-            this._snapToGrid();
+            if (farmLand.selectedTool === "duplicate" && !GridObject.duplicating) {
+                this.duplicate();
+            } else {
+                this._snapToGrid();
+            }
         }
         if (farmLand.isDragEnd && farmLand.selectedGridObjectId === this.id) {
             this._move();
             this.invalidPlacement = false;
             farmLand.isDragEnd = false;
+            if (GridObject.duplicating) {
+                this.duplicateEnd();
+            }
         }
     }
 

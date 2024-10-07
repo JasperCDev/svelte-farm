@@ -9,6 +9,7 @@ import { Shop } from "./Shop.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
+import { ToolDuplicate } from "./ToolDuplicate.svelte";
 import { ToolHoe } from "./ToolHoe.svelte";
 import { ToolWateringCan } from "./ToolWateringCan.svelte";
 import type { Point, Tool } from "./types";
@@ -76,6 +77,7 @@ export class FarmLand extends Component {
         this.placeObject(new TimeBlock(1, 29));
         this.placeObject(new ToolHoe(15, 20));
         this.placeObject(new ToolWateringCan(13, 14));
+        this.placeObject(new ToolDuplicate(9, 9));
         this.placeObject(new CurrencyBlock(18, 29));
 
         this.placeObject(new PlantBasic(1, 1));

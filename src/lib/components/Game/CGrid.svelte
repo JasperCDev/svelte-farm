@@ -5,6 +5,7 @@
         time_block: CTimeBlock,
         tool_watering_can: CToolWateringCan,
         tool_hoe: CToolHoe,
+        tool_duplicate: CToolDuplicate,
         currency_block: CCurrencyBlock,
     };
 </script>
@@ -20,6 +21,7 @@
     import CToolHoe from "./CToolHoe.svelte";
     import CCurrencyBlock from "./CCurrencyBlock.svelte";
     import CToolWateringCan from "./CToolWateringCan.svelte";
+    import CToolDuplicate from "./CToolDuplicate.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));

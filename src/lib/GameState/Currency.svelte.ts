@@ -4,7 +4,7 @@ import { GridObject } from "./GridObject.svelte";
 import { Plant } from "./Plant.svelte";
 
 export class Currency extends Component {
-    value = $state<number>(0);
+    value = $state<number>(5);
     prevDay = 1;
 
     update(timestamp: number): void {

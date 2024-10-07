@@ -30,7 +30,10 @@ export class Plant extends GridObject {
                 let tileIndx = Tile.getIteratorFromPoint({ row: this.row, col: this.col });
                 let tile = farmLand.tiles[tileIndx];
                 if (farmLand.water >= 25) {
-                    tile.water();
+                    if (tile.soilMoisture === 1) {
+                        return;
+                    }
+                    tile.soilMoisture = 1;
                     farmLand.water -= 25;
                 }
                 break;
