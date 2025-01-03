@@ -38,17 +38,17 @@ export class Tile extends Component {
             farmLand.gridObjects[Tile.getIteratorFromPoint({ row: this.row, col: this.col })];
         switch (this.type) {
             case "SOIL":
-                if (typeof gridObject === "undefined") {
+                if (typeof gridObject === "undefined" && this.soilMoisture !== 0) {
                     this.emptySoilCountdown -= 1;
                 } else {
-                    this.emptySoilCountdown = 1;
+                    this.emptySoilCountdown = 1000;
                 }
                 if (this.emptySoilCountdown === 0) {
                     farmLand.updateTileType(this, "GRASS");
                     this.emptySoilCountdown = 1000;
                 }
-                if (farmLand.weather.weather === "raining") {
-                    this.soilMoisture += 0.005;
+                if (farmLand.time.weather === "raining") {
+                    this.soilMoisture = Math.min(this.soilMoisture + 0.005, 1);
                 }
                 break;
         }

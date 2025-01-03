@@ -16,15 +16,42 @@
     }
 </script>
 
-<div class="tint" style={getTint()}></div>
-{#if farmLand.weather.weather === "raining"}
-    <CRain />
+{#if farmLand.isGameOver}
+    <div>GAME OVER</div>
+{:else}
+    <div class="tint" style={getTint()}></div>
+    {#if farmLand.time.weather === "raining"}
+        <CRain />
+    {/if}
+    <div class="game" style="cursor: {getCursor()};">
+        <div class="flex">
+            <div class="grid-wrapper">
+                <CGrid />
+            </div>
+            <div class="row">
+                <div>ONE</div>
+                <div>TWO</div>
+                <div>THREE</div>
+            </div>
+        </div>
+    </div>
 {/if}
-<div class="game" style="cursor: {getCursor()};">
-    <CGrid />
-</div>
 
 <style>
+    .flex {
+        display: grid;
+        grid-template-rows: 8fr 2fr;
+        grid-template-columns: 1fr;
+        width: 100%;
+        height: 100%;
+        justify-content: space-evenly;
+    }
+    .row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 20%;
+    }
     .game {
         display: flex;
         justify-content: center;

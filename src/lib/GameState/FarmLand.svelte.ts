@@ -6,6 +6,7 @@ import { CurrencyBlock } from "./CurrencyBlock.svelte";
 import { GridObject } from "./GridObject.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { Shop } from "./Shop.svelte";
+import { Shrine } from "./Shrine.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
@@ -13,7 +14,6 @@ import { ToolDuplicate } from "./ToolDuplicate.svelte";
 import { ToolHoe } from "./ToolHoe.svelte";
 import { ToolWateringCan } from "./ToolWateringCan.svelte";
 import type { Point, Tool } from "./types";
-import { Weather } from "./Weather.svelte";
 
 export class FarmLand extends Component {
     static idHelper = 0;
@@ -67,10 +67,11 @@ export class FarmLand extends Component {
 
     public time = new Time();
     public currency = new Currency();
-    public weather = new Weather();
     public water = $state<number>(100);
-    constructor() {
-        super();
+
+    public isGameOver = $state<boolean>(false);
+
+    init() {
         this.getGridSize();
         this.initTilePieces();
         this.placeObject(new Shop(10, 10));
@@ -78,7 +79,7 @@ export class FarmLand extends Component {
         this.placeObject(new ToolHoe(15, 20));
         this.placeObject(new ToolWateringCan(13, 14));
         this.placeObject(new ToolDuplicate(9, 9));
-        this.placeObject(new CurrencyBlock(18, 29));
+        // this.placeObject(new CurrencyBlock(18, 29));
 
         this.placeObject(new PlantBasic(1, 1));
         this.placeObject(new PlantBasic(1, 2));
@@ -106,7 +107,6 @@ export class FarmLand extends Component {
         this.mousePosition = this._mousePositionFromEvent;
         this.time.update(timestamp);
         this.currency.update(timestamp);
-        this.weather.update(timestamp);
         for (let gridObject of this.gridObjects) {
             if (typeof gridObject === "undefined") {
                 continue;
@@ -267,8 +267,12 @@ export class FarmLand extends Component {
     }
 
     public getGridSize() {
-        let widthPercent = window.innerWidth / 16000000;
-        let heightPercent = window.innerHeight / 9000000;
+        let gridWrapper = document.querySelector(".grid-wrapper");
+        if (gridWrapper === null) {
+            return;
+        }
+        let widthPercent = gridWrapper.clientWidth / 16000000;
+        let heightPercent = gridWrapper.clientHeight / 9000000;
         let smallestPercent = Math.min(widthPercent, heightPercent);
         this.gridWidth = Math.round(16000000 * smallestPercent);
         this.gridHeight = Math.round(9000000 * smallestPercent);
@@ -280,7 +284,7 @@ export class FarmLand extends Component {
         let relX = mousePos.x - (window.innerWidth - this.gridWidth) / 2;
         let relY = mousePos.y - (window.innerHeight - this.gridHeight) / 2;
 
-        // x & y remander from tilesize
+        // x & y remainder from tilesize
         let modX = relX % this.tileSize;
         let modY = relY % this.tileSize;
 

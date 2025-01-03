@@ -8,6 +8,7 @@ export class ToolWateringCan extends GridObject {
     constructor(row: number, col: number) {
         super(row, col, "tool_watering_can", 1, 1);
     }
+
     onClick(): void {
         farmLand.selectedTool =
             farmLand.selectedTool === "watering_can" ? "cursor" : "watering_can";
@@ -15,7 +16,7 @@ export class ToolWateringCan extends GridObject {
 
     update(timestamp: number): void {
         super.update(timestamp);
-        if (farmLand.weather.weather === "raining") {
+        if (farmLand.time.weather === "raining") {
             farmLand.water = Math.min(farmLand.water + 0.1, 100);
         }
     }
