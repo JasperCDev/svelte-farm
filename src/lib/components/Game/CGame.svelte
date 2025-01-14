@@ -24,16 +24,7 @@
         <CRain />
     {/if}
     <div class="game" style="cursor: {getCursor()};">
-        <div class="flex">
-            <div class="grid-wrapper">
-                <CGrid />
-            </div>
-            <div class="row">
-                <div>ONE</div>
-                <div>TWO</div>
-                <div>THREE</div>
-            </div>
-        </div>
+        <CGrid />
     </div>
 {/if}
 

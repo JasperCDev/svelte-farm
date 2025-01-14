@@ -79,7 +79,7 @@ export class FarmLand extends Component {
         this.placeObject(new ToolHoe(15, 20));
         this.placeObject(new ToolWateringCan(13, 14));
         this.placeObject(new ToolDuplicate(9, 9));
-        // this.placeObject(new CurrencyBlock(18, 29));
+        this.placeObject(new CurrencyBlock(18, 29));
 
         this.placeObject(new PlantBasic(1, 1));
         this.placeObject(new PlantBasic(1, 2));
@@ -219,6 +219,7 @@ export class FarmLand extends Component {
             x: e.clientX,
             y: e.clientY,
         });
+        console.log(point);
         const clickedGridObject = this.getGridObjectFromPoint(point);
         if (typeof clickedGridObject !== "undefined") {
             clickedGridObject.handleClick();
@@ -267,12 +268,8 @@ export class FarmLand extends Component {
     }
 
     public getGridSize() {
-        let gridWrapper = document.querySelector(".grid-wrapper");
-        if (gridWrapper === null) {
-            return;
-        }
-        let widthPercent = gridWrapper.clientWidth / 16000000;
-        let heightPercent = gridWrapper.clientHeight / 9000000;
+        let widthPercent = window.innerWidth / 16000000;
+        let heightPercent = window.innerHeight / 9000000;
         let smallestPercent = Math.min(widthPercent, heightPercent);
         this.gridWidth = Math.round(16000000 * smallestPercent);
         this.gridHeight = Math.round(9000000 * smallestPercent);
