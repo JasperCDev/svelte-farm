@@ -8,6 +8,7 @@
         tool_hoe: CToolHoe,
         tool_duplicate: CToolDuplicate,
         currency_block: CCurrencyBlock,
+        seed_bag: CSeedBag,
     };
 </script>
 
@@ -24,6 +25,7 @@
     import CToolWateringCan from "./CToolWateringCan.svelte";
     import CToolDuplicate from "./CToolDuplicate.svelte";
     import CShrine from "./CShrine.svelte";
+    import CSeedBag from "./CSeedBag.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));

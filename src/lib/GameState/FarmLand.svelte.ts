@@ -5,6 +5,7 @@ import { Currency } from "./Currency.svelte";
 import { CurrencyBlock } from "./CurrencyBlock.svelte";
 import { GridObject } from "./GridObject.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
+import { SeedBag } from "./SeedBag.svelte";
 import { Shop } from "./Shop.svelte";
 import { Shrine } from "./Shrine.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
@@ -80,7 +81,7 @@ export class FarmLand extends Component {
         this.placeObject(new ToolWateringCan(13, 14));
         this.placeObject(new ToolDuplicate(9, 9));
         this.placeObject(new CurrencyBlock(18, 29));
-
+        this.placeObject(new SeedBag(3, 3));
         this.placeObject(new PlantBasic(1, 1));
         this.placeObject(new PlantBasic(1, 2));
         this.placeObject(new PlantBasic(1, 3));
