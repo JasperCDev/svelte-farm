@@ -3,7 +3,9 @@
 </script>
 
 {#each farmLand.tiles as tile}
-    <div class="tile-texture soil-moisture" style="opacity: {tile.soilMoisture}"></div>
+    <div class="tile-texture soil-moisture" style="opacity: {tile.soilMoisture}">
+        <div class="soil-moisture"></div>
+    </div>
 {/each}
 
 <style>
@@ -17,7 +19,11 @@
         user-select: none;
     }
 
-    .tile-texture.soil-moisture {
+    .soil-moisture {
         background-color: #75450d;
+        width: 90%;
+        height: 90%;
+        margin: auto;
+        border-radius: 25%;
     }
 </style>

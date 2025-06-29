@@ -24,6 +24,6 @@
         padding: 1rem;
     }
     p {
-        font-size: 3cqh;
+        font-size: 2vw;
     }
 </style>

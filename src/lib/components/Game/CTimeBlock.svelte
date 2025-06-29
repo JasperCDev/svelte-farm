@@ -22,6 +22,6 @@
         justify-content: center;
     }
     p {
-        font-size: 3cqh;
+        font-size: 1.5vw;
     }
 </style>
