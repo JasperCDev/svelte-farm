@@ -4,17 +4,17 @@
         randomHeight: number;
     }
     // Access the props via $props
-    const { randomHeight, randomWidth }: Props = $props();
+    let { randomHeight, randomWidth }: Props = $props();
 
-    const pathLength = 1;
+    let pathLength = 1;
 
     // Computed values using Svelte 5 reactivity
-    const animationDelay = `${Math.random() * 3}s`;
-    const animationDuration = `${randomHeight / (window.innerHeight * 0.5)}s`;
-    const translateY = `${-(randomHeight * 2)}px`;
-    const strokeDasharray = `${25 / randomHeight} ${(randomHeight - 25) / randomHeight}`;
+    let animationDelay = `${Math.random() * 3}s`;
+    let animationDuration = `${randomHeight / (window.innerHeight * 0.5)}s`;
+    let translateY = `${-(randomHeight * 2)}px`;
+    let strokeDasharray = `${25 / randomHeight} ${(randomHeight - 25) / randomHeight}`;
 
-    const d = `M${randomWidth} 0 L${randomWidth} ${randomHeight}`;
+    let d = `M${randomWidth} 0 L${randomWidth} ${randomHeight}`;
 </script>
 
 <path

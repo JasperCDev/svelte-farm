@@ -7,12 +7,12 @@
 
     // Function to generate random raindrops
     function getRaindrops() {
-        const rainDropCount = Math.floor(window.innerWidth / 10);
-        const rainDrops = [];
+        let rainDropCount = Math.floor(window.innerWidth / 10);
+        let rainDrops = [];
 
         for (let i = 0; i < rainDropCount; i++) {
-            const randomWidth = Math.random() * window.innerWidth;
-            const randomHeight = Math.random() * window.innerHeight + window.innerHeight * 0.2;
+            let randomWidth = Math.random() * window.innerWidth;
+            let randomHeight = Math.random() * window.innerHeight + window.innerHeight * 0.2;
             rainDrops.push([randomWidth, randomHeight]);
         }
 

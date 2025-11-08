@@ -4,6 +4,7 @@ import { Component } from "./Component.svelte";
 import { Currency } from "./Currency.svelte";
 import { CurrencyBlock } from "./CurrencyBlock.svelte";
 import { GridObject } from "./GridObject.svelte";
+import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { SeedBag } from "./SeedBag.svelte";
 import { Shop } from "./Shop.svelte";
@@ -57,13 +58,15 @@ export class FarmLand extends Component {
     public gridWidth = $state<number>(0);
     public gridHeight = $state<number>(0);
 
-    public selectedGridObjectId = $state<string | null>(null);
+    public focusedGridObjectId = $state<string | null>(null);
+    public focusedTileID = $state<string | null>(null);
     public selectedTool = $state<Tool>("cursor");
     public isDragging = $state<boolean>(false);
     public isMouseDown = $state<boolean>(false);
     public mousePosition = $state<Point>({ row: 1, col: 1 });
     private _mousePositionFromEvent = { row: 1, col: 1 };
     public recentMouseDownPosition = $state<Point>({ row: 1, col: 1 });
+    public mouseDownTimestamp = $state<number | null>(0);
     public isDragEnd = $state<boolean>(false);
 
     public time = new Time();
@@ -89,6 +92,7 @@ export class FarmLand extends Component {
         this.placeObject(new PlantBasic(1, 5));
         this.placeObject(new PlantBasic(1, 6));
         this.placeObject(new PlantBasic(1, 7));
+        this.placeObject(new LifeEnergyPod(15, 15));
 
         this.updateTileType(this.tiles[0], "SOIL");
         this.updateTileType(this.tiles[1], "SOIL");
@@ -127,15 +131,20 @@ export class FarmLand extends Component {
             y: e.clientY,
         });
         this.isMouseDown = true;
-        const clickedGridObject = this.getGridObjectFromPoint(this.recentMouseDownPosition);
-        this.selectedGridObjectId = clickedGridObject?.id || null;
+        this.mouseDownTimestamp = e.timeStamp;
+        let focusedGridObject = this.getGridObjectFromPoint(this.recentMouseDownPosition);
+        this.focusedGridObjectId = focusedGridObject?.id || null;
+
+        let focusedTile = this.tiles[Tile.getIteratorFromPoint(this.recentMouseDownPosition)];
+        this.focusedTileID = focusedTile.id;
     }
 
     public handleGridMouseUp(e: MouseEvent) {
         e.preventDefault();
         e.stopPropagation();
         this.isMouseDown = false;
-        if (!this.isDragging || this.selectedGridObjectId === null) {
+        this.mouseDownTimestamp = null;
+        if (!this.isDragging || this.focusedGridObjectId === null) {
             return;
         }
         this.stopDrag();
@@ -146,7 +155,7 @@ export class FarmLand extends Component {
         // hacky trick to prevent a drag triggering a click
         requestAnimationFrame(() => {
             this.isDragging = false;
-            farmLand.selectedGridObjectId = null;
+            farmLand.focusedGridObjectId = null;
         });
     }
 
@@ -189,7 +198,7 @@ export class FarmLand extends Component {
             let tile = this.tiles[Tile.getIteratorFromPoint(square)];
             this.updateTileType(tile, "GRASS");
         }
-        const pos = GridObject.getIteratorFromPoint({
+        let pos = GridObject.getIteratorFromPoint({
             row: gridObject.row,
             col: gridObject.col,
         });
@@ -221,9 +230,9 @@ export class FarmLand extends Component {
             y: e.clientY,
         });
         console.log(point);
-        const clickedGridObject = this.getGridObjectFromPoint(point);
-        if (typeof clickedGridObject !== "undefined") {
-            clickedGridObject.handleClick();
+        let focusedGridObject = this.getGridObjectFromPoint(point);
+        if (typeof focusedGridObject !== "undefined") {
+            focusedGridObject.handleClick();
             return;
         }
         let tileIndx = Tile.getIteratorFromPoint(point);
@@ -253,13 +262,13 @@ export class FarmLand extends Component {
         if (!this.isMouseDown) {
             return;
         }
-        if (this.selectedGridObjectId === null) {
+        if (this.focusedGridObjectId === null) {
             return;
         }
         if (this.isDragging) {
             return;
         }
-        const isDifferentPoint =
+        let isDifferentPoint =
             this._mousePositionFromEvent.row !== this.recentMouseDownPosition.row ||
             this._mousePositionFromEvent.col !== this.recentMouseDownPosition.col;
         if (isDifferentPoint) {
@@ -297,7 +306,7 @@ export class FarmLand extends Component {
         };
     }
 }
-export let farmLand = new FarmLand();
+export let  farmLand = new FarmLand();
 
 function update(timestamp: number) {
     farmLand.update(timestamp);

@@ -29,8 +29,8 @@ export class PlantBasic extends Plant {
         let obj = new PlantBasic(FarmLand.ROW_COUNT, FarmLand.COL_COUNT);
         obj.draggedRow = this.row;
         obj.draggedCol = this.col;
-        farmLand.selectedGridObjectId = obj.id;
-        const pos = GridObject.getIteratorFromPoint({
+        farmLand.focusedGridObjectId = obj.id;
+        let pos = GridObject.getIteratorFromPoint({
             row: FarmLand.ROW_COUNT + 1,
             col: FarmLand.COL_COUNT + 1,
         });

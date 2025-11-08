@@ -5,7 +5,7 @@ import { Plant } from "./Plant.svelte";
 
 export class Currency extends Component {
     value = $state<number>(5);
-    rent = $state<number>(500);
+    rent = $state<number>(100);
     prevHour = 9;
     prevDay = 1;
 
@@ -13,7 +13,7 @@ export class Currency extends Component {
         super.update(timestamp);
         if (farmLand.time.hour !== this.prevHour) {
             this.prevHour = farmLand.time.hour;
-            for (const gridObject of farmLand.gridObjects) {
+            for (let gridObject of farmLand.gridObjects) {
                 if (typeof gridObject === "undefined") {
                     continue;
                 }

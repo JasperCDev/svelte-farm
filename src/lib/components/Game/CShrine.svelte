@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { CurrencyBlock } from "../../GameState/CurrencyBlock.svelte";
     import { farmLand } from "../../GameState/FarmLand.svelte";
     import type { Shrine } from "../../GameState/Shrine.svelte";
     import type { TimeBlock } from "../../GameState/TimeBlock.svelte";

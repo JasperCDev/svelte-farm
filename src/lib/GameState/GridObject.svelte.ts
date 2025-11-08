@@ -148,11 +148,11 @@ export class GridObject extends Component {
         if (this.invalidPlacement) {
             return;
         }
-        const posOld = GridObject.getIteratorFromPoint({
+        let posOld = GridObject.getIteratorFromPoint({
             row: this.row,
             col: this.col,
         });
-        const posNew = GridObject.getIteratorFromPoint({
+        let posNew = GridObject.getIteratorFromPoint({
             row: this.draggedRow,
             col: this.draggedCol,
         });
@@ -172,20 +172,26 @@ export class GridObject extends Component {
     duplicateEnd() {}
 
     update(timestamp: number): void {
-        if (farmLand.isDragging && farmLand.selectedGridObjectId === this.id) {
+        if (farmLand.isDragging && farmLand.focusedGridObjectId === this.id) {
             if (farmLand.selectedTool === "duplicate" && !GridObject.duplicating) {
                 this.duplicate();
             } else {
                 this._snapToGrid();
             }
         }
-        if (farmLand.isDragEnd && farmLand.selectedGridObjectId === this.id) {
+        if (farmLand.isDragEnd && farmLand.focusedGridObjectId === this.id) {
             this._move();
             this.invalidPlacement = false;
             farmLand.isDragEnd = false;
             if (GridObject.duplicating) {
                 this.duplicateEnd();
             }
+        }
+    }
+
+    handleMouseHold(deltaTime: number): void {
+        if (farmLand.isDragging) {
+            return;
         }
     }
 

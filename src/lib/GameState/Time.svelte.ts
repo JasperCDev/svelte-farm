@@ -25,10 +25,10 @@ export class Time extends Component {
         let previousTime = this.currentTime;
         this.currentTime = this.currentTime + timePassed;
         this.prevTimestamp = previousTime;
-        const dayTime = 1000 * 60 * 5; // 5 minutes
-        const msIn15Minutes = dayTime / 24 / 4;
-        const timeSinceLastTick = timestamp - this.prevTick;
-        const tick = timeSinceLastTick >= msIn15Minutes;
+        let dayTime = 1000 * 60 * 5; // 5 minutes
+        let msIn15Minutes = dayTime / 24 / 4;
+        let timeSinceLastTick = timestamp - this.prevTick;
+        let tick = timeSinceLastTick >= msIn15Minutes;
         if (tick) {
             // next minute
             this.minute = this.minute === 45 ? 0 : this.minute + 15;

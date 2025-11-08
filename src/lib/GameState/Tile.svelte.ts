@@ -13,6 +13,8 @@ export class Tile extends Component {
     movable = $state<boolean>(true);
     soilMoisture = $state<number>(0);
     emptySoilCountdown = 1000;
+    isHoeing = $state<boolean>(false);
+    hoeProgress = $state<number>(0);
     constructor(tileIndex: number, type?: TileType) {
         super();
         let tilePoint = Tile.getPointFromIterator(tileIndex);
@@ -27,8 +29,6 @@ export class Tile extends Component {
             case "cursor":
                 break;
             case "hoe":
-                farmLand.updateTileType(this, "SOIL");
-                this.type = "SOIL";
                 break;
         }
     }
@@ -36,7 +36,16 @@ export class Tile extends Component {
     update(timestamp: number): void {
         let gridObject =
             farmLand.gridObjects[Tile.getIteratorFromPoint({ row: this.row, col: this.col })];
+
         switch (this.type) {
+            case "GRASS":
+                this.isHoeing =
+                    farmLand.isMouseDown &&
+                    farmLand.selectedTool === "hoe" &&
+                    farmLand.focusedTileID === this.id &&
+                    farmLand.mouseDownTimestamp !== null &&
+                    timestamp - farmLand.mouseDownTimestamp >= 100;
+                break;
             case "SOIL":
                 if (typeof gridObject === "undefined" && this.soilMoisture !== 0) {
                     this.emptySoilCountdown -= 1;
@@ -51,6 +60,14 @@ export class Tile extends Component {
                     this.soilMoisture = Math.min(this.soilMoisture + 0.005, 1);
                 }
                 break;
+        }
+        if (this.isHoeing) {
+            this.hoeProgress = Math.min(this.hoeProgress + 0.02, 1);
+            if (this.hoeProgress === 1) {
+                this.hoeProgress = 0;
+                this.isHoeing = false;
+                farmLand.updateTileType(this, "SOIL");
+            }
         }
     }
 

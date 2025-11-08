@@ -1,5 +1,5 @@
 <script context="module">
-    export const GRID_OBJECT_MAP = {
+    export let GRID_OBJECT_MAP = {
         plant_basic: CPlantBasic,
         shop: CShop,
         shrine: CShrine,
@@ -9,6 +9,7 @@
         tool_duplicate: CToolDuplicate,
         currency_block: CCurrencyBlock,
         seed_bag: CSeedBag,
+        life_energy_pod: CLifeEnergyPod,
     };
 </script>
 
@@ -26,6 +27,7 @@
     import CToolDuplicate from "./CToolDuplicate.svelte";
     import CShrine from "./CShrine.svelte";
     import CSeedBag from "./CSeedBag.svelte";
+    import CLifeEnergyPod from "./CLifeEnergyPod.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
