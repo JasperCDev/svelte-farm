@@ -3,9 +3,21 @@ import { GridObject, type GridObjectName } from "./GridObject.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import type { Points } from "./types";
 
+export class Orb {
+    x = $state<number>(0);
+    y = $state<number>(0);
+
+    constructor(row: number, col: number) {
+        this.x = row * farmLand.tileSize + farmLand.tileSize / 2;
+        this.y = col * farmLand.tileSize + farmLand.tileSize / 2;
+    }
+}
+
 export class Plant extends GridObject {
     validTiles: TileType[] = ["SOIL"];
     health = $state<number>(300);
+    orbs = $state<Orb[]>([]);
+    prevHour = 0;
     constructor(
         row: number,
         col: number,
@@ -17,6 +29,15 @@ export class Plant extends GridObject {
     ) {
         super(row, col, name, width, height, squares, movable);
         this.handleClick = this.handleClick.bind(this);
+    }
+
+    addOrb() {
+        this.orbs = [...this.orbs, new Orb(this.row, this.col)];
+    }
+
+    removeOrb() {
+        this.orbs = this.orbs.slice(0, -1);
+        farmLand.currency.value += 1;
     }
 
     handleClick(): void {
@@ -44,6 +65,16 @@ export class Plant extends GridObject {
         super.update(timestamp);
         let tileIndx = Tile.getIteratorFromPoint({ row: this.row, col: this.col });
         let tile = farmLand.tiles[tileIndx];
+
+        for (let i = 0; i < this.orbs.length; i++) {
+            const orb = this.orbs[i];
+            orb.x = farmLand.energyPodPosition ???
+            orb.y = farmLand.energyPodPosition ???
+        }
+        if (farmLand.time.hour !== this.prevHour) {
+            this.prevHour = farmLand.time.hour;
+            this.addOrb();
+        }
         if (tile.soilMoisture > 0) {
             if (this.health < 300) {
                 this.health = Math.min(this.health + 0.1, 300);

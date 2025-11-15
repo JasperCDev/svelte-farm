@@ -11,17 +11,6 @@ export class Currency extends Component {
 
     update(timestamp: number): void {
         super.update(timestamp);
-        if (farmLand.time.hour !== this.prevHour) {
-            this.prevHour = farmLand.time.hour;
-            for (let gridObject of farmLand.gridObjects) {
-                if (typeof gridObject === "undefined") {
-                    continue;
-                }
-                if (gridObject instanceof Plant) {
-                    this.value += 1;
-                }
-            }
-        }
         if (farmLand.time.day !== this.prevDay) {
             this.prevDay = farmLand.time.day;
             this.value = Math.max(this.value - this.rent, 0);

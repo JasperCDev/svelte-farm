@@ -74,6 +74,7 @@ export class FarmLand extends Component {
     public water = $state<number>(100);
 
     public isGameOver = $state<boolean>(false);
+    public energyPodPosition = { row: 15, col: 15 };
 
     init() {
         this.getGridSize();
@@ -306,7 +307,7 @@ export class FarmLand extends Component {
         };
     }
 }
-export let  farmLand = new FarmLand();
+export let farmLand = new FarmLand();
 
 function update(timestamp: number) {
     farmLand.update(timestamp);
