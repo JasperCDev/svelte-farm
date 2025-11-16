@@ -66,11 +66,31 @@ export class Plant extends GridObject {
         let tileIndx = Tile.getIteratorFromPoint({ row: this.row, col: this.col });
         let tile = farmLand.tiles[tileIndx];
 
+        const targetX = farmLand.energyPodPosition.col * farmLand.tileSize + farmLand.tileSize / 2;
+        const targetY = farmLand.energyPodPosition.row * farmLand.tileSize + farmLand.tileSize / 2;
+        const speed = 2; // pixels per frame or change to per-second version
+
         for (let i = 0; i < this.orbs.length; i++) {
             const orb = this.orbs[i];
-            orb.x = farmLand.energyPodPosition ???
-            orb.y = farmLand.energyPodPosition ???
+
+            // direction vector from orb -> target
+            const dx = targetX - orb.x;
+            const dy = targetY - orb.y;
+
+            const dist = Math.hypot(dx, dy);
+
+            if (dist > 2) {
+                const nx = dx / dist;
+                const ny = dy / dist;
+
+                // move orb a bit toward the target
+                orb.x += nx * speed;
+                orb.y += ny * speed;
+            } else {
+                this.removeOrb();
+            }
         }
+
         if (farmLand.time.hour !== this.prevHour) {
             this.prevHour = farmLand.time.hour;
             this.addOrb();

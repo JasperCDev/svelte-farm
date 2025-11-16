@@ -24,15 +24,17 @@
     <div class="plant" style="color: {getPlantColor()}">
         {@render children()}
     </div>
-    {#each obj.orbs as orb, index (index)}
-        <div class="orb" style="left: {index * 12}px;"></div>
-    {/each}
 </CGridObject>
+{#each obj.orbs as orb, index (index)}
+    <div class="orb" style="top: {orb.x}px; left: {orb.y}px;"></div>
+{/each}
 
 <style>
     .orb {
         width: 10px;
+        z-index: 999;
         height: 10px;
         background-color: red;
+        position: absolute;
     }
 </style>
