@@ -1,3 +1,4 @@
+import { farmLand } from "./FarmLand.svelte";
 import { GridObject } from "./GridObject.svelte";
 
 export class LifeEnergyPod extends GridObject {
@@ -14,5 +15,14 @@ export class LifeEnergyPod extends GridObject {
     ];
     constructor(row: number, col: number) {
         super(row, col, "life_energy_pod", 3, 3, LifeEnergyPod.squares, true);
+    }
+
+    update(timestamp: number): void {
+        // Update the farmLand's energyPodPosition if this pod has been dragged and released
+        if (farmLand.isDragEnd && farmLand.focusedGridObjectId === this.id) {
+            console.log({ row: this.draggedRow, col: this.draggedCol });
+            farmLand.energyPodPosition = { col: this.draggedRow, row: this.draggedCol };
+        }
+        super.update(timestamp);
     }
 }

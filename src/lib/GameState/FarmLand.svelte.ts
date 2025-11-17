@@ -1,5 +1,4 @@
-import type { TilePiece, TilePiecePos, ZeroThruFour } from "../components/Game/CTiles.svelte";
-import { derive } from "../utils";
+import type { TilePiece, ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { Component } from "./Component.svelte";
 import { Currency } from "./Currency.svelte";
 import { CurrencyBlock } from "./CurrencyBlock.svelte";
@@ -8,7 +7,6 @@ import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { SeedBag } from "./SeedBag.svelte";
 import { Shop } from "./Shop.svelte";
-import { Shrine } from "./Shrine.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
