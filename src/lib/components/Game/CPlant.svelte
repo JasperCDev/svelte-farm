@@ -26,7 +26,7 @@
     </div>
 </CGridObject>
 {#each obj.orbs as orb, index (index)}
-    <div class="orb" style="top: {orb.x}px; left: {orb.y}px;"></div>
+    <div class="orb" style="top: {orb.y}px; left: {orb.x}px;"></div>
 {/each}
 
 <style>

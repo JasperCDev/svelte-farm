@@ -20,8 +20,7 @@ export class LifeEnergyPod extends GridObject {
     update(timestamp: number): void {
         // Update the farmLand's energyPodPosition if this pod has been dragged and released
         if (farmLand.isDragEnd && farmLand.focusedGridObjectId === this.id) {
-            console.log({ row: this.draggedRow, col: this.draggedCol });
-            farmLand.energyPodPosition = { col: this.draggedRow, row: this.draggedCol };
+            farmLand.energyPodPosition = { col: this.draggedCol, row: this.draggedRow };
         }
         super.update(timestamp);
     }
