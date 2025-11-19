@@ -1,13 +1,11 @@
 <script context="module">
     export let GRID_OBJECT_MAP = {
         plant_basic: CPlantBasic,
-        shop: CShop,
         shrine: CShrine,
         time_block: CTimeBlock,
         tool_watering_can: CToolWateringCan,
         tool_hoe: CToolHoe,
         tool_duplicate: CToolDuplicate,
-        currency_block: CCurrencyBlock,
         seed_bag: CSeedBag,
         life_energy_pod: CLifeEnergyPod,
     };
@@ -17,12 +15,10 @@
     import { onDestroy, onMount } from "svelte";
     import { farmLand } from "../../GameState/FarmLand.svelte";
     import CPlantBasic from "./CPlantBasic.svelte";
-    import CShop from "./CShop.svelte";
     import CTiles from "./CTiles.svelte";
     import CTileTextures from "./CTileTextures.svelte";
     import CTimeBlock from "./CTimeBlock.svelte";
     import CToolHoe from "./CToolHoe.svelte";
-    import CCurrencyBlock from "./CCurrencyBlock.svelte";
     import CToolWateringCan from "./CToolWateringCan.svelte";
     import CToolDuplicate from "./CToolDuplicate.svelte";
     import CShrine from "./CShrine.svelte";

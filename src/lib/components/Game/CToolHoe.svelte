@@ -1,6 +1,5 @@
 <script lang="ts">
     import { farmLand } from "../../GameState/FarmLand.svelte";
-    import type { Shop } from "../../GameState/Shop.svelte";
     import type { ToolHoe } from "../../GameState/ToolHoe.svelte";
     import CGridObject from "./CGridObject.svelte";
     import SvgHoe from "./SVGHoe.svelte";

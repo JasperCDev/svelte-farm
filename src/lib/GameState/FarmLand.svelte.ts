@@ -1,12 +1,10 @@
 import type { TilePiece, ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { Component } from "./Component.svelte";
 import { Currency } from "./Currency.svelte";
-import { CurrencyBlock } from "./CurrencyBlock.svelte";
 import { GridObject } from "./GridObject.svelte";
 import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { SeedBag } from "./SeedBag.svelte";
-import { Shop } from "./Shop.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
@@ -77,12 +75,10 @@ export class FarmLand extends Component {
     init() {
         this.getGridSize();
         this.initTilePieces();
-        this.placeObject(new Shop(10, 10));
         this.placeObject(new TimeBlock(1, 29));
         this.placeObject(new ToolHoe(15, 20));
         this.placeObject(new ToolWateringCan(13, 14));
         this.placeObject(new ToolDuplicate(9, 9));
-        this.placeObject(new CurrencyBlock(18, 29));
         this.placeObject(new SeedBag(3, 3));
         this.placeObject(new PlantBasic(1, 1));
         this.placeObject(new PlantBasic(1, 2));

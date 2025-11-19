@@ -1,9 +1,7 @@
 <script lang="ts">
     import type { SeedBag } from "../../GameState/SeedBag.svelte";
-    import type { Shop } from "../../GameState/Shop.svelte";
     import CGridObject from "./CGridObject.svelte";
     import SvgSeedBag from "./SVGSeedBag.svelte";
-    import SvgShop from "./SVGShop.svelte";
 
     interface Props {
         obj: SeedBag;

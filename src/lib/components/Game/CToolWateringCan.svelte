@@ -1,9 +1,7 @@
 <script lang="ts">
     import { farmLand } from "../../GameState/FarmLand.svelte";
-    import type { Shop } from "../../GameState/Shop.svelte";
     import type { ToolWateringCan } from "../../GameState/ToolWateringCan.svelte";
     import CGridObject from "./CGridObject.svelte";
-    import SvgHoe from "./SVGHoe.svelte";
 
     interface Props {
         obj: ToolWateringCan;
