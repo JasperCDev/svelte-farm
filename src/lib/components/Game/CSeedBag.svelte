@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { farmLand } from "../../GameState/FarmLand.svelte";
     import type { SeedBag } from "../../GameState/SeedBag.svelte";
     import CGridObject from "./CGridObject.svelte";
     import SvgSeedBag from "./SVGSeedBag.svelte";
@@ -10,7 +11,10 @@
 </script>
 
 <CGridObject gridObject={obj}>
-    <div class="seed_bag">
+    <div
+        class="seed_bag"
+        style="outline: {farmLand.selectedTool === 'seedbag' ? '2px solid red' : ''};"
+    >
         <SvgSeedBag />
     </div>
 </CGridObject>
@@ -21,6 +25,5 @@
         justify-content: center;
         align-items: center;
         height: 100%;
-        background-color: yellow;
     }
 </style>

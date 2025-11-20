@@ -1,7 +1,10 @@
 <script lang="ts">
     import type { Plant } from "../../GameState/Plant.svelte";
     import CPlant from "./CPlant.svelte";
+    import SVGBean from "./SVGBean.svelte";
+    import SVGPlantBasic from "./SVGPlantBasic.svelte";
     import SvgPlantBasic from "./SVGPlantBasic.svelte";
+    import SVGSeedBag from "./SVGSeedBag.svelte";
 
     interface Props {
         obj: Plant;
@@ -11,7 +14,11 @@
 
 <CPlant {obj}>
     <div>
-        <SvgPlantBasic />
+        {#if obj.stage === "seed"}
+            <SVGBean />
+        {:else}
+            <SVGPlantBasic />
+        {/if}
     </div>
 </CPlant>
 

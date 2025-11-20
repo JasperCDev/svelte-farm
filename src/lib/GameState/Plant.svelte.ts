@@ -19,6 +19,9 @@ export class Plant extends GridObject {
     health = $state<number>(300);
     orbs = $state<Orb[]>([]);
     prevHour = 0;
+    stage = $state<"seed" | "plant">("seed");
+    growth = $state<number>(0);
+
     constructor(
         row: number,
         col: number,
@@ -64,8 +67,18 @@ export class Plant extends GridObject {
 
     update(timestamp: number): void {
         super.update(timestamp);
+
         let tileIndx = Tile.getIteratorFromPoint({ row: this.row, col: this.col });
         let tile = farmLand.tiles[tileIndx];
+        if (this.stage === "seed") {
+            if (tile.soilMoisture > 0) {
+                this.growth += 1;
+            }
+            if (this.growth >= 100) {
+                this.stage = "plant";
+            }
+            return;
+        }
         let targetX = farmLand.energyPodPosition.col * farmLand.tileSize + farmLand.tileSize / 2;
         let targetY = farmLand.energyPodPosition.row * farmLand.tileSize + farmLand.tileSize / 2;
         for (let i = 0; i < this.orbs.length; i++) {
