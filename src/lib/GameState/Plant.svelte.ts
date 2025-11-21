@@ -9,8 +9,8 @@ export class Orb {
     y = $state<number>(0);
 
     constructor(row: number, col: number) {
-        this.x = row * farmLand.tileSize + farmLand.tileSize / 2;
-        this.y = col * farmLand.tileSize + farmLand.tileSize / 2;
+        this.x = (col - 1) * farmLand.tileSize + farmLand.tileSize / 2;
+        this.y = (row - 1) * farmLand.tileSize + farmLand.tileSize / 2;
     }
 }
 
