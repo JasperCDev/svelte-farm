@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { farmLand } from "../../GameState/FarmLand.svelte";
+    import { FarmLand, farmLand } from "../../GameState/FarmLand.svelte";
     import type { ToolHoe } from "../../GameState/ToolHoe.svelte";
     import CGridObject from "./CGridObject.svelte";
     import SvgHoe from "./SVGHoe.svelte";
@@ -8,6 +8,12 @@
         obj: ToolHoe;
     }
     let { obj }: Props = $props();
+    let hoeProgress = $derived(() => {
+        return farmLand.tiles.find((tile) => tile.id === farmLand.focusedTileID)?.hoeProgress;
+    });
+    $effect(() => {
+        console.log("hoeProgress", hoeProgress);
+    });
 </script>
 
 <CGridObject gridObject={obj}>
@@ -15,14 +21,22 @@
         <SvgHoe />
     </div>
 </CGridObject>
-<div
-    class="tool-progress"
-    style="
+{#if hoeProgress !== undefined}
+    <div
+        class="tool-progress"
+        style="
         top: calc({farmLand.recentMouseDownPosition.row - 2} * var(--tile-size));
         left: calc({farmLand.recentMouseDownPosition.col - 0.5} * var(--tile-size));
-        height: calc(var(--tile-size) * {farmLand.se});
+        align-items: end;
     "
-></div>
+    >
+        <div
+            class="bar"
+            style="transform: translateY({farmLand.tileSize -
+                farmLand.tileSize * (hoeProgress() || 0)}px)"
+        ></div>
+    </div>
+{/if}
 
 <style>
     .hoe {
@@ -31,8 +45,13 @@
     .tool-progress {
         width: calc(var(--tile-size) / 2);
         height: var(--tile-size);
-        background-color: green;
+        background-color: gray;
         position: absolute;
         z-index: 10;
+        overflow: hidden;
+    }
+    .bar {
+        background-color: green;
+        height: var(--tile-size);
     }
 </style>
