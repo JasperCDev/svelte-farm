@@ -34,6 +34,7 @@ export class Tile extends Component {
     }
 
     update(timestamp: number): void {
+        console.log(this.isHoeing);
         let gridObject =
             farmLand.gridObjects[Tile.getIteratorFromPoint({ row: this.row, col: this.col })];
 
@@ -44,7 +45,7 @@ export class Tile extends Component {
                     farmLand.selectedTool === "hoe" &&
                     farmLand.focusedTileID === this.id &&
                     farmLand.mouseDownTimestamp !== null &&
-                    timestamp - farmLand.mouseDownTimestamp >= 100;
+                    timestamp - farmLand.mouseDownTimestamp >= 200;
                 break;
             case "SOIL":
                 if (typeof gridObject === "undefined" && this.soilMoisture !== 0) {
@@ -68,6 +69,9 @@ export class Tile extends Component {
                 this.isHoeing = false;
                 farmLand.updateTileType(this, "SOIL");
             }
+        }
+        if (!this.isHoeing && this.hoeProgress > 0) {
+            this.hoeProgress = Math.max(this.hoeProgress - 0.1, 0);
         }
     }
 

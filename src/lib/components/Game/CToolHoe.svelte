@@ -11,9 +11,6 @@
     let hoeProgress = $derived(() => {
         return farmLand.tiles.find((tile) => tile.id === farmLand.focusedTileID)?.hoeProgress;
     });
-    $effect(() => {
-        console.log("hoeProgress", hoeProgress);
-    });
 </script>
 
 <CGridObject gridObject={obj}>
@@ -21,7 +18,7 @@
         <SvgHoe />
     </div>
 </CGridObject>
-{#if hoeProgress !== undefined}
+{#if (hoeProgress() ?? 0) > 0}
     <div
         class="tool-progress"
         style="
@@ -36,6 +33,15 @@
                 farmLand.tileSize * (hoeProgress() || 0)}px)"
         ></div>
     </div>
+{/if}
+{#if farmLand.selectedTool === "hoe"}
+    <div
+        class="tile-highlight"
+        style="
+        top: calc({farmLand.mousePosition.row - 1} * var(--tile-size));
+        left: calc({farmLand.mousePosition.col - 1} * var(--tile-size));
+    "
+    ></div>
 {/if}
 
 <style>
@@ -53,5 +59,13 @@
     .bar {
         background-color: green;
         height: var(--tile-size);
+    }
+    .tile-highlight {
+        width: var(--tile-size);
+        height: var(--tile-size);
+        position: absolute;
+        border: 2px solid red;
+
+        z-index: 9999;
     }
 </style>

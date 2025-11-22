@@ -56,6 +56,7 @@ export class FarmLand extends Component {
 
     public focusedGridObjectId = $state<string | null>(null);
     public focusedTileID = $state<string | null>(null);
+    public hoveredTileID = $state<string | null>(null);
     public selectedTool = $state<Tool>("cursor");
     public isDragging = $state<boolean>(false);
     public isMouseDown = $state<boolean>(false);
@@ -105,6 +106,7 @@ export class FarmLand extends Component {
 
     update(timestamp: number): void {
         this.mousePosition = this._mousePositionFromEvent;
+        this.hoveredTileID = this.tiles[Tile.getIteratorFromPoint(this.mousePosition)].id;
         this.time.update(timestamp);
         this.currency.update(timestamp);
         for (let gridObject of this.gridObjects) {
