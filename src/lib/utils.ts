@@ -6,6 +6,10 @@ export function run(cb: () => void) {
     return cb();
 }
 
+export function switchMap<T extends string | number, R>(value: T, map: Record<T, () => R>): R {
+    return map[value]();
+}
+
 export function moveTowards(x: number, y: number, targetX: number, targetY: number, speed: number) {
     const dx = targetX - x;
     const dy = targetY - y;

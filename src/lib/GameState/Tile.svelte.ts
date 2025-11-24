@@ -30,11 +30,16 @@ export class Tile extends Component {
                 break;
             case "hoe":
                 break;
+            case "seedbag":
+                if (this.type !== "SOIL") {
+                    return;
+                }
+                farmLand.placeObject("plant_basic", this.row, this.col);
+                farmLand.updateTileType(this, "SOIL");
         }
     }
 
     update(timestamp: number): void {
-        console.log(this.isHoeing);
         let gridObject =
             farmLand.gridObjects[Tile.getIteratorFromPoint({ row: this.row, col: this.col })];
 
@@ -62,7 +67,7 @@ export class Tile extends Component {
                 break;
         }
         if (this.isHoeing) {
-            this.hoeProgress = Math.max(Math.min(this.hoeProgress + 0.01, 1), 0.1);
+            this.hoeProgress = Math.max(Math.min(this.hoeProgress + 0.02, 1), 0.1);
             if (this.hoeProgress === 1) {
                 this.hoeProgress = 0;
                 this.isHoeing = false;

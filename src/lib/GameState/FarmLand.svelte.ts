@@ -1,10 +1,12 @@
 import type { TilePiece, ZeroThruFour } from "../components/Game/CTiles.svelte";
+import { switchMap } from "../utils";
 import { Component } from "./Component.svelte";
 import { Currency } from "./Currency.svelte";
-import { GridObject } from "./GridObject.svelte";
+import { GridObject, type GridObjectName } from "./GridObject.svelte";
 import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { SeedBag } from "./SeedBag.svelte";
+import { Shrine } from "./Shrine.svelte";
 import { Tile, type TileType } from "./Tile.svelte";
 import { Time } from "./Time.svelte";
 import { TimeBlock } from "./TimeBlock.svelte";
@@ -76,19 +78,19 @@ export class FarmLand extends Component {
     init() {
         this.getGridSize();
         this.initTilePieces();
-        this.placeObject(new TimeBlock(1, 29));
-        this.placeObject(new ToolHoe(15, 20));
-        this.placeObject(new ToolWateringCan(13, 14));
-        this.placeObject(new ToolDuplicate(9, 9));
-        this.placeObject(new SeedBag(3, 3));
-        this.placeObject(new PlantBasic(1, 1));
-        this.placeObject(new PlantBasic(1, 2));
-        this.placeObject(new PlantBasic(1, 3));
-        this.placeObject(new PlantBasic(1, 4));
-        this.placeObject(new PlantBasic(1, 5));
-        this.placeObject(new PlantBasic(1, 6));
-        this.placeObject(new PlantBasic(1, 7));
-        this.placeObject(new LifeEnergyPod(15, 15));
+        this.placeObject("time_block", 1, 29);
+        this.placeObject("tool_hoe", 15, 20);
+        this.placeObject("tool_watering_can", 13, 14);
+        this.placeObject("tool_duplicate", 9, 9);
+        this.placeObject("seed_bag", 3, 3);
+        this.placeObject("plant_basic", 1, 1);
+        this.placeObject("plant_basic", 1, 2);
+        this.placeObject("plant_basic", 1, 3);
+        this.placeObject("plant_basic", 1, 4);
+        this.placeObject("plant_basic", 1, 5);
+        this.placeObject("plant_basic", 1, 6);
+        this.placeObject("plant_basic", 1, 7);
+        this.placeObject("life_energy_pod", 15, 15);
 
         this.updateTileType(this.tiles[0], "SOIL");
         this.updateTileType(this.tiles[1], "SOIL");
@@ -189,7 +191,17 @@ export class FarmLand extends Component {
         tile.type = type;
     }
 
-    public placeObject(gridObject: GridObject) {
+    public placeObject(gridObjectName: GridObjectName, row: number, col: number) {
+        const gridObject = switchMap(gridObjectName, {
+            tool_hoe: () => new ToolHoe(row, col),
+            tool_watering_can: () => new ToolWateringCan(row, col),
+            tool_duplicate: () => new ToolDuplicate(row, col),
+            seed_bag: () => new SeedBag(row, col),
+            plant_basic: () => new PlantBasic(row, col),
+            life_energy_pod: () => new LifeEnergyPod(row, col),
+            shrine: () => new Shrine(row, col),
+            time_block: () => new TimeBlock(row, col),
+        });
         for (let i = 0; i < gridObject.space.squares.length; i++) {
             let square = gridObject.space.squares[i];
             let tile = this.tiles[Tile.getIteratorFromPoint(square)];
