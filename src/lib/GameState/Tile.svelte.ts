@@ -44,8 +44,7 @@ export class Tile extends Component {
                     farmLand.isMouseDown &&
                     farmLand.selectedTool === "hoe" &&
                     farmLand.focusedTileID === this.id &&
-                    farmLand.mouseDownTimestamp !== null &&
-                    timestamp - farmLand.mouseDownTimestamp >= 200;
+                    farmLand.mouseDownTimestamp !== null;
                 break;
             case "SOIL":
                 if (typeof gridObject === "undefined" && this.soilMoisture !== 0) {
@@ -63,7 +62,7 @@ export class Tile extends Component {
                 break;
         }
         if (this.isHoeing) {
-            this.hoeProgress = Math.min(this.hoeProgress + 0.02, 1);
+            this.hoeProgress = Math.max(Math.min(this.hoeProgress + 0.01, 1), 0.1);
             if (this.hoeProgress === 1) {
                 this.hoeProgress = 0;
                 this.isHoeing = false;
@@ -71,7 +70,7 @@ export class Tile extends Component {
             }
         }
         if (!this.isHoeing && this.hoeProgress > 0) {
-            this.hoeProgress = Math.max(this.hoeProgress - 0.1, 0);
+            this.hoeProgress = Math.max(this.hoeProgress - 0.02, 0);
         }
     }
 

@@ -23,10 +23,10 @@
         class="tool-progress"
         style="
         top: calc({farmLand.recentMouseDownPosition.row - 2} * var(--tile-size));
-        left: calc({farmLand.recentMouseDownPosition.col - 0.5} * var(--tile-size));
+        left: calc({farmLand.recentMouseDownPosition.col + 0.2} * var(--tile-size));
         align-items: end;
     "
-    >
+    >   
         <div
             class="bar"
             style="transform: translateY({farmLand.tileSize -
