@@ -4,6 +4,7 @@ import { Component } from "./Component.svelte";
 import { Currency } from "./Currency.svelte";
 import { GridObject, type GridObjectName } from "./GridObject.svelte";
 import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
+import { MysteryBox } from "./MysteryBox.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { SeedBag } from "./SeedBag.svelte";
 import { Shrine } from "./Shrine.svelte";
@@ -91,6 +92,7 @@ export class FarmLand extends Component {
         this.placeObject("plant_basic", 1, 6);
         this.placeObject("plant_basic", 1, 7);
         this.placeObject("life_energy_pod", 15, 15);
+        this.placeObject("mystery_box", 10, 9);
 
         this.updateTileType(this.tiles[0], "SOIL");
         this.updateTileType(this.tiles[1], "SOIL");
@@ -201,6 +203,7 @@ export class FarmLand extends Component {
             life_energy_pod: () => new LifeEnergyPod(row, col),
             shrine: () => new Shrine(row, col),
             time_block: () => new TimeBlock(row, col),
+            mystery_box: () => new MysteryBox(row, col),
         });
         for (let i = 0; i < gridObject.space.squares.length; i++) {
             let square = gridObject.space.squares[i];

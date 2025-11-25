@@ -12,7 +12,9 @@
     let objectClassName = $derived((className || "") + " object");
     let zIndex = $derived(gridObject.invalidPlacement ? 999 : 20);
     let isDragging = $derived(
-        farmLand.isDragging && farmLand.focusedGridObjectId === gridObject.id,
+        farmLand.isDragging &&
+            farmLand.focusedGridObjectId === gridObject.id &&
+            !gridObject.name.startsWith("plant"),
     );
 </script>
 

@@ -8,6 +8,7 @@
         tool_duplicate: CToolDuplicate,
         seed_bag: CSeedBag,
         life_energy_pod: CLifeEnergyPod,
+        mystery_box: CMysteryBox,
     };
 </script>
 
@@ -24,6 +25,7 @@
     import CShrine from "./CShrine.svelte";
     import CSeedBag from "./CSeedBag.svelte";
     import CLifeEnergyPod from "./CLifeEnergyPod.svelte";
+    import CMysteryBox from "./CMysteryBox.svelte";
 
     onMount(() => {
         window.addEventListener("resize", farmLand.getGridSize.bind(farmLand));
