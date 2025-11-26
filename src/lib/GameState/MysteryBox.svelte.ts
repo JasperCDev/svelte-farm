@@ -6,7 +6,7 @@ export class MysteryBox extends GridObject {
     price = $state(10);
     open = $state(false);
     constructor(row: number, col: number) {
-        super(row, col, "mystery_box", 3, 3, MysteryBox.squares, true);
+        super(row, col, "mystery_box", 1, 1, MysteryBox.squares, true);
     }
 
     update(timestamp: number): void {}

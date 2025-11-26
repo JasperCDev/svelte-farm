@@ -11,14 +11,10 @@
 </script>
 
 <CGridObject gridObject={obj}>
-    <div
-        class="mystery-box"
-        style="outline: {farmLand.selectedTool === 'seedbag' ? '2px solid red' : ''};"
-    >
+    <div class="mystery-box">
         <SVGBox />
     </div>
 </CGridObject>
-
 
 <style>
 </style>
