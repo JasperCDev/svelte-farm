@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { farmLand } from "../../GameState/FarmLand.svelte";
-    import type { SeedBag } from "../../GameState/SeedBag.svelte";
+    import type { MysteryBox } from "../../GameState/MysteryBox.svelte";
     import CGridObject from "./CGridObject.svelte";
     import SVGBox from "./SVGBox.svelte";
 
     interface Props {
-        obj: SeedBag;
+        obj: MysteryBox;
     }
     let { obj }: Props = $props();
 </script>

@@ -9,7 +9,9 @@ export class MysteryBox extends GridObject {
         super(row, col, "mystery_box", 1, 1, MysteryBox.squares, true);
     }
 
-    update(timestamp: number): void {}
+    update(timestamp: number): void {
+        super.update(timestamp);
+    }
 
     buy() {
         farmLand.currency.value -= this.price;

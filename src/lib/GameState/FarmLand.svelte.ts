@@ -92,7 +92,7 @@ export class FarmLand extends Component {
         this.placeObject("plant_basic", 1, 6);
         this.placeObject("plant_basic", 1, 7);
         this.placeObject("life_energy_pod", 15, 15);
-        this.placeObject("mystery_box", 10, 9);
+        this.placeObject("mystery_box", 7, 7);
 
         this.updateTileType(this.tiles[0], "SOIL");
         this.updateTileType(this.tiles[1], "SOIL");
