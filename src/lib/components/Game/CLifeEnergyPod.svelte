@@ -3,6 +3,7 @@
     import type { LifeEnergyPod } from "../../GameState/LifeEnergyPod.svelte";
 
     import CGridObject from "./CGridObject.svelte";
+    import SVGSword from "./SVGSword.svelte";
 
     interface Props {
         obj: LifeEnergyPod;
@@ -12,6 +13,7 @@
 
 <CGridObject gridObject={obj}>
     <div class="life_energy_pod">
+        <SVGSword style="fill: red;"/>
         <div
             style="height: {Math.floor(farmLand.currency.value / farmLand.currency.rent) * 100}%"
         ></div>
@@ -22,13 +24,10 @@
 <style>
     .life_energy_pod {
         display: flex;
-        align-items: flex-end;
+        align-items: start;
+        justify-content: center;
         height: 100%;
-        background-color: #f0f0f0;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         position: relative;
-        background-color: lightblue;
     }
 
     .life_energy_pod div {
