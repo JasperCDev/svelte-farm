@@ -13,7 +13,9 @@
 
 <CGridObject gridObject={obj}>
     <div class="life_energy_pod">
-        <SVGSword style="fill: red;"/>
+        <span class="animate">
+            <SVGSword color="red" />
+        </span>
         <div
             style="height: {Math.floor(farmLand.currency.value / farmLand.currency.rent) * 100}%"
         ></div>
@@ -22,6 +24,22 @@
 </CGridObject>
 
 <style>
+    @keyframes bobbing {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    .animate {
+        animation: bobbing 2s ease-in-out infinite;
+    }
+
     .life_energy_pod {
         display: flex;
         align-items: start;
