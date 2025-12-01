@@ -6,7 +6,7 @@
     const { color }: Props = $props();
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="70%" height="70%" viewBox="0 0 24 24" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none">
     <path
         d="M12 23.41c-.096 0-.192-.018-.281-.053a.75.75 0 0 1-.239-.156L7.59 19.37a.59.59 0 0 1-.23-.53V7.23a.75.75 0 0 1 .75-.75h7.78a.75.75 0 0 1 .75.74l.08 11.54a.59.59 0 0 1-.22.53l-3.94 3.91a.74.74 0 0 1-.47.18Zm-3.14-4.89L12 21.61l3.19-3.16-.04-10.45H8.86v10.52Z"
         fill={color}
