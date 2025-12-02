@@ -2,6 +2,7 @@ import type { TilePiece, ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { switchMap } from "../utils";
 import { Component } from "./Component.svelte";
 import { Currency } from "./Currency.svelte";
+import { Disease } from "./Disease.svelte";
 import { GridObject, type GridObjectName } from "./GridObject.svelte";
 import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
 import { MysteryBox } from "./MysteryBox.svelte";
@@ -71,6 +72,7 @@ export class FarmLand extends Component {
 
     public time = new Time();
     public currency = new Currency();
+    public disease = new Disease();
     public water = $state<number>(100);
 
     public isGameOver = $state<boolean>(false);
@@ -241,7 +243,6 @@ export class FarmLand extends Component {
             x: e.clientX,
             y: e.clientY,
         });
-        console.log(point);
         let focusedGridObject = this.getGridObjectFromPoint(point);
         if (typeof focusedGridObject !== "undefined") {
             focusedGridObject.handleClick();
@@ -287,6 +288,10 @@ export class FarmLand extends Component {
             this.isDragging = true;
             return;
         }
+    }
+
+    public spawnDisease() {
+
     }
 
     public getGridSize() {

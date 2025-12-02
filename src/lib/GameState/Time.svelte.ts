@@ -1,4 +1,5 @@
 import { Component } from "./Component.svelte";
+import { farmLand } from "./FarmLand.svelte";
 
 type WeatherName = "raining" | "default";
 
@@ -13,6 +14,10 @@ export class Time extends Component {
 
     init = false;
     weather = $state<WeatherName>("default");
+
+    constructor() {
+        super();
+    }
 
     update(timestamp: number): void {
         if (!this.init) {
@@ -36,6 +41,9 @@ export class Time extends Component {
             if (this.minute === 0) {
                 this.hour = this.hour === 23 ? 0 : this.hour + 1;
             }
+            if (this.minute === 0 && this.hour === 0) {
+                farmLand.spawnDisease();
+            }
             if (this.hour === 19 && Math.random() > 0.8) {
                 this.weather = "raining";
             }
@@ -47,6 +55,14 @@ export class Time extends Component {
                 this.day += 1;
             }
             this.prevTick = timestamp;
+            const tickEvent = new CustomEvent("tick", {
+                detail: {
+                    day: this.day,
+                    hour: this.hour,
+                    minute: this.minute,
+                },
+            });
+            window.dispatchEvent(tickEvent);
         }
     }
 }
