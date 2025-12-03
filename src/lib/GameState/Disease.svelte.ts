@@ -1,15 +1,19 @@
 import type { ZeroThruFour } from "../components/Game/CTiles.svelte";
 import { moveTowards } from "../utils";
 import { FarmLand, farmLand } from "./FarmLand.svelte";
+import { Orb } from "./Plant.svelte";
 import type { Point } from "./types";
 
 export class Disease {
-    public orbs = $state<Point[]>([]);
+    public orbs = $state<Orb[]>([]);
     constructor() {
         window.addEventListener("tick", this.onTick);
     }
 
     update() {
+      console.log("UPDATE", this.orbs)
+        let targetX = farmLand.energyPodPosition.col * farmLand.tileSize + farmLand.tileSize / 2;
+        let targetY = farmLand.energyPodPosition.row * farmLand.tileSize + farmLand.tileSize / 2;
         for (let i = 0; i < this.orbs.length; i++) {
             let orb = this.orbs[i];
 
@@ -19,41 +23,48 @@ export class Disease {
             orb.y = y;
 
             if (x === targetX && y === targetY) {
-                this.removeOrb();
+                this.orbs = this.orbs.filter((o) => o.id !== orb.id);
             }
         }
     }
 
+    removeOrb() {}
+
     onTick(e: EventListener["arguments"]) {
+        console.log(farmLand.time.hour, farmLand.time.minute);
         if (farmLand.time.hour === 0 && farmLand.time.minute === 0) {
+            const newOrbs: Orb[] = [];
             for (let i = 0; i < farmLand.currency.rent / 10; i++) {
                 const v = Math.floor(Math.random() * 4) as ZeroThruFour;
-                const newOrbs = [];
                 switch (v) {
                     case 0:
-                        newOrbs.push({
-                            row: 0,
-                            col: Math.floor(Math.random() * FarmLand.COL_COUNT),
-                        });
+                        newOrbs.push(new Orb(0, Math.floor(Math.random() * FarmLand.COL_COUNT)));
+
                         break;
                     case 1:
-                        newOrbs.push({
-                            row: Math.floor(Math.random() * FarmLand.ROW_COUNT),
-                            col: 0,
-                        });
+                        newOrbs.push(new Orb(Math.floor(Math.random() * FarmLand.ROW_COUNT), 0));
+
                         break;
                     case 2:
-                        newOrbs.push({
-                            row: FarmLand.ROW_COUNT - 1,
-                            col: Math.floor(Math.random() * FarmLand.COL_COUNT),
-                        });
+                        newOrbs.push(
+                            new Orb(
+                                FarmLand.ROW_COUNT - 1,
+                                Math.floor(Math.random() * FarmLand.COL_COUNT),
+                            ),
+                        );
+                        break;
                     case 3:
-                        newOrbs.push({
-                            row: Math.floor(Math.random() * FarmLand.ROW_COUNT),
-                            col: FarmLand.COL_COUNT - 1,
-                        });
+                        newOrbs.push(
+                            new Orb(
+                                Math.floor(Math.random() * FarmLand.ROW_COUNT),
+                                FarmLand.COL_COUNT - 1,
+                            ),
+                        );
+                        break;
                 }
             }
+            this.orbs = newOrbs;
+            console.log("newOrbs", newOrbs);
         }
     }
 }

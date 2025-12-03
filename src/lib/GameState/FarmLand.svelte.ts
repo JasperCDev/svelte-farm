@@ -115,6 +115,7 @@ export class FarmLand extends Component {
         this.hoveredTileID = this.tiles[Tile.getIteratorFromPoint(this.mousePosition)].id;
         this.time.update(timestamp);
         this.currency.update(timestamp);
+        this.disease.update();
         for (let gridObject of this.gridObjects) {
             if (typeof gridObject === "undefined") {
                 continue;

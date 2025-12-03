@@ -7,6 +7,7 @@ import type { Points } from "./types";
 export class Orb {
     x = $state<number>(0);
     y = $state<number>(0);
+    id = Math.random()
 
     constructor(row: number, col: number) {
         this.x = (col - 1) * farmLand.tileSize + farmLand.tileSize / 2;

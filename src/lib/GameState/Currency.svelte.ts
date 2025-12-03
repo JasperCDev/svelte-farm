@@ -11,14 +11,14 @@ export class Currency extends Component {
 
     update(timestamp: number): void {
         super.update(timestamp);
-        if (farmLand.time.day !== this.prevDay) {
-            this.prevDay = farmLand.time.day;
-            this.value = Math.max(this.value - this.rent, 0);
-            if (this.value <= 0) {
-                alert("game over");
-                farmLand.isGameOver = true;
-            }
-            this.rent *= 1.5;
-        }
+        // if (farmLand.time.day !== this.prevDay) {
+        //     this.prevDay = farmLand.time.day;
+        //     this.value = Math.max(this.value - this.rent, 0);
+        //     if (this.value <= 0) {
+        //         alert("game over");
+        //         farmLand.isGameOver = true;
+        //     }
+        //     this.rent *= 1.5;
+        // }
     }
 }

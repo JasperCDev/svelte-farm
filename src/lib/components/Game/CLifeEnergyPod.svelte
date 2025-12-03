@@ -24,6 +24,9 @@
             style="height: {Math.floor(farmLand.currency.value / farmLand.currency.rent) * 100}%"
         ></div>
         <span class="value_label">{farmLand.currency.value}/{farmLand.currency.rent}</span>
+        {#each farmLand.disease.orbs as orb}
+            <div class="orb" style="top: {orb.y}px; left: {orb.x}px;"></div>
+        {/each}
     </div>
 </CGridObject>
 
@@ -38,6 +41,14 @@
         100% {
             transform: translateY(0);
         }
+    }
+
+    .orb {
+        width: 30px;
+        z-index: 999;
+        height: 30px;
+        background-color: black;
+        position: absolute;
     }
 
     .animate {
