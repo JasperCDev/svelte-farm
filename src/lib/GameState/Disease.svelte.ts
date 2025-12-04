@@ -7,11 +7,11 @@ import type { Point } from "./types";
 export class Disease {
     public orbs = $state<Orb[]>([]);
     constructor() {
+        this.onTick = this.onTick.bind(this);
         window.addEventListener("tick", this.onTick);
     }
 
     update() {
-      console.log("UPDATE", this.orbs)
         let targetX = farmLand.energyPodPosition.col * farmLand.tileSize + farmLand.tileSize / 2;
         let targetY = farmLand.energyPodPosition.row * farmLand.tileSize + farmLand.tileSize / 2;
         for (let i = 0; i < this.orbs.length; i++) {
@@ -24,6 +24,7 @@ export class Disease {
 
             if (x === targetX && y === targetY) {
                 this.orbs = this.orbs.filter((o) => o.id !== orb.id);
+                farmLand.currency.value -= 10;
             }
         }
     }
@@ -31,7 +32,6 @@ export class Disease {
     removeOrb() {}
 
     onTick(e: EventListener["arguments"]) {
-        console.log(farmLand.time.hour, farmLand.time.minute);
         if (farmLand.time.hour === 0 && farmLand.time.minute === 0) {
             const newOrbs: Orb[] = [];
             for (let i = 0; i < farmLand.currency.rent / 10; i++) {
@@ -64,7 +64,6 @@ export class Disease {
                 }
             }
             this.orbs = newOrbs;
-            console.log("newOrbs", newOrbs);
         }
     }
 }

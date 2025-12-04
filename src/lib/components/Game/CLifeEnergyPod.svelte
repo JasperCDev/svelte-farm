@@ -22,13 +22,14 @@
         </span>
         <div
             style="height: {Math.floor(farmLand.currency.value / farmLand.currency.rent) * 100}%"
+            class="bar"
         ></div>
         <span class="value_label">{farmLand.currency.value}/{farmLand.currency.rent}</span>
-        {#each farmLand.disease.orbs as orb}
-            <div class="orb" style="top: {orb.y}px; left: {orb.x}px;"></div>
-        {/each}
     </div>
 </CGridObject>
+{#each farmLand.disease.orbs as orb}
+    <div class="orb" style="top: {orb.y}px; left: {orb.x}px;"></div>
+{/each}
 
 <style>
     @keyframes bobbing {
@@ -44,9 +45,9 @@
     }
 
     .orb {
-        width: 30px;
+        width: 15px;
         z-index: 999;
-        height: 30px;
+        height: 15px;
         background-color: black;
         position: absolute;
     }
@@ -65,7 +66,7 @@
         border: 1px solid red;
     }
 
-    .life_energy_pod div {
+    .bar {
         width: 100%;
         position: absolute;
         bottom: 0px;
