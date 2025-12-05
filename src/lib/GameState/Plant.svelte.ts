@@ -7,7 +7,7 @@ import type { Points } from "./types";
 export class Orb {
     x = $state<number>(0);
     y = $state<number>(0);
-    id = Math.random()
+    id = Math.random();
 
     constructor(row: number, col: number) {
         this.x = (col - 1) * farmLand.tileSize + farmLand.tileSize / 2;
@@ -40,8 +40,8 @@ export class Plant extends GridObject {
         this.orbs = [...this.orbs, new Orb(this.row, this.col)];
     }
 
-    removeOrb() {
-        this.orbs = this.orbs.slice(0, -1);
+    removeOrb(id: number) {
+        this.orbs = this.orbs.filter((o) => o.id !== id);
         farmLand.currency.value += 1;
     }
 
@@ -91,7 +91,7 @@ export class Plant extends GridObject {
             orb.y = y;
 
             if (x === targetX && y === targetY) {
-                this.removeOrb();
+                this.removeOrb(orb.id);
             }
         }
 

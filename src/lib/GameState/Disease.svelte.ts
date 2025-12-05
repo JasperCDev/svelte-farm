@@ -25,6 +25,10 @@ export class Disease {
             if (x === targetX && y === targetY) {
                 this.orbs = this.orbs.filter((o) => o.id !== orb.id);
                 farmLand.currency.value -= 10;
+                if (farmLand.currency.value <= 0) {
+                  farmLand.isGameOver = true;
+                  alert('game over')
+                }
             }
         }
     }
