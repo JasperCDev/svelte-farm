@@ -35,7 +35,6 @@ export class Time extends Component {
         let timeSinceLastTick = timestamp - this.prevTick;
         let tick = timeSinceLastTick >= msIn15Minutes;
         if (tick) {
-            // next minute
             this.minute = this.minute === 45 ? 0 : this.minute + 15;
             // next hour
             if (this.minute === 0) {

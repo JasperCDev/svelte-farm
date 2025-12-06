@@ -6,6 +6,7 @@ import { Disease } from "./Disease.svelte";
 import { GridObject, type GridObjectName } from "./GridObject.svelte";
 import { LifeEnergyPod } from "./LifeEnergyPod.svelte";
 import { MysteryBox } from "./MysteryBox.svelte";
+import { PlantBag } from "./PlantBag.svelte";
 import { PlantBasic } from "./PlantBasic.svelte";
 import { SeedBag } from "./SeedBag.svelte";
 import { Shrine } from "./Shrine.svelte";
@@ -95,6 +96,7 @@ export class FarmLand extends Component {
         this.placeObject("plant_basic", 1, 7);
         this.placeObject("life_energy_pod", 15, 15);
         this.placeObject("mystery_box", 7, 7);
+        this.placeObject("plant_bag", 1, 12);
 
         this.updateTileType(this.tiles[0], "SOIL");
         this.updateTileType(this.tiles[1], "SOIL");
@@ -207,6 +209,7 @@ export class FarmLand extends Component {
             shrine: () => new Shrine(row, col),
             time_block: () => new TimeBlock(row, col),
             mystery_box: () => new MysteryBox(row, col),
+            plant_bag: () => new PlantBag(row, col),
         });
         for (let i = 0; i < gridObject.space.squares.length; i++) {
             let square = gridObject.space.squares[i];
@@ -291,9 +294,7 @@ export class FarmLand extends Component {
         }
     }
 
-    public spawnDisease() {
-
-    }
+    public spawnDisease() {}
 
     public getGridSize() {
         let widthPercent = window.innerWidth / 16000000;
