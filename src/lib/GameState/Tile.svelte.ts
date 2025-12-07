@@ -52,7 +52,7 @@ export class Tile extends Component {
                     farmLand.mouseDownTimestamp !== null;
                 break;
             case "SOIL":
-                if (typeof gridObject === "undefined" && this.soilMoisture !== 0) {
+                if (typeof gridObject === "undefined" && this.soilMoisture === 0) {
                     this.emptySoilCountdown -= 1;
                 } else {
                     this.emptySoilCountdown = 1000;
