@@ -16,4 +16,7 @@
 </CGridObject>
 
 <style>
+    .plant-bag {
+        background: red;
+    }
 </style>
