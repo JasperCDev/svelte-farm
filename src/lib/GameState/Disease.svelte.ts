@@ -12,6 +12,9 @@ export class Disease {
     }
 
     update() {
+        if (farmLand.isGameOver) {
+            return;
+        }
         let targetX = farmLand.energyPodPosition.col * farmLand.tileSize + farmLand.tileSize / 2;
         let targetY = farmLand.energyPodPosition.row * farmLand.tileSize + farmLand.tileSize / 2;
         for (let i = 0; i < this.orbs.length; i++) {
@@ -26,8 +29,8 @@ export class Disease {
                 this.orbs = this.orbs.filter((o) => o.id !== orb.id);
                 farmLand.currency.value -= 10;
                 if (farmLand.currency.value <= 0) {
-                  farmLand.isGameOver = true;
-                  alert('game over')
+                    farmLand.isGameOver = true;
+                    return;
                 }
             }
         }
