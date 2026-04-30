@@ -34,7 +34,7 @@
         width: 10px;
         z-index: 999;
         height: 10px;
-        background-color: red;
+        background-color: green;
         position: absolute;
     }
 </style>

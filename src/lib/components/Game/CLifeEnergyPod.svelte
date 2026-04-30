@@ -48,7 +48,7 @@
         width: 15px;
         z-index: 999;
         height: 15px;
-        background-color: black;
+        background-color: red;
         position: absolute;
     }
 
