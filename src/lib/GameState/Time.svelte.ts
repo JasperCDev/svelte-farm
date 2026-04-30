@@ -29,7 +29,7 @@ export class Time extends Component {
         let timePassed = timestamp - this.prevTimestamp;
         this.currentTime = this.currentTime + timePassed;
         this.prevTimestamp = timestamp;
-        let dayTime = 1000 * 60 * 5; // 5 minutes
+        let dayTime = 1000 * 60 * 2; // 2 minutes
         let msIn15Minutes = dayTime / 24 / 4;
         let timeSinceLastTick = timestamp - this.prevTick;
         let tick = timeSinceLastTick >= msIn15Minutes;
