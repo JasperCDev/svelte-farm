@@ -27,9 +27,8 @@ export class Time extends Component {
             return;
         }
         let timePassed = timestamp - this.prevTimestamp;
-        let previousTime = this.currentTime;
         this.currentTime = this.currentTime + timePassed;
-        this.prevTimestamp = previousTime;
+        this.prevTimestamp = timestamp;
         let dayTime = 1000 * 60 * 5; // 5 minutes
         let msIn15Minutes = dayTime / 24 / 4;
         let timeSinceLastTick = timestamp - this.prevTick;
