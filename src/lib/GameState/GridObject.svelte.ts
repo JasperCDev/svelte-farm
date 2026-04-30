@@ -129,7 +129,7 @@ export class GridObject extends Component {
         });
 
         let isTileValid = derive(() => {
-            for (let square of newSquares) {
+            for (let { row, col } of newSquares) {
                 let tile = Tile.getTileByPoint({ row, col });
                 if (!this.validTiles.includes(tile.type)) {
                     return false;
